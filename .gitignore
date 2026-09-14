@@ -1,0 +1,9 @@
+# Ignore all files and directories
+/*
+
+# Track only essential repository files
+!/windows-11-lock-screen-styler.wh.cpp
+!/README.md
+!/README-TÜRKÇE.md
+!/.gitignore
+!/LICENSE
