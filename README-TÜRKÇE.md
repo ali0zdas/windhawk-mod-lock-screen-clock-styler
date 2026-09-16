@@ -11,6 +11,7 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 - **Modern Flip Clock:** Saat ve dakika için bölünmüş, ortasında şık katlanma çizgisi bulunan akrilik cam kartlar.
 - **Retro Vintage Flip Saat:** Klasik mekanik Solari tren garı / havalimanı esintili koyu mat kömür kartlar, fildişi/krem rakamlar, belirgin mekanik katlanma yarığı ve menteşe klipsleri.
 - **Cyberpunk / Neon Glow Saat:** Koyu obsidyen akrilik kartlar, elektrik camgöbeği (cyan) neon kenar ışıması, lazer kesim ayrım çizgisi ve parlak macenta/pembe HUD tarih kapsülü.
+- **Minimalist Aura / Yüzen Saat:** Kart çerçevesi olmadan, ortam ışığı gölgesi (ambient drop-shadow) derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen zarif tipografi.
 - **Retro Piksel / LED Matris Saat:** Otantik 7x9 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli.
 - **Saniye Göstergesi:** İsteğe bağlı olarak saat ve dakikayla aynı hizada tam format (`SS:DD:SN`) gerçek zamanlı saniye gösterimi.
 - **Dinamik Tarih Kapsülü:** Saatin altında konumlanan, sistem diline duyarlı gün ve ay göstergesi.
@@ -35,7 +36,7 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 | Ayar | Açıklama | Varsayılan |
 | :--- | :--- | :--- |
-| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat (`flip`), Retro Vintage Flip Saat (`vintage`), Cyberpunk Neon Glow (`cyberpunk`), Retro Piksel LED Matris (`pixel`), Minimal Dijital (`minimal`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
+| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat (`flip`), Retro Vintage Flip Saat (`vintage`), Cyberpunk Neon Glow (`cyberpunk`), Minimalist Aura Yüzen Saat (`aura`), Retro Piksel LED Matris (`pixel`), Minimal Dijital (`minimal`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
 | **Show Seconds (Saniyeyi Göster)** | Saniye hanesini açıp kapatma (`SS:DD:SN`) | `Kapalı` |
 | **Glass Opacity (Cam Opaklığı)** | Kartların yarı saydamlık derecesi (0 - 255) | `45` |
 | **Card Corner Radius (Köşe Yuvarlaklığı)**| Kartların köşe kavis yarıçapı (px) | `22` |

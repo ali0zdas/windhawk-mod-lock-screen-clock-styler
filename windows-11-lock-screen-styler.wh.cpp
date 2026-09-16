@@ -23,6 +23,7 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 - **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Cyberpunk / Neon Glow Clock:** High-voltage cyberpunk aesthetic with dark obsidian acrylic cards, electric cyan neon edge highlights, laser-cut split seam, and hot magenta HUD date capsule.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
+- **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
 - **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
 - **Show Seconds Toggle:** Optional live seconds display for both Flip and Pixel clock styles.
 - **Frosted Glass / Acrylic Styling:** Translucent glass panels with subtle border highlights and rounded corners.
@@ -52,6 +53,8 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
     - cyberpunk:tr-TR: "Cyberpunk / Neon Glow Saat"
     - pixel: "Retro Pixel / LED Dot Matrix Clock"
     - pixel:tr-TR: "Retro Piksel / LED Matris Saat"
+    - aura: "Minimalist Aura / Floating Clock"
+    - aura:tr-TR: "Minimalist Aura / Yüzen Saat"
     - minimal: "Minimalist Digital Clock"
     - minimal:tr-TR: "Minimalist Dijital Saat"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
@@ -192,6 +195,7 @@ wuxc::TextBlock g_hourTextBlock{ nullptr };
 wuxc::TextBlock g_minTextBlock{ nullptr };
 wuxc::TextBlock g_secTextBlock{ nullptr };
 wuxc::TextBlock g_minimalTimeTextBlock{ nullptr };
+wuxc::TextBlock g_auraShadowTextBlock{ nullptr };
 wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
@@ -362,7 +366,7 @@ void UpdateTimeAndDate() {
             SetPixelDigitValue(g_pixelDigits[4], s1);
             SetPixelDigitValue(g_pixelDigits[5], s2);
         }
-    } else if (g_settings.clockStyle == L"minimal") {
+    } else if (g_settings.clockStyle == L"aura" || g_settings.clockStyle == L"minimal") {
         if (g_minimalTimeTextBlock) {
             WCHAR timeBuf[32];
             if (g_settings.showSeconds) {
@@ -371,6 +375,9 @@ void UpdateTimeAndDate() {
                 swprintf_s(timeBuf, L"%02d:%02d", st.wHour, st.wMinute);
             }
             g_minimalTimeTextBlock.Text(timeBuf);
+            if (g_auraShadowTextBlock) {
+                g_auraShadowTextBlock.Text(timeBuf);
+            }
         }
     } else {
         // Flip Clock
@@ -979,6 +986,76 @@ wux::UIElement BuildPixelClockElement() {
     return rootContainer;
 }
 
+// Build Minimalist Aura / Floating Clock Element
+wux::UIElement BuildAuraClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkAuraClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    // Layered floating time container with soft ambient drop-shadow
+    wuxc::Grid timeLayerGrid;
+    timeLayerGrid.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    double fontSize = (double)(g_settings.clockFontSize * 1.35);
+
+    // 1. Ambient Drop-Shadow Aura Layer (Behind foreground text for contrast on any wallpaper)
+    wuxc::TextBlock shadowText;
+    shadowText.FontSize(fontSize);
+    shadowText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    shadowText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
+    shadowText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(140, 0, 0, 0)));
+    shadowText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    shadowText.Margin(wux::Thickness{ 0.0, 4.0, 0.0, 0.0 });
+    timeLayerGrid.Children().Append(shadowText);
+    g_auraShadowTextBlock = shadowText;
+
+    // 2. Foreground Crisp Pure White Floating Text Layer
+    wuxc::TextBlock timeText;
+    timeText.FontSize(fontSize);
+    timeText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    timeText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
+    timeText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    timeText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    timeLayerGrid.Children().Append(timeText);
+    g_minimalTimeTextBlock = timeText;
+
+    verticalLayout.Children().Append(timeLayerGrid);
+
+    // Floating Aura Date Pill
+    if (g_settings.showDateCapsule) {
+        wuxc::Border auraDatePill;
+        auraDatePill.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(38, 255, 255, 255)));
+        auraDatePill.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(65, 255, 255, 255)));
+        auraDatePill.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        auraDatePill.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(18.0));
+        auraDatePill.Padding(wux::Thickness{ 22.0, 7.0, 22.0, 7.0 });
+        auraDatePill.Margin(wux::Thickness{ 0.0, 14.0, 0.0, 0.0 });
+        auraDatePill.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        wuxc::TextBlock dateText;
+        dateText.Name(L"WindhawkAuraDateText");
+        dateText.FontSize(18.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::Medium());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(245, 255, 255, 255)));
+        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        auraDatePill.Child(dateText);
+        verticalLayout.Children().Append(auraDatePill);
+        g_dateTextBlock = dateText;
+    }
+
+    rootContainer.Children().Append(verticalLayout);
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
 // Build Minimalist Digital Clock Element
 wux::UIElement BuildMinimalClockElement() {
     wuxc::Grid rootContainer;
@@ -1026,6 +1103,8 @@ wux::UIElement BuildClockElement() {
         return BuildVintageClockElement();
     } else if (g_settings.clockStyle == L"cyberpunk") {
         return BuildCyberpunkClockElement();
+    } else if (g_settings.clockStyle == L"aura") {
+        return BuildAuraClockElement();
     } else if (g_settings.clockStyle == L"minimal") {
         return BuildMinimalClockElement();
     }
@@ -1053,6 +1132,7 @@ void RebuildClockUI() {
         g_minTextBlock = nullptr;
         g_secTextBlock = nullptr;
         g_minimalTimeTextBlock = nullptr;
+        g_auraShadowTextBlock = nullptr;
         g_dateTextBlock = nullptr;
         for (int i = 0; i < 6; i++) {
             g_pixelDigits[i].dots.clear();

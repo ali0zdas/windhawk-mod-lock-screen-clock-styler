@@ -11,6 +11,7 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 - **Modern Flip Clock:** Split frosted glass cards for hours and minutes with an elegant seam.
 - **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Cyberpunk / Neon Glow Clock:** High-voltage cyberpunk aesthetic with dark obsidian acrylic cards, electric cyan neon edge highlights, laser-cut split seam, and hot magenta HUD date capsule.
+- **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
 - **Retro Pixel / LED Matrix Clock:** Authentic 7x9 double-pixel dot matrix display with subtle ambient dot illumination and frosted acrylic contrast backplate.
 - **Seconds Display:** Optional real-time seconds (`HH:MM:SS`) toggle aligned with the clock.
 - **Dynamic Date Capsule:** Localized weekday and date display positioned neatly under the clock.
@@ -35,7 +36,7 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| **Clock Style** | Choose between Frosted Glass Flip Clock (`flip`), Retro Vintage Flip Clock (`vintage`), Cyberpunk / Neon Glow Clock (`cyberpunk`), Retro Pixel / LED Matrix (`pixel`), Minimalist Digital (`minimal`), or Default Clock (`defaultOnly`) | `flip` |
+| **Clock Style** | Choose between Frosted Glass Flip Clock (`flip`), Retro Vintage Flip Clock (`vintage`), Cyberpunk / Neon Glow Clock (`cyberpunk`), Minimalist Aura / Floating Clock (`aura`), Retro Pixel / LED Matrix (`pixel`), Minimalist Digital (`minimal`), or Default Clock (`defaultOnly`) | `flip` |
 | **Show Seconds** | Toggle seconds display (`HH:MM:SS`) | `Disabled` |
 | **Glass Opacity** | Card translucency alpha value (0 - 255) | `45` |
 | **Card Corner Radius** | Curvature radius of the cards (px) | `22` |
