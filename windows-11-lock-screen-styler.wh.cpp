@@ -21,6 +21,7 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 ## Features:
 - **Modern Flip Clock:** Split glass cards for hour, minute, and optional seconds with an elegant horizontal flip seam.
 - **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
+- **Cyberpunk / Neon Glow Clock:** High-voltage cyberpunk aesthetic with dark obsidian acrylic cards, electric cyan neon edge highlights, laser-cut split seam, and hot magenta HUD date capsule.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
 - **Show Seconds Toggle:** Optional live seconds display for both Flip and Pixel clock styles.
@@ -47,6 +48,8 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
     - flip:tr-TR: "Buzlu Cam Flip Saat"
     - vintage: "Retro Vintage Flip Clock"
     - vintage:tr-TR: "Retro Vintage Flip Saat"
+    - cyberpunk: "Cyberpunk / Neon Glow Clock"
+    - cyberpunk:tr-TR: "Cyberpunk / Neon Glow Saat"
     - pixel: "Retro Pixel / LED Dot Matrix Clock"
     - pixel:tr-TR: "Retro Piksel / LED Matris Saat"
     - minimal: "Minimalist Digital Clock"
@@ -662,6 +665,158 @@ wux::UIElement BuildVintageClockElement() {
     return rootContainer;
 }
 
+// Build Single Cyberpunk Neon Card Element
+wuxc::Grid CreateCyberpunkFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
+    wuxc::Grid card;
+    card.Width(width);
+    card.Height(height);
+
+    // 1. Dark Obsidian Glass Body with Electric Cyan Neon Glow Border
+    wuxc::Border cyberBackplate;
+    cyberBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(215, 9, 12, 24)));
+    cyberBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(195, 0, 240, 255))); // Electric Neon Cyan
+    cyberBackplate.BorderThickness(wux::Thickness{ 1.8, 1.8, 1.8, 1.8 });
+    cyberBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
+
+    // 2. Inner Neon Specular Highlight (Top sheen)
+    wuxc::Border innerGlow;
+    innerGlow.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(24, 0, 240, 255)));
+    innerGlow.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius - 2.0));
+    innerGlow.Height(height * 0.46);
+    innerGlow.VerticalAlignment(wux::VerticalAlignment::Top);
+    innerGlow.Margin(wux::Thickness{ 2.0, 2.0, 2.0, 0.0 });
+
+    // 3. Cyberpunk High-Voltage Typography (Pure bright electric white-cyan)
+    wuxc::TextBlock cardText;
+    cardText.Name(textName);
+    cardText.FontSize((double)g_settings.clockFontSize);
+    cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::Black());
+    cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 230, 252, 255)));
+    cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // 4. Center Horizontal Neon Laser Split Seam
+    wuxc::Grid laserSeam;
+    laserSeam.Height(10.0);
+    laserSeam.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    laserSeam.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // Soft laser aura (cyan glow)
+    wuxs::Rectangle laserAura;
+    laserAura.Height(4.0);
+    laserAura.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    laserAura.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(70, 0, 240, 255)));
+    laserAura.VerticalAlignment(wux::VerticalAlignment::Center);
+    laserAura.Margin(wux::Thickness{ 2.0, 0.0, 2.0, 0.0 });
+
+    // Sharp core laser line (vibrant bright cyan)
+    wuxs::Rectangle laserCore;
+    laserCore.Height(1.6);
+    laserCore.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    laserCore.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 0, 240, 255)));
+    laserCore.VerticalAlignment(wux::VerticalAlignment::Center);
+    laserCore.Margin(wux::Thickness{ 2.0, 0.0, 2.0, 0.0 });
+
+    // Left and Right Cyber Edge Accents (Hot Magenta laser nodes)
+    wuxs::Rectangle leftNode;
+    leftNode.Width(5.0);
+    leftNode.Height(10.0);
+    leftNode.RadiusX(1.0);
+    leftNode.RadiusY(1.0);
+    leftNode.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    leftNode.VerticalAlignment(wux::VerticalAlignment::Center);
+    leftNode.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128))); // Hot Magenta
+
+    wuxs::Rectangle rightNode;
+    rightNode.Width(5.0);
+    rightNode.Height(10.0);
+    rightNode.RadiusX(1.0);
+    rightNode.RadiusY(1.0);
+    rightNode.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    rightNode.VerticalAlignment(wux::VerticalAlignment::Center);
+    rightNode.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128))); // Hot Magenta
+
+    laserSeam.Children().Append(laserAura);
+    laserSeam.Children().Append(laserCore);
+    laserSeam.Children().Append(leftNode);
+    laserSeam.Children().Append(rightNode);
+
+    card.Children().Append(cyberBackplate);
+    card.Children().Append(innerGlow);
+    card.Children().Append(cardText);
+    card.Children().Append(laserSeam);
+    outText = cardText;
+
+    return card;
+}
+
+// Build Cyberpunk Neon Glow Clock UI Element
+wux::UIElement BuildCyberpunkClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkCyberpunkClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    wuxc::StackPanel cardsLayout;
+    cardsLayout.Orientation(wuxc::Orientation::Horizontal);
+    cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    cardsLayout.Spacing(g_settings.showSeconds ? 14.0 : 18.0);
+
+    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.45) : (g_settings.clockFontSize * 1.65);
+    double cardHeight = g_settings.clockFontSize * 1.95;
+    double cornerRad = 14.0;
+
+    // 1. Hour Card
+    auto hourCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkCyberHourText");
+    cardsLayout.Children().Append(hourCard);
+
+    // 2. Minute Card
+    auto minCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkCyberMinText");
+    cardsLayout.Children().Append(minCard);
+
+    // 3. Seconds Card (If enabled)
+    if (g_settings.showSeconds) {
+        auto secCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkCyberSecText");
+        cardsLayout.Children().Append(secCard);
+    }
+
+    verticalLayout.Children().Append(cardsLayout);
+
+    // Cyberpunk HUD Date Capsule (Hot Magenta Neon Accent)
+    if (g_settings.showDateCapsule) {
+        wuxc::Border hudCapsule;
+        hudCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(200, 14, 10, 24)));
+        hudCapsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(190, 255, 0, 128))); // Hot Magenta
+        hudCapsule.BorderThickness(wux::Thickness{ 1.4, 1.4, 1.4, 1.4 });
+        hudCapsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(10.0));
+        hudCapsule.Padding(wux::Thickness{ 24.0, 7.0, 24.0, 7.0 });
+        hudCapsule.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
+        hudCapsule.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        wuxc::TextBlock dateText;
+        dateText.Name(L"WindhawkCyberDateText");
+        dateText.FontSize(18.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 110, 185))); // Electric Pink
+        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        hudCapsule.Child(dateText);
+        verticalLayout.Children().Append(hudCapsule);
+        g_dateTextBlock = dateText;
+    }
+
+    rootContainer.Children().Append(verticalLayout);
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
 // Build Pixel Digit Grid Helper (7 cols x 9 rows, 63 dots)
 wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double spacing) {
     wuxc::Grid grid;
@@ -869,6 +1024,8 @@ wux::UIElement BuildClockElement() {
         return BuildPixelClockElement();
     } else if (g_settings.clockStyle == L"vintage") {
         return BuildVintageClockElement();
+    } else if (g_settings.clockStyle == L"cyberpunk") {
+        return BuildCyberpunkClockElement();
     } else if (g_settings.clockStyle == L"minimal") {
         return BuildMinimalClockElement();
     }
