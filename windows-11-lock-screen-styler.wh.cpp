@@ -20,6 +20,7 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 
 ## Features:
 - **Modern Flip Clock:** Split glass cards for hour, minute, and optional seconds with an elegant horizontal flip seam.
+- **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
 - **Show Seconds Toggle:** Optional live seconds display for both Flip and Pixel clock styles.
@@ -43,9 +44,15 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
     - flip: "Frosted Glass Flip Clock"
+    - flip:tr-TR: "Buzlu Cam Flip Saat"
+    - vintage: "Retro Vintage Flip Clock"
+    - vintage:tr-TR: "Retro Vintage Flip Saat"
     - pixel: "Retro Pixel / LED Dot Matrix Clock"
+    - pixel:tr-TR: "Retro Piksel / LED Matris Saat"
     - minimal: "Minimalist Digital Clock"
+    - minimal:tr-TR: "Minimalist Dijital Saat"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
+    - defaultOnly:tr-TR: "Yalnızca Varsayılan Saat (Widget'lar Gizli)"
 - showSeconds: false
   $name: "Show Seconds"
   $name:tr-TR: "Saniyeyi Göster"
@@ -508,6 +515,153 @@ wux::UIElement BuildFlipClockElement() {
     return rootContainer;
 }
 
+// Build Single Vintage Flip Card Element (Retro Mechanical Airport/Station Solari Style)
+wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
+    wuxc::Grid card;
+    card.Width(width);
+    card.Height(height);
+
+    // Matte Industrial Charcoal Flap Body
+    wuxc::Border flapBackplate;
+    flapBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 18, 20, 24)));
+    flapBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(95, 60, 68, 78)));
+    flapBackplate.BorderThickness(wux::Thickness{ 1.2, 1.2, 1.2, 1.2 });
+    flapBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
+
+    // Vintage Warm Cream / Aged Ivory Typography
+    wuxc::TextBlock cardText;
+    cardText.Name(textName);
+    cardText.FontSize((double)g_settings.clockFontSize);
+    cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
+    cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 246, 241, 230)));
+    cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // Center Mechanical Split: Upper shadow + Lower light catch bevel + Side axle hinge clips
+    wuxc::Grid splitSeam;
+    splitSeam.Height(10.0);
+    splitSeam.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    splitSeam.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    wuxc::StackPanel seamLines;
+    seamLines.Orientation(wuxc::Orientation::Vertical);
+    seamLines.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // Deep shadow groove between top and bottom flaps
+    wuxs::Rectangle shadowGroove;
+    shadowGroove.Height(2.0);
+    shadowGroove.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    shadowGroove.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 8, 9, 11)));
+    shadowGroove.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
+
+    // Subtle edge highlight on bottom flap catching ambient overhead light
+    wuxs::Rectangle bevelHighlight;
+    bevelHighlight.Height(1.0);
+    bevelHighlight.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    bevelHighlight.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(38, 255, 255, 255)));
+    bevelHighlight.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
+
+    seamLines.Children().Append(shadowGroove);
+    seamLines.Children().Append(bevelHighlight);
+    splitSeam.Children().Append(seamLines);
+
+    // Left and Right Axle Clips (Mechanical hinge pins)
+    wuxs::Rectangle leftClip;
+    leftClip.Width(4.0);
+    leftClip.Height(9.0);
+    leftClip.RadiusX(1.0);
+    leftClip.RadiusY(1.0);
+    leftClip.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    leftClip.VerticalAlignment(wux::VerticalAlignment::Center);
+    leftClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(225, 10, 12, 15)));
+
+    wuxs::Rectangle rightClip;
+    rightClip.Width(4.0);
+    rightClip.Height(9.0);
+    rightClip.RadiusX(1.0);
+    rightClip.RadiusY(1.0);
+    rightClip.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    rightClip.VerticalAlignment(wux::VerticalAlignment::Center);
+    rightClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(225, 10, 12, 15)));
+
+    splitSeam.Children().Append(leftClip);
+    splitSeam.Children().Append(rightClip);
+
+    card.Children().Append(flapBackplate);
+    card.Children().Append(cardText);
+    card.Children().Append(splitSeam);
+    outText = cardText;
+
+    return card;
+}
+
+// Build Retro Vintage Flip Clock UI Element
+wux::UIElement BuildVintageClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkVintageClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    wuxc::StackPanel cardsLayout;
+    cardsLayout.Orientation(wuxc::Orientation::Horizontal);
+    cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    cardsLayout.Spacing(g_settings.showSeconds ? 12.0 : 16.0);
+
+    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.42) : (g_settings.clockFontSize * 1.62);
+    double cardHeight = g_settings.clockFontSize * 1.95;
+    double cornerRad = 10.0;
+
+    // 1. Hour Card
+    auto hourCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkVintageHourText");
+    cardsLayout.Children().Append(hourCard);
+
+    // 2. Minute Card
+    auto minCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkVintageMinText");
+    cardsLayout.Children().Append(minCard);
+
+    // 3. Seconds Card (If enabled)
+    if (g_settings.showSeconds) {
+        auto secCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkVintageSecText");
+        cardsLayout.Children().Append(secCard);
+    }
+
+    verticalLayout.Children().Append(cardsLayout);
+
+    // Vintage Date Plate (Embossed Industrial Badge Style)
+    if (g_settings.showDateCapsule) {
+        wuxc::Border dateCapsule;
+        dateCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(215, 20, 22, 28)));
+        dateCapsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(85, 60, 68, 78)));
+        dateCapsule.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        dateCapsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(8.0));
+        dateCapsule.Padding(wux::Thickness{ 22.0, 7.0, 22.0, 7.0 });
+        dateCapsule.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
+        dateCapsule.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        wuxc::TextBlock dateText;
+        dateText.Name(L"WindhawkVintageDateText");
+        dateText.FontSize(18.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 235, 228, 215)));
+        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+        dateCapsule.Child(dateText);
+        verticalLayout.Children().Append(dateCapsule);
+        g_dateTextBlock = dateText;
+    }
+
+    rootContainer.Children().Append(verticalLayout);
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
 // Build Pixel Digit Grid Helper (7 cols x 9 rows, 63 dots)
 wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double spacing) {
     wuxc::Grid grid;
@@ -713,6 +867,8 @@ wux::UIElement BuildMinimalClockElement() {
 wux::UIElement BuildClockElement() {
     if (g_settings.clockStyle == L"pixel") {
         return BuildPixelClockElement();
+    } else if (g_settings.clockStyle == L"vintage") {
+        return BuildVintageClockElement();
     } else if (g_settings.clockStyle == L"minimal") {
         return BuildMinimalClockElement();
     }
