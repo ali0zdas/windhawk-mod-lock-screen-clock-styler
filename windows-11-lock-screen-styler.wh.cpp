@@ -1,7 +1,9 @@
 // ==WindhawkMod==
 // @id              windows-11-lock-screen-styler
 // @name            Windows 11 Lock Screen Styler
+// @name:tr-TR      Windows 11 Kilit Ekranı Özelleştirici
 // @description     Customize the Windows 11 lock screen with modern clock styles, date display, and widget controls.
+// @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget kontrolleriyle özelleştirin.
 // @version         0.1.0
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
@@ -33,39 +35,63 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 /*
 - clockStyle: flip
   $name: "Clock Style"
+  $name:tr-TR: "Saat Stili"
   $description: "The clock style to display on the lock screen."
+  $description:tr-TR: "Kilit ekranında görüntülenecek saat tasarım stili."
   $options:
     - flip: "Frosted Glass Flip Clock"
+    - flip:tr-TR: "Buzlu Cam Flip Saat"
     - minimal: "Minimalist Digital Clock"
+    - minimal:tr-TR: "Minimalist Dijital Saat"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
+    - defaultOnly:tr-TR: "Yalnızca Varsayılan Saat (Widget'lar Gizli)"
 - glassOpacity: 45
   $name: "Glass Opacity (Liquid Glass Alpha)"
+  $name:tr-TR: "Cam Opaklığı (Akrilik Alpha)"
   $description: "Translucency level of the flip cards (0 to 255; 0 is completely transparent, 255 is fully opaque)."
+  $description:tr-TR: "Flip kartların yarı saydamlık derecesi (0 tamamen şeffaf, 255 tamamen mat)."
 - cardCornerRadius: 22
   $name: "Card Corner Radius (px)"
+  $name:tr-TR: "Kart Köşe Yuvarlaklığı (px)"
   $description: "Corner curvature radius of the flip clock cards."
+  $description:tr-TR: "Flip saat kartlarının köşe kavis yarıçapı."
 - clockFontSize: 92
   $name: "Digit Font Size"
+  $name:tr-TR: "Rakam Font Boyutu"
   $description: "Font size for hour and minute digits."
+  $description:tr-TR: "Saat ve dakika rakamlarının yazı tipi büyüklüğü."
 - verticalOffset: 0
   $name: "Vertical Offset (px)"
+  $name:tr-TR: "Dikey Ofset (px)"
   $description: "Offset to shift the clock vertically up or down (-200 to +400)."
+  $description:tr-TR: "Saati dikey olarak yukarı veya aşağı kaydırma ofseti (-200 ile +400 arası)."
 - clockAlignment: center
   $name: "Clock Horizontal Alignment"
+  $name:tr-TR: "Yatay Hizalama"
   $description: "Horizontal alignment of the clock on screen."
+  $description:tr-TR: "Saatin ekrandaki yatay hizalama konumu."
   $options:
     - center: "Center of Screen"
+    - center:tr-TR: "Ekranın Ortası"
     - left: "Left Side"
+    - left:tr-TR: "Sol Taraf"
     - right: "Right Side"
+    - right:tr-TR: "Sağ Taraf"
 - hideDefaultWidgets: true
   $name: "Hide Default Widgets"
+  $name:tr-TR: "Varsayılan Widget'ları Gizle"
   $description: "Hides MSN weather, sports, and news widget areas on the lock screen."
+  $description:tr-TR: "Kilit ekranındaki MSN hava durumu, spor ve borsa/haber widget alanlarını gizler."
 - hideDefaultClock: true
   $name: "Hide Default Lock Screen Clock"
+  $name:tr-TR: "Varsayılan Kilit Ekranı Saatini Gizle"
   $description: "Hides the default Windows 11 clock and date text to make way for the new clock."
+  $description:tr-TR: "Yeni saate yer açmak için varsayılan Windows 11 saat ve tarih yazısını gizler."
 - showDateCapsule: true
   $name: "Show Date Capsule"
+  $name:tr-TR: "Tarih Kapsülünü Göster"
   $description: "Displays a date and weekday capsule below the flip clock cards."
+  $description:tr-TR: "Flip saat kartlarının altında gün ve tarih kapsülünü görüntüler."
 */
 // ==/WindhawkModSettings==
 
