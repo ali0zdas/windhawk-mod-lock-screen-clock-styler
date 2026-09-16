@@ -3,8 +3,8 @@
 // @name            Windows 11 Lock Screen Styler
 // @name:tr-TR      Windows 11 Kilit Ekranı Özelleştirici
 // @description     Customize the Windows 11 lock screen with modern clock styles, date display, and widget controls.
-// @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget kontrolleriyle özelleştirin.
-// @version         0.1.0
+// @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget denetimleriyle özelleştirin.
+// @version         0.2.0
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
 // @include         LockApp.exe
@@ -19,7 +19,9 @@
 Customize and enhance the Windows 11 lock screen with modern clock designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
-- **Modern Flip Clock:** Split glass cards for hour and minute with an elegant horizontal flip seam.
+- **Modern Flip Clock:** Split glass cards for hour, minute, and optional seconds with an elegant horizontal flip seam.
+- **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
+- **Show Seconds Toggle:** Optional live seconds display for the Flip clock.
 - **Frosted Glass / Acrylic Styling:** Translucent glass panels with subtle border highlights and rounded corners.
 - **Dynamic Date Display:** Elegant date and day capsule positioned beneath the clock, adapting to the user's system locale.
 - **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
@@ -35,21 +37,23 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 /*
 - clockStyle: flip
   $name: "Clock Style"
-  $name:tr-TR: "Saat Stili"
+  $name:tr-TR: "Saat Tasarım Stili"
   $description: "The clock style to display on the lock screen."
-  $description:tr-TR: "Kilit ekranında görüntülenecek saat tasarım stili."
+  $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
     - flip: "Frosted Glass Flip Clock"
-    - flip:tr-TR: "Buzlu Cam Flip Saat"
     - minimal: "Minimalist Digital Clock"
-    - minimal:tr-TR: "Minimalist Dijital Saat"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
-    - defaultOnly:tr-TR: "Yalnızca Varsayılan Saat (Widget'lar Gizli)"
+- showSeconds: false
+  $name: "Show Seconds"
+  $name:tr-TR: "Saniyeyi Göster"
+  $description: "Displays seconds on the clock."
+  $description:tr-TR: "Saatte saniye göstergesini etkinleştirir."
 - glassOpacity: 45
   $name: "Glass Opacity (Liquid Glass Alpha)"
-  $name:tr-TR: "Cam Opaklığı (Akrilik Alpha)"
+  $name:tr-TR: "Cam Opaklığı (Alfa Değeri)"
   $description: "Translucency level of the flip cards (0 to 255; 0 is completely transparent, 255 is fully opaque)."
-  $description:tr-TR: "Flip kartların yarı saydamlık derecesi (0 tamamen şeffaf, 255 tamamen mat)."
+  $description:tr-TR: "Flip kartlarının yarı saydamlık derecesi (0 ile 255 arası; 0 tamamen saydam, 255 tam opak)."
 - cardCornerRadius: 22
   $name: "Card Corner Radius (px)"
   $name:tr-TR: "Kart Köşe Yuvarlaklığı (px)"
@@ -59,39 +63,36 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $name: "Digit Font Size"
   $name:tr-TR: "Rakam Font Boyutu"
   $description: "Font size for hour and minute digits."
-  $description:tr-TR: "Saat ve dakika rakamlarının yazı tipi büyüklüğü."
+  $description:tr-TR: "Saat ve dakika rakamlarının punto büyüklüğü."
 - verticalOffset: 0
   $name: "Vertical Offset (px)"
-  $name:tr-TR: "Dikey Ofset (px)"
+  $name:tr-TR: "Dikey Konum Ofseti (px)"
   $description: "Offset to shift the clock vertically up or down (-200 to +400)."
-  $description:tr-TR: "Saati dikey olarak yukarı veya aşağı kaydırma ofseti (-200 ile +400 arası)."
+  $description:tr-TR: "Saatin ekrandaki dikey konumunu yukarı veya aşağı kaydırma ofseti (-200 ile +400 arası)."
 - clockAlignment: center
   $name: "Clock Horizontal Alignment"
-  $name:tr-TR: "Yatay Hizalama"
+  $name:tr-TR: "Saat Yatay Hizalaması"
   $description: "Horizontal alignment of the clock on screen."
-  $description:tr-TR: "Saatin ekrandaki yatay hizalama konumu."
+  $description:tr-TR: "Saatin ekrandaki yatay hizalaması."
   $options:
     - center: "Center of Screen"
-    - center:tr-TR: "Ekranın Ortası"
     - left: "Left Side"
-    - left:tr-TR: "Sol Taraf"
     - right: "Right Side"
-    - right:tr-TR: "Sağ Taraf"
 - hideDefaultWidgets: true
   $name: "Hide Default Widgets"
   $name:tr-TR: "Varsayılan Widget'ları Gizle"
   $description: "Hides MSN weather, sports, and news widget areas on the lock screen."
-  $description:tr-TR: "Kilit ekranındaki MSN hava durumu, spor ve borsa/haber widget alanlarını gizler."
+  $description:tr-TR: "Kilit ekranındaki MSN hava durumu, spor ve haber widget alanını gizler."
 - hideDefaultClock: true
   $name: "Hide Default Lock Screen Clock"
   $name:tr-TR: "Varsayılan Kilit Ekranı Saatini Gizle"
   $description: "Hides the default Windows 11 clock and date text to make way for the new clock."
-  $description:tr-TR: "Yeni saate yer açmak için varsayılan Windows 11 saat ve tarih yazısını gizler."
+  $description:tr-TR: "Windows 11'in standart saat ve tarih metnini gizleyerek yeni saatin görünmesini sağlar."
 - showDateCapsule: true
   $name: "Show Date Capsule"
   $name:tr-TR: "Tarih Kapsülünü Göster"
   $description: "Displays a date and weekday capsule below the flip clock cards."
-  $description:tr-TR: "Flip saat kartlarının altında gün ve tarih kapsülünü görüntüler."
+  $description:tr-TR: "Flip saat kartlarının altında gün ve ay kapsülünü görüntüler."
 */
 // ==/WindhawkModSettings==
 
@@ -104,12 +105,14 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.UI.h>
+#include <winrt/Windows.UI.Core.h>
 #include <winrt/Windows.UI.Text.h>
 #include <winrt/Windows.UI.Xaml.h>
 #include <winrt/Windows.UI.Xaml.Controls.h>
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 #include <string>
+#include <vector>
 #include <chrono>
 
 namespace wux = winrt::Windows::UI::Xaml;
@@ -121,6 +124,7 @@ namespace wu = winrt::Windows::UI;
 // Mod Configuration Settings
 struct ModSettings {
     std::wstring clockStyle;
+    bool showSeconds;
     int glassOpacity;
     int cardCornerRadius;
     int clockFontSize;
@@ -136,6 +140,8 @@ void LoadSettings() {
     PCWSTR styleStr = Wh_GetStringSetting(L"clockStyle");
     g_settings.clockStyle = (styleStr && *styleStr) ? styleStr : L"flip";
     Wh_FreeStringSetting(styleStr);
+
+    g_settings.showSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
 
     g_settings.glassOpacity = Wh_GetIntSetting(L"glassOpacity");
     if (g_settings.glassOpacity <= 0 || g_settings.glassOpacity > 255) {
@@ -162,50 +168,24 @@ void LoadSettings() {
     g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, opacity=%d, font=%d, hideWidgets=%d, hideClock=%d",
-           g_settings.clockStyle.c_str(), g_settings.glassOpacity,
+    Wh_Log(L"Settings loaded: style=%s, showSec=%d, opacity=%d, font=%d, hideWidgets=%d, hideClock=%d",
+           g_settings.clockStyle.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
            g_settings.clockFontSize, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock);
 }
 
-// Flip Clock UI References
+// UI State References
+wuxc::Grid g_lockRootGrid{ nullptr };
+wux::UIElement g_activeClockElement{ nullptr };
 wuxc::TextBlock g_hourTextBlock{ nullptr };
 wuxc::TextBlock g_minTextBlock{ nullptr };
+wuxc::TextBlock g_secTextBlock{ nullptr };
+wuxc::TextBlock g_minimalTimeTextBlock{ nullptr };
 wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
-bool g_flipClockInjected = false;
+bool g_clockInjected = false;
 
-// Update Time and Date
-void UpdateTimeAndDate() {
-    if (!g_hourTextBlock || !g_minTextBlock) {
-        return;
-    }
-
-    SYSTEMTIME st;
-    GetLocalTime(&st);
-
-    WCHAR hourBuf[8];
-    swprintf_s(hourBuf, L"%02d", st.wHour);
-
-    WCHAR minBuf[8];
-    swprintf_s(minBuf, L"%02d", st.wMinute);
-
-    g_hourTextBlock.Text(hourBuf);
-    g_minTextBlock.Text(minBuf);
-
-    if (g_dateTextBlock && g_settings.showDateCapsule) {
-        WCHAR dateBuf[128];
-        if (GetDateFormatW(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, nullptr, dateBuf, ARRAYSIZE(dateBuf)) > 0) {
-            g_dateTextBlock.Text(dateBuf);
-        }
-    }
-}
-
-// Build Flip Clock UI Element
-wux::UIElement BuildFlipClockElement() {
-    wuxc::Grid rootContainer;
-    rootContainer.Name(L"WindhawkFlipClockContainer");
-
-    // Horizontal Alignment
+// Helper to apply root horizontal and vertical alignments
+void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     if (g_settings.clockAlignment == L"left") {
         rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Left);
         rootContainer.Margin(wux::Thickness{ 80.0, (double)g_settings.verticalOffset, 0.0, 0.0 });
@@ -217,96 +197,137 @@ wux::UIElement BuildFlipClockElement() {
         rootContainer.Margin(wux::Thickness{ 0.0, (double)g_settings.verticalOffset, 0.0, 0.0 });
     }
     rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
+}
+void UpdateTimeAndDate() {
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+
+    if (g_settings.clockStyle == L"minimal") {
+        if (g_minimalTimeTextBlock) {
+            WCHAR timeBuf[32];
+            if (g_settings.showSeconds) {
+                swprintf_s(timeBuf, L"%02d:%02d:%02d", st.wHour, st.wMinute, st.wSecond);
+            } else {
+                swprintf_s(timeBuf, L"%02d:%02d", st.wHour, st.wMinute);
+            }
+            g_minimalTimeTextBlock.Text(timeBuf);
+        }
+    } else {
+        // Flip Clock
+        if (g_hourTextBlock && g_minTextBlock) {
+            WCHAR hourBuf[8];
+            swprintf_s(hourBuf, L"%02d", st.wHour);
+            WCHAR minBuf[8];
+            swprintf_s(minBuf, L"%02d", st.wMinute);
+
+            g_hourTextBlock.Text(hourBuf);
+            g_minTextBlock.Text(minBuf);
+
+            if (g_secTextBlock && g_settings.showSeconds) {
+                WCHAR secBuf[8];
+                swprintf_s(secBuf, L"%02d", st.wSecond);
+                g_secTextBlock.Text(secBuf);
+            }
+        }
+    }
+
+    if (g_dateTextBlock && g_settings.showDateCapsule) {
+        WCHAR dateBuf[128];
+        if (GetDateFormatW(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, nullptr, dateBuf, ARRAYSIZE(dateBuf)) > 0) {
+            g_dateTextBlock.Text(dateBuf);
+        }
+    }
+}
+
+// Start Live Clock Timer
+void StartClockTimer() {
+    if (g_clockTimer) {
+        g_clockTimer.Stop();
+        g_clockTimer = nullptr;
+    }
+    g_clockTimer = wux::DispatcherTimer();
+    g_clockTimer.Interval(std::chrono::milliseconds(500));
+    g_clockTimer.Tick([](auto&&, auto&&) {
+        UpdateTimeAndDate();
+    });
+    g_clockTimer.Start();
+}
+
+// Build Single Flip Card Element
+wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
+    wuxc::Grid card;
+    card.Width(width);
+    card.Height(height);
+
+    // Acrylic Backplate
+    wuxc::Border backplate;
+    backplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
+    backplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
+    backplate.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 1.5 });
+    backplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
+
+    // Center Flip Fold / Seam Line
+    wuxs::Rectangle divider;
+    divider.Height(2.0);
+    divider.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    divider.VerticalAlignment(wux::VerticalAlignment::Center);
+    divider.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(45, 0, 0, 0)));
+    divider.Margin(wux::Thickness{ 6.0, 0.0, 6.0, 0.0 });
+
+    // Card Text
+    wuxc::TextBlock cardText;
+    cardText.Name(textName);
+    cardText.FontSize((double)g_settings.clockFontSize);
+    cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    cardText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    card.Children().Append(backplate);
+    card.Children().Append(divider);
+    card.Children().Append(cardText);
+    outText = cardText;
+
+    return card;
+}
+
+// Build Flip Clock UI Element
+wux::UIElement BuildFlipClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkFlipClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
 
     wuxc::StackPanel verticalLayout;
     verticalLayout.Orientation(wuxc::Orientation::Vertical);
     verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
-    // Flip Clock Cards Panel (Hour and Minute)
     wuxc::StackPanel cardsLayout;
     cardsLayout.Orientation(wuxc::Orientation::Horizontal);
     cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardsLayout.Spacing(18.0);
+    cardsLayout.Spacing(g_settings.showSeconds ? 14.0 : 18.0);
 
-    double cardWidth = g_settings.clockFontSize * 1.65;
+    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.45) : (g_settings.clockFontSize * 1.65);
     double cardHeight = g_settings.clockFontSize * 1.95;
     double cornerRad = (double)g_settings.cardCornerRadius;
 
-    // --- HOUR CARD ---
-    wuxc::Grid hourCard;
-    hourCard.Width(cardWidth);
-    hourCard.Height(cardHeight);
-
-    // Acrylic / Liquid Glass Background
-    wuxc::Border hourBackplate;
-    hourBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
-    hourBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
-    hourBackplate.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 1.5 });
-    hourBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRad));
-
-    // Center Flip Fold / Seam Line
-    wuxs::Rectangle hourDivider;
-    hourDivider.Height(2.0);
-    hourDivider.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    hourDivider.VerticalAlignment(wux::VerticalAlignment::Center);
-    hourDivider.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(45, 0, 0, 0)));
-    hourDivider.Margin(wux::Thickness{ 6.0, 0.0, 6.0, 0.0 });
-
-    // Hour Text
-    wuxc::TextBlock hourText;
-    hourText.Name(L"WindhawkFlipHourText");
-    hourText.FontSize((double)g_settings.clockFontSize);
-    hourText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    hourText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
-    hourText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
-    hourText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    hourText.VerticalAlignment(wux::VerticalAlignment::Center);
-
-    hourCard.Children().Append(hourBackplate);
-    hourCard.Children().Append(hourDivider);
-    hourCard.Children().Append(hourText);
-    g_hourTextBlock = hourText;
-
-    // --- MINUTE CARD ---
-    wuxc::Grid minCard;
-    minCard.Width(cardWidth);
-    minCard.Height(cardHeight);
-
-    // Acrylic / Liquid Glass Background
-    wuxc::Border minBackplate;
-    minBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
-    minBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
-    minBackplate.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 1.5 });
-    minBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRad));
-
-    // Center Flip Fold / Seam Line
-    wuxs::Rectangle minDivider;
-    minDivider.Height(2.0);
-    minDivider.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    minDivider.VerticalAlignment(wux::VerticalAlignment::Center);
-    minDivider.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(45, 0, 0, 0)));
-    minDivider.Margin(wux::Thickness{ 6.0, 0.0, 6.0, 0.0 });
-
-    // Minute Text
-    wuxc::TextBlock minText;
-    minText.Name(L"WindhawkFlipMinText");
-    minText.FontSize((double)g_settings.clockFontSize);
-    minText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    minText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
-    minText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
-    minText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    minText.VerticalAlignment(wux::VerticalAlignment::Center);
-
-    minCard.Children().Append(minBackplate);
-    minCard.Children().Append(minDivider);
-    minCard.Children().Append(minText);
-    g_minTextBlock = minText;
-
+    // 1. Hour Card
+    auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkFlipHourText");
     cardsLayout.Children().Append(hourCard);
+
+    // 2. Minute Card
+    auto minCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkFlipMinText");
     cardsLayout.Children().Append(minCard);
+
+    // 3. Seconds Card (If enabled)
+    if (g_settings.showSeconds) {
+        auto secCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkFlipSecText");
+        cardsLayout.Children().Append(secCard);
+    }
+
     verticalLayout.Children().Append(cardsLayout);
 
-    // --- DATE CAPSULE ---
+    // Date Capsule
     if (g_settings.showDateCapsule) {
         wuxc::Border dateCapsule;
         dateCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(35, 255, 255, 255)));
@@ -331,19 +352,88 @@ wux::UIElement BuildFlipClockElement() {
     }
 
     rootContainer.Children().Append(verticalLayout);
-
-    // Initial time update
     UpdateTimeAndDate();
-
-    // Live Timer (DispatcherTimer)
-    g_clockTimer = wux::DispatcherTimer();
-    g_clockTimer.Interval(std::chrono::milliseconds(500));
-    g_clockTimer.Tick([](auto&&, auto&&) {
-        UpdateTimeAndDate();
-    });
-    g_clockTimer.Start();
+    StartClockTimer();
 
     return rootContainer;
+}
+
+// Build Minimalist Digital Clock Element
+wux::UIElement BuildMinimalClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkMinimalClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    wuxc::TextBlock timeText;
+    timeText.FontSize((double)(g_settings.clockFontSize * 1.3));
+    timeText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    timeText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiLight());
+    timeText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    timeText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    verticalLayout.Children().Append(timeText);
+    g_minimalTimeTextBlock = timeText;
+
+    if (g_settings.showDateCapsule) {
+        wuxc::TextBlock dateText;
+        dateText.FontSize(20.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::Normal());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(210, 255, 255, 255)));
+        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+        dateText.Margin(wux::Thickness{ 0.0, 10.0, 0.0, 0.0 });
+        verticalLayout.Children().Append(dateText);
+        g_dateTextBlock = dateText;
+    }
+
+    rootContainer.Children().Append(verticalLayout);
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
+// Factory function for selected clock style
+wux::UIElement BuildClockElement() {
+    if (g_settings.clockStyle == L"minimal") {
+        return BuildMinimalClockElement();
+    }
+    return BuildFlipClockElement();
+}
+
+// Thread-safe dynamic UI rebuild on settings change
+void RebuildClockUI() {
+    if (!g_lockRootGrid) return;
+    auto dispatcher = g_lockRootGrid.Dispatcher();
+    if (!dispatcher) return;
+
+    dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, []() {
+        if (!g_lockRootGrid) return;
+
+        if (g_activeClockElement) {
+            uint32_t index = 0;
+            if (g_lockRootGrid.Children().IndexOf(g_activeClockElement, index)) {
+                g_lockRootGrid.Children().RemoveAt(index);
+            }
+            g_activeClockElement = nullptr;
+        }
+
+        g_hourTextBlock = nullptr;
+        g_minTextBlock = nullptr;
+        g_secTextBlock = nullptr;
+        g_minimalTimeTextBlock = nullptr;
+        g_dateTextBlock = nullptr;
+        if (g_settings.clockStyle != L"defaultOnly") {
+            g_activeClockElement = BuildClockElement();
+            g_lockRootGrid.Children().Append(g_activeClockElement);
+            Wh_Log(L"Clock UI successfully rebuilt for style: %s (showSec=%d)",
+                   g_settings.clockStyle.c_str(), g_settings.showSeconds);
+        }
+    });
 }
 
 // Visual Tree Watcher (IVisualTreeServiceCallback2)
@@ -400,18 +490,19 @@ private:
                     std::wstring name = frameworkElement.Name().c_str();
 
                     // 1. Lock Screen Root Grid: LockRootGrid
-                    if ((name == L"LockRootGrid" || name == L"MainPageContainer") && !g_flipClockInjected)
+                    if ((name == L"LockRootGrid" || name == L"MainPageContainer") && !g_clockInjected)
                     {
                         auto grid = frameworkElement.try_as<wuxc::Grid>();
                         if (grid)
                         {
-                            Wh_Log(L"Found lock screen root grid: %s. Injecting Flip Clock...", name.c_str());
+                            g_lockRootGrid = grid;
+                            Wh_Log(L"Found lock screen root grid: %s. Injecting Clock...", name.c_str());
                             if (g_settings.clockStyle != L"defaultOnly")
                             {
-                                auto flipClock = BuildFlipClockElement();
-                                grid.Children().Append(flipClock);
-                                g_flipClockInjected = true;
-                                Wh_Log(L"Flip Clock successfully injected!");
+                                g_activeClockElement = BuildClockElement();
+                                grid.Children().Append(g_activeClockElement);
+                                g_clockInjected = true;
+                                Wh_Log(L"Clock successfully injected! Style: %s", g_settings.clockStyle.c_str());
                             }
                         }
                     }
@@ -755,12 +846,13 @@ void Wh_ModUninit() {
         g_visualTreeWatcher = nullptr;
     }
     g_tapInjected = false;
-    g_flipClockInjected = false;
+    g_clockInjected = false;
+    g_activeClockElement = nullptr;
+    g_lockRootGrid = nullptr;
 }
 
 void Wh_ModSettingsChanged() {
     Wh_Log(L"Mod settings changed (Wh_ModSettingsChanged)...");
     LoadSettings();
-    UpdateTimeAndDate();
+    RebuildClockUI();
 }
-
