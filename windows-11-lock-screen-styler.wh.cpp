@@ -19,13 +19,13 @@
 Customize and enhance the Windows 11 lock screen with modern clock designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
-- **Modern Flip Clock:** Split glass cards for hour, minute, and optional seconds with an elegant horizontal flip seam.
+- **Modern Flip Clock:** Split glass cards for hour and minute with an elegant horizontal flip seam.
 - **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
-- **Cyberpunk / Neon Glow Clock:** High-voltage cyberpunk aesthetic with dark obsidian acrylic cards, electric cyan neon edge highlights, laser-cut split seam, and hot magenta HUD date capsule.
+- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke tactical Netrunner HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow and hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
-- **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
-- **Show Seconds Toggle:** Optional live seconds display for both Flip and Pixel clock styles.
+- **12-Hour / 24-Hour Format:** Switch between 24-hour time and 12-hour time with dedicated AM/PM indicators across themes.
+- **Show Seconds Toggle:** Optional live seconds display for Cyberpunk, Pixel, and Aura clock styles.
 - **Frosted Glass / Acrylic Styling:** Translucent glass panels with subtle border highlights and rounded corners.
 - **Dynamic Date Display:** Elegant date and day capsule positioned beneath the clock, adapting to the user's system locale.
 - **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
@@ -46,24 +46,24 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
     - flip: "Frosted Glass Flip Clock"
-    - flip:tr-TR: "Buzlu Cam Flip Saat"
     - vintage: "Retro Vintage Flip Clock"
-    - vintage:tr-TR: "Retro Vintage Flip Saat"
-    - cyberpunk: "Cyberpunk / Neon Glow Clock"
-    - cyberpunk:tr-TR: "Cyberpunk / Neon Glow Saat"
-    - pixel: "Retro Pixel / LED Dot Matrix Clock"
-    - pixel:tr-TR: "Retro Piksel / LED Matris Saat"
+    - cyberpunk: "Cyberpunk Sci-Fi HUD Terminal"
+    - pixel: "Retro Pixel / LED Dot Matrix"
     - aura: "Minimalist Aura / Floating Clock"
-    - aura:tr-TR: "Minimalist Aura / Yüzen Saat"
-    - minimal: "Minimalist Digital Clock"
-    - minimal:tr-TR: "Minimalist Dijital Saat"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
-    - defaultOnly:tr-TR: "Yalnızca Varsayılan Saat (Widget'lar Gizli)"
+- timeFormat: 24h
+  $name: "Time Format"
+  $name:tr-TR: "Saat Formatı"
+  $description: "Select 24-hour format or 12-hour format with AM/PM indicator."
+  $description:tr-TR: "24 saat formatı veya AM/PM göstergeli 12 saat formatı seçimi."
+  $options:
+    - 24h: "24-Hour (14:30)"
+    - 12h: "12-Hour AM/PM (02:30 PM)"
 - showSeconds: false
   $name: "Show Seconds"
   $name:tr-TR: "Saniyeyi Göster"
-  $description: "Displays seconds on the clock."
-  $description:tr-TR: "Saatte saniye göstergesini etkinleştirir."
+  $description: "Displays live seconds (supported on Cyberpunk, Retro Pixel, and Aura styles)."
+  $description:tr-TR: "Canlı saniye göstergesini etkinleştirir (Cyberpunk, Retro Pixel ve Aura stillerinde desteklenir)."
 - glassOpacity: 45
   $name: "Glass Opacity (Liquid Glass Alpha)"
   $name:tr-TR: "Cam Opaklığı (Alfa Değeri)"
@@ -124,6 +124,7 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 #include <winrt/Windows.UI.Text.h>
 #include <winrt/Windows.UI.Xaml.h>
 #include <winrt/Windows.UI.Xaml.Controls.h>
+#include <winrt/Windows.UI.Xaml.Documents.h>
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
 #include <string>
@@ -132,6 +133,7 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 
 namespace wux = winrt::Windows::UI::Xaml;
 namespace wuxc = winrt::Windows::UI::Xaml::Controls;
+namespace wuxd = winrt::Windows::UI::Xaml::Documents;
 namespace wuxm = winrt::Windows::UI::Xaml::Media;
 namespace wuxs = winrt::Windows::UI::Xaml::Shapes;
 namespace wu = winrt::Windows::UI;
@@ -139,6 +141,7 @@ namespace wu = winrt::Windows::UI;
 // Mod Configuration Settings
 struct ModSettings {
     std::wstring clockStyle;
+    std::wstring timeFormat;
     bool showSeconds;
     int glassOpacity;
     int cardCornerRadius;
@@ -155,6 +158,10 @@ void LoadSettings() {
     PCWSTR styleStr = Wh_GetStringSetting(L"clockStyle");
     g_settings.clockStyle = (styleStr && *styleStr) ? styleStr : L"flip";
     Wh_FreeStringSetting(styleStr);
+
+    PCWSTR fmtStr = Wh_GetStringSetting(L"timeFormat");
+    g_settings.timeFormat = (fmtStr && *fmtStr) ? fmtStr : L"24h";
+    Wh_FreeStringSetting(fmtStr);
 
     g_settings.showSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
 
@@ -183,8 +190,8 @@ void LoadSettings() {
     g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, showSec=%d, opacity=%d, font=%d, hideWidgets=%d, hideClock=%d",
-           g_settings.clockStyle.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
+    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, hideWidgets=%d, hideClock=%d",
+           g_settings.clockStyle.c_str(), g_settings.timeFormat.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
            g_settings.clockFontSize, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock);
 }
 
@@ -194,18 +201,21 @@ wux::UIElement g_activeClockElement{ nullptr };
 wuxc::TextBlock g_hourTextBlock{ nullptr };
 wuxc::TextBlock g_minTextBlock{ nullptr };
 wuxc::TextBlock g_secTextBlock{ nullptr };
-wuxc::TextBlock g_minimalTimeTextBlock{ nullptr };
+wuxc::TextBlock g_ampmTextBlock{ nullptr };
+wuxc::TextBlock g_auraTimeTextBlock{ nullptr };
 wuxc::TextBlock g_auraShadowTextBlock{ nullptr };
 wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
 
-// 7x9 Dot Matrix Font Table for Digits 0 to 9 with 2-Dot Stroke Thickness
-// Each digit consists of 9 rows; each row uses the lower 7 bits (bit 6 = col 0, bit 0 = col 6).
-static const uint8_t FONT_7x9[10][9] = {
+// 7x11 Dot Matrix Font Table for Digits 0 to 9 with 2-Dot Stroke Thickness
+// Each digit consists of 11 rows; each row uses the lower 7 bits (bit 6 = col 0, bit 0 = col 6).
+static const uint8_t FONT_7x11[10][11] = {
     // 0
     { 0b0111110,
       0b1111111,
+      0b1100011,
+      0b1100011,
       0b1100011,
       0b1100011,
       0b1100011,
@@ -221,6 +231,8 @@ static const uint8_t FONT_7x9[10][9] = {
       0b0001100,
       0b0001100,
       0b0001100,
+      0b0001100,
+      0b0001100,
       0b0111110,
       0b0111110 },
     // 2
@@ -228,8 +240,10 @@ static const uint8_t FONT_7x9[10][9] = {
       0b1111111,
       0b0000011,
       0b0000011,
+      0b0000011,
       0b0111111,
       0b1111110,
+      0b1100000,
       0b1100000,
       0b1111111,
       0b1111111 },
@@ -238,7 +252,9 @@ static const uint8_t FONT_7x9[10][9] = {
       0b1111111,
       0b0000011,
       0b0000011,
+      0b0000011,
       0b0011110,
+      0b0000011,
       0b0000011,
       0b0000011,
       0b1111111,
@@ -248,8 +264,10 @@ static const uint8_t FONT_7x9[10][9] = {
       0b1100011,
       0b1100011,
       0b1100011,
+      0b1100011,
       0b1111111,
       0b1111111,
+      0b0000011,
       0b0000011,
       0b0000011,
       0b0000011 },
@@ -257,8 +275,10 @@ static const uint8_t FONT_7x9[10][9] = {
     { 0b1111111,
       0b1111111,
       0b1100000,
+      0b1100000,
       0b1111110,
-      0b1111111,
+      0b0111111,
+      0b0000011,
       0b0000011,
       0b0000011,
       0b1111111,
@@ -267,8 +287,10 @@ static const uint8_t FONT_7x9[10][9] = {
     { 0b0111110,
       0b1111111,
       0b1100000,
+      0b1100000,
       0b1111110,
       0b1111111,
+      0b1100011,
       0b1100011,
       0b1100011,
       0b1111111,
@@ -277,8 +299,10 @@ static const uint8_t FONT_7x9[10][9] = {
     { 0b1111111,
       0b1111111,
       0b0000011,
+      0b0000011,
       0b0000110,
       0b0001100,
+      0b0011000,
       0b0011000,
       0b0110000,
       0b0110000,
@@ -288,7 +312,9 @@ static const uint8_t FONT_7x9[10][9] = {
       0b1111111,
       0b1100011,
       0b1100011,
+      0b1100011,
       0b0111110,
+      0b1100011,
       0b1100011,
       0b1100011,
       0b1111111,
@@ -298,8 +324,10 @@ static const uint8_t FONT_7x9[10][9] = {
       0b1111111,
       0b1100011,
       0b1100011,
+      0b1100011,
       0b1111111,
       0b0111111,
+      0b0000011,
       0b0000011,
       0b1111111,
       0b0111110 }
@@ -307,7 +335,7 @@ static const uint8_t FONT_7x9[10][9] = {
 
 // Pixel Clock State
 struct PixelDigitGrid {
-    std::vector<wuxs::Ellipse> dots; // 63 dots per digit (7 cols x 9 rows)
+    std::vector<wuxs::Ellipse> dots; // 77 dots per digit (7 cols x 11 rows)
 };
 PixelDigitGrid g_pixelDigits[6]; // H1, H2, M1, M2, S1, S2
 wuxm::SolidColorBrush g_brushActiveDot{ nullptr };
@@ -328,13 +356,13 @@ void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
 }
 
-// Update single pixel digit dots (7x9 matrix)
+// Update single pixel digit dots (7x11 matrix)
 void SetPixelDigitValue(PixelDigitGrid& digitRef, int val) {
-    if (val < 0 || val > 9 || digitRef.dots.size() != 63 || !g_brushActiveDot || !g_brushInactiveDot) {
+    if (val < 0 || val > 9 || digitRef.dots.size() != 77 || !g_brushActiveDot || !g_brushInactiveDot) {
         return;
     }
-    const uint8_t* rows = FONT_7x9[val];
-    for (int r = 0; r < 9; r++) {
+    const uint8_t* rows = FONT_7x11[val];
+    for (int r = 0; r < 11; r++) {
         uint8_t rowBits = rows[r];
         for (int c = 0; c < 7; c++) {
             bool active = (rowBits & (1 << (6 - c))) != 0;
@@ -349,9 +377,23 @@ void UpdateTimeAndDate() {
     SYSTEMTIME st;
     GetLocalTime(&st);
 
+    bool is12h = (g_settings.timeFormat == L"12h");
+    int rawHour = st.wHour;
+    int displayHour = rawHour;
+    bool isPM = (rawHour >= 12);
+    const wchar_t* ampmStr = isPM ? L"PM" : L"AM";
+    if (is12h) {
+        displayHour = rawHour % 12;
+        if (displayHour == 0) displayHour = 12;
+    }
+
+    if (g_ampmTextBlock) {
+        g_ampmTextBlock.Text(ampmStr);
+    }
+
     if (g_settings.clockStyle == L"pixel") {
-        int h1 = st.wHour / 10;
-        int h2 = st.wHour % 10;
+        int h1 = displayHour / 10;
+        int h2 = displayHour % 10;
         int m1 = st.wMinute / 10;
         int m2 = st.wMinute % 10;
 
@@ -366,24 +408,36 @@ void UpdateTimeAndDate() {
             SetPixelDigitValue(g_pixelDigits[4], s1);
             SetPixelDigitValue(g_pixelDigits[5], s2);
         }
-    } else if (g_settings.clockStyle == L"aura" || g_settings.clockStyle == L"minimal") {
-        if (g_minimalTimeTextBlock) {
+    } else if (g_settings.clockStyle == L"aura") {
+        if (g_auraTimeTextBlock) {
             WCHAR timeBuf[32];
-            if (g_settings.showSeconds) {
-                swprintf_s(timeBuf, L"%02d:%02d:%02d", st.wHour, st.wMinute, st.wSecond);
+            if (is12h) {
+                if (g_settings.showSeconds) {
+                    swprintf_s(timeBuf, L"%02d:%02d:%02d %s", displayHour, st.wMinute, st.wSecond, ampmStr);
+                } else {
+                    swprintf_s(timeBuf, L"%02d:%02d %s", displayHour, st.wMinute, ampmStr);
+                }
             } else {
-                swprintf_s(timeBuf, L"%02d:%02d", st.wHour, st.wMinute);
+                if (g_settings.showSeconds) {
+                    swprintf_s(timeBuf, L"%02d:%02d:%02d", displayHour, st.wMinute, st.wSecond);
+                } else {
+                    swprintf_s(timeBuf, L"%02d:%02d", displayHour, st.wMinute);
+                }
             }
-            g_minimalTimeTextBlock.Text(timeBuf);
+            g_auraTimeTextBlock.Text(timeBuf);
             if (g_auraShadowTextBlock) {
                 g_auraShadowTextBlock.Text(timeBuf);
             }
         }
     } else {
-        // Flip Clock
+        // Flip Clock, Retro Vintage, Cyberpunk HUD
         if (g_hourTextBlock && g_minTextBlock) {
             WCHAR hourBuf[8];
-            swprintf_s(hourBuf, L"%02d", st.wHour);
+            if (is12h && (g_settings.clockStyle == L"flip" || g_settings.clockStyle == L"vintage")) {
+                swprintf_s(hourBuf, L"%d", displayHour);
+            } else {
+                swprintf_s(hourBuf, L"%02d", displayHour);
+            }
             WCHAR minBuf[8];
             swprintf_s(minBuf, L"%02d", st.wMinute);
 
@@ -421,7 +475,7 @@ void StartClockTimer() {
 }
 
 // Build Single Flip Card Element
-wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
+wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, double fontSize, wuxc::TextBlock& outText, const wchar_t* textName, bool isHourCard = false) {
     wuxc::Grid card;
     card.Width(width);
     card.Height(height);
@@ -444,17 +498,42 @@ wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, wuxc
     // Card Text
     wuxc::TextBlock cardText;
     cardText.Name(textName);
-    cardText.FontSize((double)g_settings.clockFontSize);
+    cardText.FontSize(fontSize);
     cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
     cardText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
     cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
     cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(cardText, wux::FontNumeralAlignment::Tabular);
 
     card.Children().Append(backplate);
-    card.Children().Append(divider);
     card.Children().Append(cardText);
+    card.Children().Append(divider);
     outText = cardText;
+
+    // AM/PM Indicator Badge on Hour Card (12h format)
+    if (isHourCard && g_settings.timeFormat == L"12h") {
+        wuxc::Border ampmBadge;
+        ampmBadge.HorizontalAlignment(wux::HorizontalAlignment::Left);
+        ampmBadge.VerticalAlignment(wux::VerticalAlignment::Top);
+        ampmBadge.Margin(wux::Thickness{ 14.0, 12.0, 0.0, 0.0 });
+        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(45, 255, 255, 255)));
+        ampmBadge.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(75, 255, 255, 255)));
+        ampmBadge.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        ampmBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(6.0));
+        ampmBadge.Padding(wux::Thickness{ 7.0, 2.0, 7.0, 2.0 });
+
+        wuxc::TextBlock ampmText;
+        ampmText.Name(L"WindhawkFlipAmPmText");
+        ampmText.FontSize(12.0);
+        ampmText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        ampmText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        ampmText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+        ampmBadge.Child(ampmText);
+
+        card.Children().Append(ampmBadge);
+        g_ampmTextBlock = ampmText;
+    }
 
     return card;
 }
@@ -472,25 +551,21 @@ wux::UIElement BuildFlipClockElement() {
     wuxc::StackPanel cardsLayout;
     cardsLayout.Orientation(wuxc::Orientation::Horizontal);
     cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardsLayout.Spacing(g_settings.showSeconds ? 14.0 : 18.0);
+    cardsLayout.Spacing(22.0);
 
-    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.45) : (g_settings.clockFontSize * 1.65);
-    double cardHeight = g_settings.clockFontSize * 1.95;
+    // Near-square large chunky card proportions (aspect ratio ~0.95)
+    double cardWidth = (double)g_settings.clockFontSize * 1.95;
+    double cardHeight = (double)g_settings.clockFontSize * 2.05;
+    double flipFontSize = (double)g_settings.clockFontSize * 1.48;
     double cornerRad = (double)g_settings.cardCornerRadius;
 
     // 1. Hour Card
-    auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkFlipHourText");
+    auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, L"WindhawkFlipHourText", true);
     cardsLayout.Children().Append(hourCard);
 
     // 2. Minute Card
-    auto minCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkFlipMinText");
+    auto minCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_minTextBlock, L"WindhawkFlipMinText", false);
     cardsLayout.Children().Append(minCard);
-
-    // 3. Seconds Card (If enabled)
-    if (g_settings.showSeconds) {
-        auto secCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkFlipSecText");
-        cardsLayout.Children().Append(secCard);
-    }
 
     verticalLayout.Children().Append(cardsLayout);
 
@@ -502,7 +577,7 @@ wux::UIElement BuildFlipClockElement() {
         dateCapsule.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
         dateCapsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(12.0));
         dateCapsule.Padding(wux::Thickness{ 20.0, 8.0, 20.0, 8.0 });
-        dateCapsule.Margin(wux::Thickness{ 0.0, 16.0, 0.0, 0.0 });
+        dateCapsule.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
         dateCapsule.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
         wuxc::TextBlock dateText;
@@ -526,7 +601,7 @@ wux::UIElement BuildFlipClockElement() {
 }
 
 // Build Single Vintage Flip Card Element (Retro Mechanical Airport/Station Solari Style)
-wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
+wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadius, double fontSize, wuxc::TextBlock& outText, const wchar_t* textName, bool isHourCard = false) {
     wuxc::Grid card;
     card.Width(width);
     card.Height(height);
@@ -541,12 +616,13 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     // Vintage Warm Cream / Aged Ivory Typography
     wuxc::TextBlock cardText;
     cardText.Name(textName);
-    cardText.FontSize((double)g_settings.clockFontSize);
+    cardText.FontSize(fontSize);
     cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
     cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
     cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 246, 241, 230)));
     cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
     cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(cardText, wux::FontNumeralAlignment::Tabular);
 
     // Center Mechanical Split: Upper shadow + Lower light catch bevel + Side axle hinge clips
     wuxc::Grid splitSeam;
@@ -603,6 +679,30 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     card.Children().Append(splitSeam);
     outText = cardText;
 
+    // Vintage Mechanical AM/PM Tag on Hour Card (12h format)
+    if (isHourCard && g_settings.timeFormat == L"12h") {
+        wuxc::Border ampmBadge;
+        ampmBadge.HorizontalAlignment(wux::HorizontalAlignment::Left);
+        ampmBadge.VerticalAlignment(wux::VerticalAlignment::Top);
+        ampmBadge.Margin(wux::Thickness{ 12.0, 10.0, 0.0, 0.0 });
+        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(245, 12, 14, 18)));
+        ampmBadge.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(95, 60, 68, 78)));
+        ampmBadge.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        ampmBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(4.0));
+        ampmBadge.Padding(wux::Thickness{ 6.0, 1.5, 6.0, 1.5 });
+
+        wuxc::TextBlock ampmText;
+        ampmText.Name(L"WindhawkVintageAmPmText");
+        ampmText.FontSize(11.0);
+        ampmText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        ampmText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        ampmText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 246, 241, 230)));
+        ampmBadge.Child(ampmText);
+
+        card.Children().Append(ampmBadge);
+        g_ampmTextBlock = ampmText;
+    }
+
     return card;
 }
 
@@ -619,25 +719,21 @@ wux::UIElement BuildVintageClockElement() {
     wuxc::StackPanel cardsLayout;
     cardsLayout.Orientation(wuxc::Orientation::Horizontal);
     cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardsLayout.Spacing(g_settings.showSeconds ? 12.0 : 16.0);
+    cardsLayout.Spacing(20.0);
 
-    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.42) : (g_settings.clockFontSize * 1.62);
-    double cardHeight = g_settings.clockFontSize * 1.95;
-    double cornerRad = 10.0;
+    // Near-square large chunky card proportions (aspect ratio ~0.95)
+    double cardWidth = (double)g_settings.clockFontSize * 1.95;
+    double cardHeight = (double)g_settings.clockFontSize * 2.05;
+    double flipFontSize = (double)g_settings.clockFontSize * 1.48;
+    double cornerRad = 12.0;
 
     // 1. Hour Card
-    auto hourCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkVintageHourText");
+    auto hourCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, L"WindhawkVintageHourText", true);
     cardsLayout.Children().Append(hourCard);
 
     // 2. Minute Card
-    auto minCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkVintageMinText");
+    auto minCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_minTextBlock, L"WindhawkVintageMinText", false);
     cardsLayout.Children().Append(minCard);
-
-    // 3. Seconds Card (If enabled)
-    if (g_settings.showSeconds) {
-        auto secCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkVintageSecText");
-        cardsLayout.Children().Append(secCard);
-    }
 
     verticalLayout.Children().Append(cardsLayout);
 
@@ -672,152 +768,316 @@ wux::UIElement BuildVintageClockElement() {
     return rootContainer;
 }
 
-// Build Single Cyberpunk Neon Card Element
-wuxc::Grid CreateCyberpunkFlipCard(double width, double height, double cornerRadius, wuxc::TextBlock& outText, const wchar_t* textName) {
-    wuxc::Grid card;
-    card.Width(width);
-    card.Height(height);
-
-    // 1. Dark Obsidian Glass Body with Electric Cyan Neon Glow Border
-    wuxc::Border cyberBackplate;
-    cyberBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(215, 9, 12, 24)));
-    cyberBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(195, 0, 240, 255))); // Electric Neon Cyan
-    cyberBackplate.BorderThickness(wux::Thickness{ 1.8, 1.8, 1.8, 1.8 });
-    cyberBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
-
-    // 2. Inner Neon Specular Highlight (Top sheen)
-    wuxc::Border innerGlow;
-    innerGlow.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(24, 0, 240, 255)));
-    innerGlow.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius - 2.0));
-    innerGlow.Height(height * 0.46);
-    innerGlow.VerticalAlignment(wux::VerticalAlignment::Top);
-    innerGlow.Margin(wux::Thickness{ 2.0, 2.0, 2.0, 0.0 });
-
-    // 3. Cyberpunk High-Voltage Typography (Pure bright electric white-cyan)
-    wuxc::TextBlock cardText;
-    cardText.Name(textName);
-    cardText.FontSize((double)g_settings.clockFontSize);
-    cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::Black());
-    cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 230, 252, 255)));
-    cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardText.VerticalAlignment(wux::VerticalAlignment::Center);
-
-    // 4. Center Horizontal Neon Laser Split Seam
-    wuxc::Grid laserSeam;
-    laserSeam.Height(10.0);
-    laserSeam.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    laserSeam.VerticalAlignment(wux::VerticalAlignment::Center);
-
-    // Soft laser aura (cyan glow)
-    wuxs::Rectangle laserAura;
-    laserAura.Height(4.0);
-    laserAura.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    laserAura.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(70, 0, 240, 255)));
-    laserAura.VerticalAlignment(wux::VerticalAlignment::Center);
-    laserAura.Margin(wux::Thickness{ 2.0, 0.0, 2.0, 0.0 });
-
-    // Sharp core laser line (vibrant bright cyan)
-    wuxs::Rectangle laserCore;
-    laserCore.Height(1.6);
-    laserCore.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    laserCore.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 0, 240, 255)));
-    laserCore.VerticalAlignment(wux::VerticalAlignment::Center);
-    laserCore.Margin(wux::Thickness{ 2.0, 0.0, 2.0, 0.0 });
-
-    // Left and Right Cyber Edge Accents (Hot Magenta laser nodes)
-    wuxs::Rectangle leftNode;
-    leftNode.Width(5.0);
-    leftNode.Height(10.0);
-    leftNode.RadiusX(1.0);
-    leftNode.RadiusY(1.0);
-    leftNode.HorizontalAlignment(wux::HorizontalAlignment::Left);
-    leftNode.VerticalAlignment(wux::VerticalAlignment::Center);
-    leftNode.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128))); // Hot Magenta
-
-    wuxs::Rectangle rightNode;
-    rightNode.Width(5.0);
-    rightNode.Height(10.0);
-    rightNode.RadiusX(1.0);
-    rightNode.RadiusY(1.0);
-    rightNode.HorizontalAlignment(wux::HorizontalAlignment::Right);
-    rightNode.VerticalAlignment(wux::VerticalAlignment::Center);
-    rightNode.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128))); // Hot Magenta
-
-    laserSeam.Children().Append(laserAura);
-    laserSeam.Children().Append(laserCore);
-    laserSeam.Children().Append(leftNode);
-    laserSeam.Children().Append(rightNode);
-
-    card.Children().Append(cyberBackplate);
-    card.Children().Append(innerGlow);
-    card.Children().Append(cardText);
-    card.Children().Append(laserSeam);
-    outText = cardText;
-
-    return card;
-}
-
-// Build Cyberpunk Neon Glow Clock UI Element
+// Build Cyberpunk Sci-Fi HUD Terminal Clock Element (Authentic Netrunner / Tactical Cyberpunk HUD)
 wux::UIElement BuildCyberpunkClockElement() {
     wuxc::Grid rootContainer;
-    rootContainer.Name(L"WindhawkCyberpunkClockContainer");
+    rootContainer.Name(L"WindhawkCyberpunkHUDContainer");
     ApplyAlignmentAndMargin(rootContainer);
 
     wuxc::StackPanel verticalLayout;
     verticalLayout.Orientation(wuxc::Orientation::Vertical);
     verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
-    wuxc::StackPanel cardsLayout;
-    cardsLayout.Orientation(wuxc::Orientation::Horizontal);
-    cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardsLayout.Spacing(g_settings.showSeconds ? 14.0 : 18.0);
+    // Outer Tactical HUD Bracket Frame
+    wuxc::Grid hudFrame;
+    hudFrame.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    hudFrame.VerticalAlignment(wux::VerticalAlignment::Center);
 
-    double cardWidth = g_settings.showSeconds ? (g_settings.clockFontSize * 1.45) : (g_settings.clockFontSize * 1.65);
-    double cardHeight = g_settings.clockFontSize * 1.95;
-    double cornerRad = 14.0;
+    // 1. Dark Obsidian Glass Chassis with Neon Cyan Edge
+    wuxc::Border chassis;
+    chassis.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(215, 8, 10, 18)));
+    chassis.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(130, 0, 245, 255))); // Electric Neon Cyan
+    chassis.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 1.5 });
+    chassis.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(6.0));
+    chassis.Padding(wux::Thickness{ 32.0, 18.0, 32.0, 20.0 });
 
-    // 1. Hour Card
-    auto hourCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_hourTextBlock, L"WindhawkCyberHourText");
-    cardsLayout.Children().Append(hourCard);
+    wuxc::StackPanel hudContent;
+    hudContent.Orientation(wuxc::Orientation::Vertical);
+    hudContent.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
-    // 2. Minute Card
-    auto minCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_minTextBlock, L"WindhawkCyberMinText");
-    cardsLayout.Children().Append(minCard);
+    // --- TOP CYBER HEADER BAR ---
+    wuxc::Grid topBar;
+    topBar.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    topBar.Margin(wux::Thickness{ 0.0, 0.0, 0.0, 14.0 });
 
-    // 3. Seconds Card (If enabled)
+    // Left Tag: [ SYS.LOC // TIME_SYNC ]
+    wuxc::TextBlock topTag;
+    topTag.Text(L"SYS.LOC // TIME_SYNC");
+    topTag.FontSize(11.0);
+    topTag.FontFamily(wuxm::FontFamily(L"Consolas"));
+    topTag.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    topTag.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(220, 0, 245, 255)));
+    topTag.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    topTag.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // Right Telemetry Blocks: 3 Cyan + 1 Acid Yellow
+    wuxc::StackPanel telemetryPills;
+    telemetryPills.Orientation(wuxc::Orientation::Horizontal);
+    telemetryPills.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    telemetryPills.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    wuxc::TextBlock liveLabel;
+    liveLabel.Text(L"ONLINE ");
+    liveLabel.FontSize(10.0);
+    liveLabel.FontFamily(wuxm::FontFamily(L"Consolas"));
+    liveLabel.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    liveLabel.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(220, 252, 238, 10))); // Acid Yellow
+    liveLabel.VerticalAlignment(wux::VerticalAlignment::Center);
+    telemetryPills.Children().Append(liveLabel);
+
+    for (int i = 0; i < 3; i++) {
+        wuxs::Rectangle pill;
+        pill.Width(6.0);
+        pill.Height(9.0);
+        pill.RadiusX(1.0);
+        pill.RadiusY(1.0);
+        pill.Margin(wux::Thickness{ 2.0, 0.0, 0.0, 0.0 });
+        pill.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(230, 0, 245, 255)));
+        telemetryPills.Children().Append(pill);
+    }
+    wuxs::Rectangle yellowPill;
+    yellowPill.Width(6.0);
+    yellowPill.Height(9.0);
+    yellowPill.RadiusX(1.0);
+    yellowPill.RadiusY(1.0);
+    yellowPill.Margin(wux::Thickness{ 2.0, 0.0, 0.0, 0.0 });
+    yellowPill.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 252, 238, 10))); // Acid Yellow
+    telemetryPills.Children().Append(yellowPill);
+
+    topBar.Children().Append(topTag);
+    topBar.Children().Append(telemetryPills);
+    hudContent.Children().Append(topBar);
+
+    // Top Header Divider (Neon Cyan hair line)
+    wuxs::Rectangle headerDivider;
+    headerDivider.Height(1.0);
+    headerDivider.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    headerDivider.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(70, 0, 245, 255)));
+    headerDivider.Margin(wux::Thickness{ 0.0, 0.0, 0.0, 16.0 });
+    hudContent.Children().Append(headerDivider);
+
+    // --- CENTER DIGITS DISPLAY ---
+    wuxc::StackPanel digitsPanel;
+    digitsPanel.Orientation(wuxc::Orientation::Horizontal);
+    digitsPanel.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    digitsPanel.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    double numFontSize = (double)g_settings.clockFontSize * 1.05;
+    double digitBlockWidth = numFontSize * 1.28;
+
+    // Hour
+    wuxc::TextBlock hourText;
+    hourText.Name(L"WindhawkCyberHourText");
+    hourText.FontSize(numFontSize);
+    hourText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    hourText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    hourText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 235, 252, 255))); // Electric White-Cyan
+    hourText.Width(digitBlockWidth);
+    hourText.TextAlignment(wux::TextAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(hourText, wux::FontNumeralAlignment::Tabular);
+    digitsPanel.Children().Append(hourText);
+    g_hourTextBlock = hourText;
+
+    // Slashes 1 (//) in Acid Yellow
+    wuxc::TextBlock slash1;
+    slash1.Text(L" // ");
+    slash1.FontSize(numFontSize * 0.7);
+    slash1.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    slash1.FontWeight(winrt::Windows::UI::Text::FontWeights::Light());
+    slash1.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(230, 252, 238, 10))); // Acid Yellow
+    slash1.VerticalAlignment(wux::VerticalAlignment::Center);
+    slash1.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
+    digitsPanel.Children().Append(slash1);
+
+    // Minute
+    wuxc::TextBlock minText;
+    minText.Name(L"WindhawkCyberMinText");
+    minText.FontSize(numFontSize);
+    minText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    minText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+    minText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 235, 252, 255)));
+    minText.Width(digitBlockWidth);
+    minText.TextAlignment(wux::TextAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(minText, wux::FontNumeralAlignment::Tabular);
+    digitsPanel.Children().Append(minText);
+    g_minTextBlock = minText;
+
+    // Seconds (if enabled)
     if (g_settings.showSeconds) {
-        auto secCard = CreateCyberpunkFlipCard(cardWidth, cardHeight, cornerRad, g_secTextBlock, L"WindhawkCyberSecText");
-        cardsLayout.Children().Append(secCard);
+        wuxc::TextBlock slash2;
+        slash2.Text(L" // ");
+        slash2.FontSize(numFontSize * 0.7);
+        slash2.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+        slash2.FontWeight(winrt::Windows::UI::Text::FontWeights::Light());
+        slash2.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 255, 0, 128))); // Hot Magenta
+        slash2.VerticalAlignment(wux::VerticalAlignment::Center);
+        slash2.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
+        digitsPanel.Children().Append(slash2);
+
+        wuxc::TextBlock secText;
+        secText.Name(L"WindhawkCyberSecText");
+        secText.FontSize(numFontSize);
+        secText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+        secText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        secText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 235, 252, 255)));
+        secText.Width(digitBlockWidth);
+        secText.TextAlignment(wux::TextAlignment::Center);
+        wuxd::Typography::SetNumeralAlignment(secText, wux::FontNumeralAlignment::Tabular);
+        digitsPanel.Children().Append(secText);
+        g_secTextBlock = secText;
     }
 
-    verticalLayout.Children().Append(cardsLayout);
+    // 12-Hour AM/PM Tactical Indicator
+    if (g_settings.timeFormat == L"12h") {
+        wuxc::Border ampmBadge;
+        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(50, 0, 245, 255)));
+        ampmBadge.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(180, 0, 245, 255)));
+        ampmBadge.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        ampmBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(4.0));
+        ampmBadge.Padding(wux::Thickness{ 8.0, 4.0, 8.0, 4.0 });
+        ampmBadge.Margin(wux::Thickness{ 12.0, 0.0, 0.0, 0.0 });
+        ampmBadge.VerticalAlignment(wux::VerticalAlignment::Center);
 
-    // Cyberpunk HUD Date Capsule (Hot Magenta Neon Accent)
+        wuxc::TextBlock ampmText;
+        ampmText.Name(L"WindhawkCyberAmPmText");
+        ampmText.FontSize(numFontSize * 0.32);
+        ampmText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        ampmText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        ampmText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 245, 255)));
+        ampmBadge.Child(ampmText);
+        digitsPanel.Children().Append(ampmBadge);
+        g_ampmTextBlock = ampmText;
+    }
+
+    hudContent.Children().Append(digitsPanel);
+
+    // Bottom Scanline Bar (Dotted / Segmented Laser Track)
+    wuxs::Rectangle scanline;
+    scanline.Height(2.0);
+    scanline.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
+    scanline.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(90, 0, 245, 255)));
+    scanline.Margin(wux::Thickness{ 0.0, 14.0, 0.0, 14.0 });
+    hudContent.Children().Append(scanline);
+
+    // --- BOTTOM TELEMETRY DATE BAR ---
     if (g_settings.showDateCapsule) {
-        wuxc::Border hudCapsule;
-        hudCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(200, 14, 10, 24)));
-        hudCapsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(190, 255, 0, 128))); // Hot Magenta
-        hudCapsule.BorderThickness(wux::Thickness{ 1.4, 1.4, 1.4, 1.4 });
-        hudCapsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(10.0));
-        hudCapsule.Padding(wux::Thickness{ 24.0, 7.0, 24.0, 7.0 });
-        hudCapsule.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
-        hudCapsule.HorizontalAlignment(wux::HorizontalAlignment::Center);
+        wuxc::StackPanel bottomBar;
+        bottomBar.Orientation(wuxc::Orientation::Horizontal);
+        bottomBar.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
+        // Acid Yellow Telemetry Tag Badge
+        wuxc::Border tagBadge;
+        tagBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 252, 238, 10))); // Cyber Yellow
+        tagBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(3.0));
+        tagBadge.Padding(wux::Thickness{ 7.0, 2.0, 7.0, 2.0 });
+        tagBadge.Margin(wux::Thickness{ 0.0, 0.0, 10.0, 0.0 });
+
+        wuxc::TextBlock tagText;
+        tagText.Text(L"DATE.LOG");
+        tagText.FontSize(11.0);
+        tagText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        tagText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        tagText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 10, 12, 18))); // Deep Black
+        tagBadge.Child(tagText);
+        bottomBar.Children().Append(tagBadge);
+
+        // Date String (Cyan glow)
         wuxc::TextBlock dateText;
         dateText.Name(L"WindhawkCyberDateText");
-        dateText.FontSize(18.0);
-        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
-        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
-        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 110, 185))); // Electric Pink
-        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-
-        hudCapsule.Child(dateText);
-        verticalLayout.Children().Append(hudCapsule);
+        dateText.FontSize(15.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 0, 245, 255))); // Electric Cyan
+        dateText.VerticalAlignment(wux::VerticalAlignment::Center);
+        bottomBar.Children().Append(dateText);
         g_dateTextBlock = dateText;
+
+        hudContent.Children().Append(bottomBar);
     }
 
+    chassis.Child(hudContent);
+    hudFrame.Children().Append(chassis);
+
+    // --- TACTICAL HUD CORNER ACCENTS (4 Tactical Chamfer Brackets) ---
+    // 1. Top-Left L-bracket (Acid Yellow)
+    wuxc::Grid cornerTL;
+    cornerTL.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    cornerTL.VerticalAlignment(wux::VerticalAlignment::Top);
+    cornerTL.Margin(wux::Thickness{ -2.0, -2.0, 0.0, 0.0 });
+    wuxs::Rectangle tlH;
+    tlH.Width(16.0); tlH.Height(3.0);
+    tlH.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 252, 238, 10)));
+    tlH.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    tlH.VerticalAlignment(wux::VerticalAlignment::Top);
+    wuxs::Rectangle tlV;
+    tlV.Width(3.0); tlV.Height(16.0);
+    tlV.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 252, 238, 10)));
+    tlV.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    tlV.VerticalAlignment(wux::VerticalAlignment::Top);
+    cornerTL.Children().Append(tlH);
+    cornerTL.Children().Append(tlV);
+    hudFrame.Children().Append(cornerTL);
+
+    // 2. Top-Right Accent (Hot Magenta)
+    wuxc::Grid cornerTR;
+    cornerTR.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    cornerTR.VerticalAlignment(wux::VerticalAlignment::Top);
+    cornerTR.Margin(wux::Thickness{ 0.0, -2.0, -2.0, 0.0 });
+    wuxs::Rectangle trH;
+    trH.Width(16.0); trH.Height(3.0);
+    trH.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128)));
+    trH.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    trH.VerticalAlignment(wux::VerticalAlignment::Top);
+    wuxs::Rectangle trV;
+    trV.Width(3.0); trV.Height(16.0);
+    trV.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 255, 0, 128)));
+    trV.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    trV.VerticalAlignment(wux::VerticalAlignment::Top);
+    cornerTR.Children().Append(trH);
+    cornerTR.Children().Append(trV);
+    hudFrame.Children().Append(cornerTR);
+
+    // 3. Bottom-Left Accent (Electric Cyan)
+    wuxc::Grid cornerBL;
+    cornerBL.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    cornerBL.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    cornerBL.Margin(wux::Thickness{ -2.0, 0.0, 0.0, -2.0 });
+    wuxs::Rectangle blH;
+    blH.Width(16.0); blH.Height(3.0);
+    blH.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 245, 255)));
+    blH.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    blH.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    wuxs::Rectangle blV;
+    blV.Width(3.0); blV.Height(16.0);
+    blV.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 245, 255)));
+    blV.HorizontalAlignment(wux::HorizontalAlignment::Left);
+    blV.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    cornerBL.Children().Append(blH);
+    cornerBL.Children().Append(blV);
+    hudFrame.Children().Append(cornerBL);
+
+    // 4. Bottom-Right Accent (Electric Cyan)
+    wuxc::Grid cornerBR;
+    cornerBR.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    cornerBR.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    cornerBR.Margin(wux::Thickness{ 0.0, 0.0, -2.0, -2.0 });
+    wuxs::Rectangle brH;
+    brH.Width(16.0); brH.Height(3.0);
+    brH.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 245, 255)));
+    brH.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    brH.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    wuxs::Rectangle brV;
+    brV.Width(3.0); brV.Height(16.0);
+    brV.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 245, 255)));
+    brV.HorizontalAlignment(wux::HorizontalAlignment::Right);
+    brV.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    cornerBR.Children().Append(brH);
+    cornerBR.Children().Append(brV);
+    hudFrame.Children().Append(cornerBR);
+
+    verticalLayout.Children().Append(hudFrame);
     rootContainer.Children().Append(verticalLayout);
+
     UpdateTimeAndDate();
     StartClockTimer();
 
@@ -832,16 +1092,16 @@ wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double
         colDef.Width(wux::GridLengthHelper::FromPixels(dotSize + spacing));
         grid.ColumnDefinitions().Append(colDef);
     }
-    for (int r = 0; r < 9; r++) {
+    for (int r = 0; r < 11; r++) {
         wuxc::RowDefinition rowDef;
         rowDef.Height(wux::GridLengthHelper::FromPixels(dotSize + spacing));
         grid.RowDefinitions().Append(rowDef);
     }
 
     digitRef.dots.clear();
-    digitRef.dots.reserve(63);
+    digitRef.dots.reserve(77);
 
-    for (int r = 0; r < 9; r++) {
+    for (int r = 0; r < 11; r++) {
         for (int c = 0; c < 7; c++) {
             wuxs::Ellipse dot;
             dot.Width(dotSize);
@@ -858,7 +1118,7 @@ wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double
     return grid;
 }
 
-// Build Pixel Colon Helper (2 cols x 9 rows, 2x2 active dots for each colon point)
+// Build Pixel Colon Helper (2 cols x 11 rows, 2x2 active dots for each colon point)
 wuxc::Grid CreatePixelColon(double dotSize, double spacing) {
     wuxc::Grid grid;
     for (int c = 0; c < 2; c++) {
@@ -866,18 +1126,18 @@ wuxc::Grid CreatePixelColon(double dotSize, double spacing) {
         colDef.Width(wux::GridLengthHelper::FromPixels(dotSize + spacing));
         grid.ColumnDefinitions().Append(colDef);
     }
-    for (int r = 0; r < 9; r++) {
+    for (int r = 0; r < 11; r++) {
         wuxc::RowDefinition rowDef;
         rowDef.Height(wux::GridLengthHelper::FromPixels(dotSize + spacing));
         grid.RowDefinitions().Append(rowDef);
     }
 
-    for (int r = 0; r < 9; r++) {
+    for (int r = 0; r < 11; r++) {
         for (int c = 0; c < 2; c++) {
             wuxs::Ellipse dot;
             dot.Width(dotSize);
             dot.Height(dotSize);
-            bool isColonDot = (r == 2 || r == 3 || r == 5 || r == 6);
+            bool isColonDot = (r == 2 || r == 3 || r == 7 || r == 8);
             dot.Fill(isColonDot ? g_brushActiveDot : g_brushInactiveDot);
             dot.HorizontalAlignment(wux::HorizontalAlignment::Center);
             dot.VerticalAlignment(wux::VerticalAlignment::Center);
@@ -905,7 +1165,7 @@ wux::UIElement BuildPixelClockElement() {
     darkBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(15, 255, 255, 255)));
     darkBackplate.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
     darkBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(20.0));
-    darkBackplate.Padding(wux::Thickness{ 26.0, 22.0, 26.0, 22.0 });
+    darkBackplate.Padding(wux::Thickness{ 26.0, 24.0, 26.0, 24.0 });
     darkBackplate.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
     wuxc::StackPanel verticalLayout;
@@ -917,7 +1177,7 @@ wux::UIElement BuildPixelClockElement() {
     matrixLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
     matrixLayout.VerticalAlignment(wux::VerticalAlignment::Center);
 
-    // Scale dot size appropriately for 7x9 double-pixel thickness
+    // Scale dot size appropriately for 7x11 double-pixel thickness
     double dotSize = (double)g_settings.clockFontSize * 0.095;
     double spacing = dotSize * 0.35;
     double digitGap = dotSize * 1.3;
@@ -960,6 +1220,28 @@ wux::UIElement BuildPixelClockElement() {
         matrixLayout.Children().Append(s2);
     }
 
+    // Optional 12-Hour AM/PM Indicator
+    if (g_settings.timeFormat == L"12h") {
+        wuxc::Border ampmBadge;
+        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(35, 255, 255, 255)));
+        ampmBadge.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(60, 255, 255, 255)));
+        ampmBadge.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        ampmBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(6.0));
+        ampmBadge.Padding(wux::Thickness{ 8.0, 3.0, 8.0, 3.0 });
+        ampmBadge.Margin(wux::Thickness{ digitGap, 0.0, 0.0, 0.0 });
+        ampmBadge.VerticalAlignment(wux::VerticalAlignment::Center);
+
+        wuxc::TextBlock ampmText;
+        ampmText.Name(L"WindhawkPixelAmPmText");
+        ampmText.FontSize(dotSize * 2.8);
+        ampmText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        ampmText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        ampmText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+        ampmBadge.Child(ampmText);
+        matrixLayout.Children().Append(ampmBadge);
+        g_ampmTextBlock = ampmText;
+    }
+
     verticalLayout.Children().Append(matrixLayout);
 
     // Date display
@@ -971,7 +1253,7 @@ wux::UIElement BuildPixelClockElement() {
         dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
         dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 255, 255, 255)));
         dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-        dateText.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
+        dateText.Margin(wux::Thickness{ 0.0, 22.0, 0.0, 0.0 });
 
         verticalLayout.Children().Append(dateText);
         g_dateTextBlock = dateText;
@@ -1009,7 +1291,9 @@ wux::UIElement BuildAuraClockElement() {
     shadowText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
     shadowText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(140, 0, 0, 0)));
     shadowText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    shadowText.TextAlignment(wux::TextAlignment::Center);
     shadowText.Margin(wux::Thickness{ 0.0, 4.0, 0.0, 0.0 });
+    wuxd::Typography::SetNumeralAlignment(shadowText, wux::FontNumeralAlignment::Tabular);
     timeLayerGrid.Children().Append(shadowText);
     g_auraShadowTextBlock = shadowText;
 
@@ -1020,8 +1304,10 @@ wux::UIElement BuildAuraClockElement() {
     timeText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
     timeText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
     timeText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    timeText.TextAlignment(wux::TextAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(timeText, wux::FontNumeralAlignment::Tabular);
     timeLayerGrid.Children().Append(timeText);
-    g_minimalTimeTextBlock = timeText;
+    g_auraTimeTextBlock = timeText;
 
     verticalLayout.Children().Append(timeLayerGrid);
 
@@ -1056,45 +1342,6 @@ wux::UIElement BuildAuraClockElement() {
     return rootContainer;
 }
 
-// Build Minimalist Digital Clock Element
-wux::UIElement BuildMinimalClockElement() {
-    wuxc::Grid rootContainer;
-    rootContainer.Name(L"WindhawkMinimalClockContainer");
-    ApplyAlignmentAndMargin(rootContainer);
-
-    wuxc::StackPanel verticalLayout;
-    verticalLayout.Orientation(wuxc::Orientation::Vertical);
-    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
-
-    wuxc::TextBlock timeText;
-    timeText.FontSize((double)(g_settings.clockFontSize * 1.3));
-    timeText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    timeText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiLight());
-    timeText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
-    timeText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-
-    verticalLayout.Children().Append(timeText);
-    g_minimalTimeTextBlock = timeText;
-
-    if (g_settings.showDateCapsule) {
-        wuxc::TextBlock dateText;
-        dateText.FontSize(20.0);
-        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
-        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::Normal());
-        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(210, 255, 255, 255)));
-        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-        dateText.Margin(wux::Thickness{ 0.0, 10.0, 0.0, 0.0 });
-        verticalLayout.Children().Append(dateText);
-        g_dateTextBlock = dateText;
-    }
-
-    rootContainer.Children().Append(verticalLayout);
-    UpdateTimeAndDate();
-    StartClockTimer();
-
-    return rootContainer;
-}
-
 // Factory function for selected clock style
 wux::UIElement BuildClockElement() {
     if (g_settings.clockStyle == L"pixel") {
@@ -1105,8 +1352,6 @@ wux::UIElement BuildClockElement() {
         return BuildCyberpunkClockElement();
     } else if (g_settings.clockStyle == L"aura") {
         return BuildAuraClockElement();
-    } else if (g_settings.clockStyle == L"minimal") {
-        return BuildMinimalClockElement();
     }
     return BuildFlipClockElement();
 }
@@ -1131,7 +1376,8 @@ void RebuildClockUI() {
         g_hourTextBlock = nullptr;
         g_minTextBlock = nullptr;
         g_secTextBlock = nullptr;
-        g_minimalTimeTextBlock = nullptr;
+        g_ampmTextBlock = nullptr;
+        g_auraTimeTextBlock = nullptr;
         g_auraShadowTextBlock = nullptr;
         g_dateTextBlock = nullptr;
         for (int i = 0; i < 6; i++) {

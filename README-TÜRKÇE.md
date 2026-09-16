@@ -8,12 +8,13 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 ## ✨ Özellikler
 
-- **Modern Flip Clock:** Saat ve dakika için bölünmüş, ortasında şık katlanma çizgisi bulunan akrilik cam kartlar.
-- **Retro Vintage Flip Saat:** Klasik mekanik Solari tren garı / havalimanı esintili koyu mat kömür kartlar, fildişi/krem rakamlar, belirgin mekanik katlanma yarığı ve menteşe klipsleri.
-- **Cyberpunk / Neon Glow Saat:** Koyu obsidyen akrilik kartlar, elektrik camgöbeği (cyan) neon kenar ışıması, lazer kesim ayrım çizgisi ve parlak macenta/pembe HUD tarih kapsülü.
+- **Modern Flip Clock:** Saat ve dakika için bölünmüş, kareye yakın dolgun oranları ve ortasında şık katlanma çizgisi bulunan akrilik cam kartlar.
+- **Retro Vintage Flip Saat:** Klasik mekanik Solari tren garı / havalimanı esintili koyu mat kömür kartlar, fildişi/krem rakamlar, kareye yakın oranlar, belirgin mekanik katlanma yarığı ve menteşe klipsleri.
+- **Cyberpunk Bilim Kurgu HUD Terminali:** Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, üst telemetri tanı çubuğu, lazer eğik çizgi ayracı (`//`) ve alt tarih günlüğüyle özgün Netrunner HUD arayüzü.
 - **Minimalist Aura / Yüzen Saat:** Kart çerçevesi olmadan, ortam ışığı gölgesi (ambient drop-shadow) derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen zarif tipografi.
-- **Retro Piksel / LED Matris Saat:** Otantik 7x9 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli.
-- **Saniye Göstergesi:** İsteğe bağlı olarak saat ve dakikayla aynı hizada tam format (`SS:DD:SN`) gerçek zamanlı saniye gösterimi.
+- **Retro Piksel / LED Matris Saat:** Otantik 7x11 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve ferah dikey yüksekliğe sahip buzlu akrilik kontrast paneli.
+- **12 / 24 Saat Formatı:** 24 saat gösterimi veya temalara özel tasarlanmış şık AM/PM rozetleriyle 12 saat formatı arasında geçiş imkanı.
+- **Saniye Göstergesi:** Canlı saniye gösterimi açıp kapatma (Cyberpunk HUD, Retro Pixel ve Aura stillerinde desteklenir).
 - **Dinamik Tarih Kapsülü:** Saatin altında konumlanan, sistem diline duyarlı gün ve ay göstergesi.
 - **Varsayılan Kalabalığı Gizleme:** Kilit ekranındaki MSN hava durumu, spor, borsa ve haber widget'larını tek tıkla gizleme imkanı.
 - **Varsayılan Saati Değiştirme:** Windows 11'in standart kilit ekranı saatini gizleyip yerine özel tasarımı getirme.
@@ -36,8 +37,9 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 | Ayar | Açıklama | Varsayılan |
 | :--- | :--- | :--- |
-| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat (`flip`), Retro Vintage Flip Saat (`vintage`), Cyberpunk Neon Glow (`cyberpunk`), Minimalist Aura Yüzen Saat (`aura`), Retro Piksel LED Matris (`pixel`), Minimal Dijital (`minimal`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
-| **Show Seconds (Saniyeyi Göster)** | Saniye hanesini açıp kapatma (`SS:DD:SN`) | `Kapalı` |
+| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat (`flip`), Retro Vintage Flip Saat (`vintage`), Cyberpunk HUD Terminali (`cyberpunk`), Minimalist Aura Yüzen Saat (`aura`), Retro Piksel LED Matris (`pixel`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
+| **Time Format (Saat Formatı)** | 24 Saat (`24h`) veya 12 Saat AM/PM (`12h`) formatı | `24h` |
+| **Show Seconds (Saniyeyi Göster)** | Canlı saniye göstergesini açıp kapatma (Cyberpunk, Retro Pixel ve Aura) | `Kapalı` |
 | **Glass Opacity (Cam Opaklığı)** | Kartların yarı saydamlık derecesi (0 - 255) | `45` |
 | **Card Corner Radius (Köşe Yuvarlaklığı)**| Kartların köşe kavis yarıçapı (px) | `22` |
 | **Digit Font Size (Font Boyutu)** | Saat ve dakika rakamlarının punto büyüklüğü | `92` |

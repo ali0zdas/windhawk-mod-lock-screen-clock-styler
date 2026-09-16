@@ -8,12 +8,13 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 ## ✨ Features
 
-- **Modern Flip Clock:** Split frosted glass cards for hours and minutes with an elegant seam.
+- **Modern Flip Clock:** Split frosted glass cards for hours and minutes with bold, near-square proportions and an elegant horizontal flip seam.
 - **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
-- **Cyberpunk / Neon Glow Clock:** High-voltage cyberpunk aesthetic with dark obsidian acrylic cards, electric cyan neon edge highlights, laser-cut split seam, and hot magenta HUD date capsule.
+- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke Netrunner tactical HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow & hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
-- **Retro Pixel / LED Matrix Clock:** Authentic 7x9 double-pixel dot matrix display with subtle ambient dot illumination and frosted acrylic contrast backplate.
-- **Seconds Display:** Optional real-time seconds (`HH:MM:SS`) toggle aligned with the clock.
+- **Retro Pixel / LED Matrix Clock:** Authentic 7x11 double-pixel dot matrix display with subtle ambient dot illumination and frosted acrylic contrast backplate.
+- **12-Hour / 24-Hour Format:** Switch between 24-hour time and 12-hour time with dedicated AM/PM indicators across themes.
+- **Seconds Display:** Optional real-time seconds toggle (supported on Cyberpunk HUD, Retro Pixel, and Aura styles).
 - **Dynamic Date Capsule:** Localized weekday and date display positioned neatly under the clock.
 - **Hide Stock Clutter:** One-click toggles to hide default MSN weather, sports, and news widgets.
 - **Replace Default Clock:** Seamlessly replaces the stock Windows 11 lock screen clock.
@@ -36,8 +37,9 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| **Clock Style** | Choose between Frosted Glass Flip Clock (`flip`), Retro Vintage Flip Clock (`vintage`), Cyberpunk / Neon Glow Clock (`cyberpunk`), Minimalist Aura / Floating Clock (`aura`), Retro Pixel / LED Matrix (`pixel`), Minimalist Digital (`minimal`), or Default Clock (`defaultOnly`) | `flip` |
-| **Show Seconds** | Toggle seconds display (`HH:MM:SS`) | `Disabled` |
+| **Clock Style** | Choose between Frosted Glass Flip Clock (`flip`), Retro Vintage Flip Clock (`vintage`), Cyberpunk HUD Terminal (`cyberpunk`), Minimalist Aura / Floating Clock (`aura`), Retro Pixel / LED Matrix (`pixel`), or Default Clock (`defaultOnly`) | `flip` |
+| **Time Format** | Select 24-Hour (`24h`) or 12-Hour AM/PM (`12h`) format | `24h` |
+| **Show Seconds** | Toggle seconds display (Cyberpunk, Retro Pixel, and Aura) | `Disabled` |
 | **Glass Opacity** | Card translucency alpha value (0 - 255) | `45` |
 | **Card Corner Radius** | Curvature radius of the cards (px) | `22` |
 | **Digit Font Size** | Font size for clock digits | `92` |
