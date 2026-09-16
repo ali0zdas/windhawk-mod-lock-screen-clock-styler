@@ -20,8 +20,9 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 
 ## Features:
 - **Modern Flip Clock:** Split glass cards for hour, minute, and optional seconds with an elegant horizontal flip seam.
+- **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Digital Clock:** Clean, elegant typography with smooth date indicators.
-- **Show Seconds Toggle:** Optional live seconds display for the Flip clock.
+- **Show Seconds Toggle:** Optional live seconds display for both Flip and Pixel clock styles.
 - **Frosted Glass / Acrylic Styling:** Translucent glass panels with subtle border highlights and rounded corners.
 - **Dynamic Date Display:** Elegant date and day capsule positioned beneath the clock, adapting to the user's system locale.
 - **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
@@ -42,6 +43,7 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
     - flip: "Frosted Glass Flip Clock"
+    - pixel: "Retro Pixel / LED Dot Matrix Clock"
     - minimal: "Minimalist Digital Clock"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
 - showSeconds: false
@@ -184,6 +186,119 @@ wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
 
+// 7x9 Dot Matrix Font Table for Digits 0 to 9 with 2-Dot Stroke Thickness
+// Each digit consists of 9 rows; each row uses the lower 7 bits (bit 6 = col 0, bit 0 = col 6).
+static const uint8_t FONT_7x9[10][9] = {
+    // 0
+    { 0b0111110,
+      0b1111111,
+      0b1100011,
+      0b1100011,
+      0b1100011,
+      0b1100011,
+      0b1100011,
+      0b1111111,
+      0b0111110 },
+    // 1
+    { 0b0011100,
+      0b0111100,
+      0b0001100,
+      0b0001100,
+      0b0001100,
+      0b0001100,
+      0b0001100,
+      0b0111110,
+      0b0111110 },
+    // 2
+    { 0b0111110,
+      0b1111111,
+      0b0000011,
+      0b0000011,
+      0b0111111,
+      0b1111110,
+      0b1100000,
+      0b1111111,
+      0b1111111 },
+    // 3
+    { 0b0111110,
+      0b1111111,
+      0b0000011,
+      0b0000011,
+      0b0011110,
+      0b0000011,
+      0b0000011,
+      0b1111111,
+      0b0111110 },
+    // 4
+    { 0b1100011,
+      0b1100011,
+      0b1100011,
+      0b1100011,
+      0b1111111,
+      0b1111111,
+      0b0000011,
+      0b0000011,
+      0b0000011 },
+    // 5
+    { 0b1111111,
+      0b1111111,
+      0b1100000,
+      0b1111110,
+      0b1111111,
+      0b0000011,
+      0b0000011,
+      0b1111111,
+      0b0111110 },
+    // 6
+    { 0b0111110,
+      0b1111111,
+      0b1100000,
+      0b1111110,
+      0b1111111,
+      0b1100011,
+      0b1100011,
+      0b1111111,
+      0b0111110 },
+    // 7
+    { 0b1111111,
+      0b1111111,
+      0b0000011,
+      0b0000110,
+      0b0001100,
+      0b0011000,
+      0b0110000,
+      0b0110000,
+      0b0110000 },
+    // 8
+    { 0b0111110,
+      0b1111111,
+      0b1100011,
+      0b1100011,
+      0b0111110,
+      0b1100011,
+      0b1100011,
+      0b1111111,
+      0b0111110 },
+    // 9
+    { 0b0111110,
+      0b1111111,
+      0b1100011,
+      0b1100011,
+      0b1111111,
+      0b0111111,
+      0b0000011,
+      0b1111111,
+      0b0111110 }
+};
+
+// Pixel Clock State
+struct PixelDigitGrid {
+    std::vector<wuxs::Ellipse> dots; // 63 dots per digit (7 cols x 9 rows)
+};
+PixelDigitGrid g_pixelDigits[6]; // H1, H2, M1, M2, S1, S2
+wuxm::SolidColorBrush g_brushActiveDot{ nullptr };
+wuxm::SolidColorBrush g_brushInactiveDot{ nullptr };
+
 // Helper to apply root horizontal and vertical alignments
 void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     if (g_settings.clockAlignment == L"left") {
@@ -198,11 +313,46 @@ void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     }
     rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
 }
+
+// Update single pixel digit dots (7x9 matrix)
+void SetPixelDigitValue(PixelDigitGrid& digitRef, int val) {
+    if (val < 0 || val > 9 || digitRef.dots.size() != 63 || !g_brushActiveDot || !g_brushInactiveDot) {
+        return;
+    }
+    const uint8_t* rows = FONT_7x9[val];
+    for (int r = 0; r < 9; r++) {
+        uint8_t rowBits = rows[r];
+        for (int c = 0; c < 7; c++) {
+            bool active = (rowBits & (1 << (6 - c))) != 0;
+            int idx = r * 7 + c;
+            digitRef.dots[idx].Fill(active ? g_brushActiveDot : g_brushInactiveDot);
+        }
+    }
+}
+
+// Update Time and Date
 void UpdateTimeAndDate() {
     SYSTEMTIME st;
     GetLocalTime(&st);
 
-    if (g_settings.clockStyle == L"minimal") {
+    if (g_settings.clockStyle == L"pixel") {
+        int h1 = st.wHour / 10;
+        int h2 = st.wHour % 10;
+        int m1 = st.wMinute / 10;
+        int m2 = st.wMinute % 10;
+
+        SetPixelDigitValue(g_pixelDigits[0], h1);
+        SetPixelDigitValue(g_pixelDigits[1], h2);
+        SetPixelDigitValue(g_pixelDigits[2], m1);
+        SetPixelDigitValue(g_pixelDigits[3], m2);
+
+        if (g_settings.showSeconds) {
+            int s1 = st.wSecond / 10;
+            int s2 = st.wSecond % 10;
+            SetPixelDigitValue(g_pixelDigits[4], s1);
+            SetPixelDigitValue(g_pixelDigits[5], s2);
+        }
+    } else if (g_settings.clockStyle == L"minimal") {
         if (g_minimalTimeTextBlock) {
             WCHAR timeBuf[32];
             if (g_settings.showSeconds) {
@@ -358,6 +508,168 @@ wux::UIElement BuildFlipClockElement() {
     return rootContainer;
 }
 
+// Build Pixel Digit Grid Helper (7 cols x 9 rows, 63 dots)
+wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double spacing) {
+    wuxc::Grid grid;
+    for (int c = 0; c < 7; c++) {
+        wuxc::ColumnDefinition colDef;
+        colDef.Width(wux::GridLengthHelper::FromPixels(dotSize + spacing));
+        grid.ColumnDefinitions().Append(colDef);
+    }
+    for (int r = 0; r < 9; r++) {
+        wuxc::RowDefinition rowDef;
+        rowDef.Height(wux::GridLengthHelper::FromPixels(dotSize + spacing));
+        grid.RowDefinitions().Append(rowDef);
+    }
+
+    digitRef.dots.clear();
+    digitRef.dots.reserve(63);
+
+    for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 7; c++) {
+            wuxs::Ellipse dot;
+            dot.Width(dotSize);
+            dot.Height(dotSize);
+            dot.Fill(g_brushInactiveDot);
+            dot.HorizontalAlignment(wux::HorizontalAlignment::Center);
+            dot.VerticalAlignment(wux::VerticalAlignment::Center);
+            wuxc::Grid::SetRow(dot, r);
+            wuxc::Grid::SetColumn(dot, c);
+            grid.Children().Append(dot);
+            digitRef.dots.push_back(dot);
+        }
+    }
+    return grid;
+}
+
+// Build Pixel Colon Helper (2 cols x 9 rows, 2x2 active dots for each colon point)
+wuxc::Grid CreatePixelColon(double dotSize, double spacing) {
+    wuxc::Grid grid;
+    for (int c = 0; c < 2; c++) {
+        wuxc::ColumnDefinition colDef;
+        colDef.Width(wux::GridLengthHelper::FromPixels(dotSize + spacing));
+        grid.ColumnDefinitions().Append(colDef);
+    }
+    for (int r = 0; r < 9; r++) {
+        wuxc::RowDefinition rowDef;
+        rowDef.Height(wux::GridLengthHelper::FromPixels(dotSize + spacing));
+        grid.RowDefinitions().Append(rowDef);
+    }
+
+    for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 2; c++) {
+            wuxs::Ellipse dot;
+            dot.Width(dotSize);
+            dot.Height(dotSize);
+            bool isColonDot = (r == 2 || r == 3 || r == 5 || r == 6);
+            dot.Fill(isColonDot ? g_brushActiveDot : g_brushInactiveDot);
+            dot.HorizontalAlignment(wux::HorizontalAlignment::Center);
+            dot.VerticalAlignment(wux::VerticalAlignment::Center);
+            wuxc::Grid::SetRow(dot, r);
+            wuxc::Grid::SetColumn(dot, c);
+            grid.Children().Append(dot);
+        }
+    }
+    return grid;
+}
+
+// Build Retro Pixel / LED Dot Matrix Clock Element
+wux::UIElement BuildPixelClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkPixelClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    // High-contrast brushes: 100% active white, subtle 6% ambient inactive dots
+    g_brushActiveDot = wuxm::SolidColorBrush(wu::Colors::White());
+    g_brushInactiveDot = wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(15, 255, 255, 255));
+
+    // Dark frosted acrylic backplate for perfect contrast on any wallpaper
+    wuxc::Border darkBackplate;
+    darkBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(32, 10, 14, 22)));
+    darkBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(15, 255, 255, 255)));
+    darkBackplate.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+    darkBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(20.0));
+    darkBackplate.Padding(wux::Thickness{ 26.0, 22.0, 26.0, 22.0 });
+    darkBackplate.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+
+    wuxc::StackPanel matrixLayout;
+    matrixLayout.Orientation(wuxc::Orientation::Horizontal);
+    matrixLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    matrixLayout.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    // Scale dot size appropriately for 7x9 double-pixel thickness
+    double dotSize = (double)g_settings.clockFontSize * 0.095;
+    double spacing = dotSize * 0.35;
+    double digitGap = dotSize * 1.3;
+    double colonGap = dotSize * 1.0;
+
+    // H1 & H2
+    auto h1 = CreatePixelDigitGrid(g_pixelDigits[0], dotSize, spacing);
+    auto h2 = CreatePixelDigitGrid(g_pixelDigits[1], dotSize, spacing);
+    h1.Margin(wux::Thickness{ 0.0, 0.0, digitGap, 0.0 });
+    h2.Margin(wux::Thickness{ 0.0, 0.0, colonGap, 0.0 });
+    matrixLayout.Children().Append(h1);
+    matrixLayout.Children().Append(h2);
+
+    // Colon 1 (between hours and minutes)
+    auto colon1 = CreatePixelColon(dotSize, spacing);
+    colon1.Margin(wux::Thickness{ 0.0, 0.0, colonGap, 0.0 });
+    matrixLayout.Children().Append(colon1);
+
+    // M1 & M2
+    auto m1 = CreatePixelDigitGrid(g_pixelDigits[2], dotSize, spacing);
+    auto m2 = CreatePixelDigitGrid(g_pixelDigits[3], dotSize, spacing);
+    m1.Margin(wux::Thickness{ 0.0, 0.0, digitGap, 0.0 });
+    matrixLayout.Children().Append(m1);
+    matrixLayout.Children().Append(m2);
+
+    // Optional Seconds (HH:MM:SS format at the same scale and alignment)
+    if (g_settings.showSeconds) {
+        m2.Margin(wux::Thickness{ 0.0, 0.0, colonGap, 0.0 });
+
+        // Colon 2 (between minutes and seconds)
+        auto colon2 = CreatePixelColon(dotSize, spacing);
+        colon2.Margin(wux::Thickness{ 0.0, 0.0, colonGap, 0.0 });
+        matrixLayout.Children().Append(colon2);
+
+        // S1 & S2
+        auto s1 = CreatePixelDigitGrid(g_pixelDigits[4], dotSize, spacing);
+        auto s2 = CreatePixelDigitGrid(g_pixelDigits[5], dotSize, spacing);
+        s1.Margin(wux::Thickness{ 0.0, 0.0, digitGap, 0.0 });
+        matrixLayout.Children().Append(s1);
+        matrixLayout.Children().Append(s2);
+    }
+
+    verticalLayout.Children().Append(matrixLayout);
+
+    // Date display
+    if (g_settings.showDateCapsule) {
+        wuxc::TextBlock dateText;
+        dateText.Name(L"WindhawkPixelDateText");
+        dateText.FontSize(19.0);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 255, 255, 255)));
+        dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+        dateText.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
+
+        verticalLayout.Children().Append(dateText);
+        g_dateTextBlock = dateText;
+    }
+
+    darkBackplate.Child(verticalLayout);
+    rootContainer.Children().Append(darkBackplate);
+
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
 // Build Minimalist Digital Clock Element
 wux::UIElement BuildMinimalClockElement() {
     wuxc::Grid rootContainer;
@@ -399,7 +711,9 @@ wux::UIElement BuildMinimalClockElement() {
 
 // Factory function for selected clock style
 wux::UIElement BuildClockElement() {
-    if (g_settings.clockStyle == L"minimal") {
+    if (g_settings.clockStyle == L"pixel") {
+        return BuildPixelClockElement();
+    } else if (g_settings.clockStyle == L"minimal") {
         return BuildMinimalClockElement();
     }
     return BuildFlipClockElement();
@@ -427,6 +741,10 @@ void RebuildClockUI() {
         g_secTextBlock = nullptr;
         g_minimalTimeTextBlock = nullptr;
         g_dateTextBlock = nullptr;
+        for (int i = 0; i < 6; i++) {
+            g_pixelDigits[i].dots.clear();
+        }
+
         if (g_settings.clockStyle != L"defaultOnly") {
             g_activeClockElement = BuildClockElement();
             g_lockRootGrid.Children().Append(g_activeClockElement);

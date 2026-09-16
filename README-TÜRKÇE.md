@@ -9,10 +9,13 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 ## ✨ Özellikler
 
 - **Modern Flip Clock:** Saat ve dakika için bölünmüş, ortasında şık katlanma çizgisi bulunan akrilik cam kartlar.
+- **Retro Piksel / LED Matris Saat:** Otantik 7x9 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli.
+- **Saniye Göstergesi:** İsteğe bağlı olarak saat ve dakikayla aynı hizada tam format (`SS:DD:SN`) gerçek zamanlı saniye gösterimi.
 - **Dinamik Tarih Kapsülü:** Saatin altında konumlanan, sistem diline duyarlı gün ve ay göstergesi.
 - **Varsayılan Kalabalığı Gizleme:** Kilit ekranındaki MSN hava durumu, spor, borsa ve haber widget'larını tek tıkla gizleme imkanı.
 - **Varsayılan Saati Değiştirme:** Windows 11'in standart kilit ekranı saatini gizleyip yerine özel tasarımı getirme.
 - **Geniş Özelleştirilebilirlik:** Cam opaklığı, kart köşe yuvarlaklığı, font boyutu, hizalama ve dikey ofset gibi tüm detayları ayarlar sekmesinden düzenleme.
+- **Çoklu Dil Desteği:** Windhawk içinde yerleşik İngilizce ve Türkçe (`tr-TR`) arayüz metinleri.
 
 ---
 
@@ -30,7 +33,8 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 | Ayar | Açıklama | Varsayılan |
 | :--- | :--- | :--- |
-| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat, Minimal Dijital Saat veya Varsayılan Saat seçimi | `flip` |
+| **Clock Style (Saat Stili)** | Buzlu Cam Flip Saat (`flip`), Retro Piksel LED Matris (`pixel`), Minimal Dijital (`minimal`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
+| **Show Seconds (Saniyeyi Göster)** | Saniye hanesini açıp kapatma (`SS:DD:SN`) | `Kapalı` |
 | **Glass Opacity (Cam Opaklığı)** | Kartların yarı saydamlık derecesi (0 - 255) | `45` |
 | **Card Corner Radius (Köşe Yuvarlaklığı)**| Kartların köşe kavis yarıçapı (px) | `22` |
 | **Digit Font Size (Font Boyutu)** | Saat ve dakika rakamlarının punto büyüklüğü | `92` |
