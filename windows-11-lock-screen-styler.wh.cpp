@@ -199,7 +199,9 @@ void LoadSettings() {
 wuxc::Grid g_lockRootGrid{ nullptr };
 wux::UIElement g_activeClockElement{ nullptr };
 wuxc::TextBlock g_hourTextBlock{ nullptr };
+wuxc::TextBlock g_hourBotTextBlock{ nullptr };
 wuxc::TextBlock g_minTextBlock{ nullptr };
+wuxc::TextBlock g_minBotTextBlock{ nullptr };
 wuxc::TextBlock g_secTextBlock{ nullptr };
 wuxc::TextBlock g_ampmTextBlock{ nullptr };
 wuxc::TextBlock g_auraTimeTextBlock{ nullptr };
@@ -444,6 +446,13 @@ void UpdateTimeAndDate() {
             g_hourTextBlock.Text(hourBuf);
             g_minTextBlock.Text(minBuf);
 
+            if (g_hourBotTextBlock) {
+                g_hourBotTextBlock.Text(hourBuf);
+            }
+            if (g_minBotTextBlock) {
+                g_minBotTextBlock.Text(minBuf);
+            }
+
             if (g_secTextBlock && g_settings.showSeconds) {
                 WCHAR secBuf[8];
                 swprintf_s(secBuf, L"%02d", st.wSecond);
@@ -474,44 +483,54 @@ void StartClockTimer() {
     g_clockTimer.Start();
 }
 
-// Build Single Flip Card Element
-wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, double fontSize, wuxc::TextBlock& outText, const wchar_t* textName, bool isHourCard = false) {
+// Build Single Flip Card Element (Two physically split upper/lower flaps with clean scissors-cut gap)
+wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, double fontSize,
+                          wuxc::TextBlock& outTopText, wuxc::TextBlock& outBotText,
+                          const wchar_t* textName, bool isHourCard = false) {
     wuxc::Grid card;
     card.Width(width);
     card.Height(height);
 
-    // Acrylic Backplate
-    wuxc::Border backplate;
-    backplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
-    backplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
-    backplate.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 1.5 });
-    backplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
+    double seamGap = 4.0;
+    double halfHeight = (height - seamGap) / 2.0;
 
-    // Center Flip Fold / Seam Line
-    wuxs::Rectangle divider;
-    divider.Height(2.0);
-    divider.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    divider.VerticalAlignment(wux::VerticalAlignment::Center);
-    divider.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(45, 0, 0, 0)));
-    divider.Margin(wux::Thickness{ 6.0, 0.0, 6.0, 0.0 });
+    // Segoe UI Variable ExtraBold için optik merkezleme payı (rakamı tam kesik çizgisine oturtarak 50/50 böler)
+    double opticalOffset = fontSize * 0.045;
 
-    // Card Text
-    wuxc::TextBlock cardText;
-    cardText.Name(textName);
-    cardText.FontSize(fontSize);
-    cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
-    cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
-    cardText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
-    cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
-    cardText.VerticalAlignment(wux::VerticalAlignment::Center);
-    wuxd::Typography::SetNumeralAlignment(cardText, wux::FontNumeralAlignment::Tabular);
+    // --- 1. ÜST KANAT (Üst yarı kart & rakamlar) ---
+    wuxc::Grid topContainer;
+    topContainer.Width(width);
+    topContainer.Height(height);
 
-    card.Children().Append(backplate);
-    card.Children().Append(cardText);
-    card.Children().Append(divider);
-    outText = cardText;
+    wuxm::RectangleGeometry topClip;
+    topClip.Rect(winrt::Windows::Foundation::Rect{ 0.0f, 0.0f, (float)width, (float)halfHeight });
+    topContainer.Clip(topClip);
 
-    // AM/PM Indicator Badge on Hour Card (12h format)
+    // Üst Kanat Akrilik Gövde & Kenarlık (üst köşeler yuvarlatılmış, iç kesim 2px, alt kenar açık)
+    wuxc::Border topFlap;
+    topFlap.Width(width);
+    topFlap.Height(halfHeight);
+    topFlap.VerticalAlignment(wux::VerticalAlignment::Top);
+    topFlap.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
+    topFlap.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
+    topFlap.BorderThickness(wux::Thickness{ 1.5, 1.5, 1.5, 0.0 });
+    topFlap.CornerRadius(wux::CornerRadiusHelper::FromRadii(cornerRadius, cornerRadius, 2.0, 2.0));
+    topContainer.Children().Append(topFlap);
+
+    // Üst Rakam: Kartın merkezine hizalı, alt yarısı yarıktan itibaren kırpılır
+    wuxc::TextBlock topText;
+    topText.Name(textName);
+    topText.FontSize(fontSize);
+    topText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    topText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
+    topText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    topText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    topText.VerticalAlignment(wux::VerticalAlignment::Center);
+    topText.Margin(wux::Thickness{ 0.0, opticalOffset, 0.0, 0.0 });
+    wuxd::Typography::SetNumeralAlignment(topText, wux::FontNumeralAlignment::Tabular);
+    topContainer.Children().Append(topText);
+
+    // Saat Kartındaki AM/PM Göstergesi (12 saat formatı, üst kanat sol üstünde)
     if (isHourCard && g_settings.timeFormat == L"12h") {
         wuxc::Border ampmBadge;
         ampmBadge.HorizontalAlignment(wux::HorizontalAlignment::Left);
@@ -531,10 +550,49 @@ wuxc::Grid CreateFlipCard(double width, double height, double cornerRadius, doub
         ampmText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
         ampmBadge.Child(ampmText);
 
-        card.Children().Append(ampmBadge);
+        topContainer.Children().Append(ampmBadge);
         g_ampmTextBlock = ampmText;
     }
 
+    // --- 2. ALT KANAT (Alt yarı kart & rakamlar) ---
+    wuxc::Grid botContainer;
+    botContainer.Width(width);
+    botContainer.Height(height);
+
+    wuxm::RectangleGeometry botClip;
+    botClip.Rect(winrt::Windows::Foundation::Rect{ 0.0f, (float)(halfHeight + seamGap), (float)width, (float)halfHeight });
+    botContainer.Clip(botClip);
+
+    // Alt Kanat Akrilik Gövde & Kenarlık (iç kesim 2px, alt köşeler yuvarlatılmış, üst kenar açık)
+    wuxc::Border bottomFlap;
+    bottomFlap.Width(width);
+    bottomFlap.Height(halfHeight);
+    bottomFlap.VerticalAlignment(wux::VerticalAlignment::Bottom);
+    bottomFlap.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb((uint8_t)g_settings.glassOpacity, 255, 255, 255)));
+    bottomFlap.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 255, 255, 255)));
+    bottomFlap.BorderThickness(wux::Thickness{ 1.5, 0.0, 1.5, 1.5 });
+    bottomFlap.CornerRadius(wux::CornerRadiusHelper::FromRadii(2.0, 2.0, cornerRadius, cornerRadius));
+    botContainer.Children().Append(bottomFlap);
+
+    // Alt Rakam: Üst rakamla birebir aynı merkez koordinatlarında, üst yarısı yarıktan itibaren kırpılır
+    std::wstring botName = std::wstring(textName) + L"_Bot";
+    wuxc::TextBlock botText;
+    botText.Name(botName);
+    botText.FontSize(fontSize);
+    botText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    botText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
+    botText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    botText.HorizontalAlignment(wux::HorizontalAlignment::Center);
+    botText.VerticalAlignment(wux::VerticalAlignment::Center);
+    botText.Margin(wux::Thickness{ 0.0, opticalOffset, 0.0, 0.0 });
+    wuxd::Typography::SetNumeralAlignment(botText, wux::FontNumeralAlignment::Tabular);
+    botContainer.Children().Append(botText);
+
+    card.Children().Append(topContainer);
+    card.Children().Append(botContainer);
+
+    outTopText = topText;
+    outBotText = botText;
     return card;
 }
 
@@ -560,11 +618,11 @@ wux::UIElement BuildFlipClockElement() {
     double cornerRad = (double)g_settings.cardCornerRadius;
 
     // 1. Hour Card
-    auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, L"WindhawkFlipHourText", true);
+    auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, g_hourBotTextBlock, L"WindhawkFlipHourText", true);
     cardsLayout.Children().Append(hourCard);
 
     // 2. Minute Card
-    auto minCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_minTextBlock, L"WindhawkFlipMinText", false);
+    auto minCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_minTextBlock, g_minBotTextBlock, L"WindhawkFlipMinText", false);
     cardsLayout.Children().Append(minCard);
 
     verticalLayout.Children().Append(cardsLayout);
@@ -1374,7 +1432,9 @@ void RebuildClockUI() {
         }
 
         g_hourTextBlock = nullptr;
+        g_hourBotTextBlock = nullptr;
         g_minTextBlock = nullptr;
+        g_minBotTextBlock = nullptr;
         g_secTextBlock = nullptr;
         g_ampmTextBlock = nullptr;
         g_auraTimeTextBlock = nullptr;
