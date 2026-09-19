@@ -8,14 +8,16 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 ## ✨ Özellikler
 
+- **Minimalist Cupertino (Temiz Tipografi):** Saatin üzerine yerleştirilen yerelleştirilmiş gün ve ay başlığı, ultra zarif ve hafif tipografi (`Segoe UI Variable Display Light`), çift katmanlı atmosferik gölge derinliği ve sol-alt (`bottomLeft`) veya merkez hizalama desteğiyle Apple kilit ekranı estetiği.
 - **Modern Flip Saat:** Saat ve dakika için bölünmüş, kareye yakın dolgun oranları, ortasında şık makas kesiği yarığı ve 24px kavisli köşeleri bulunan akrilik cam kartlar.
 - **Klasik Flip Saat:** Klasik mekanik Solari tren garı / havalimanı esintili koyu mat kömür kartlar, fildişi/krem rakamlar, kareye yakın oranlar, belirgin mekanik katlanma yarığı ve menteşe klipsleri.
-- **Cyberpunk Bilim Kurgu HUD Terminali:** Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, üst telemetri tanı çubuğu, lazer eğik çizgi ayracı (`//`) ve alt tarih günlüğüyle özgün Netrunner HUD arayüzü.
+- **Cyberpunk Bilim Kurgu HUD Terminali:** Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, üst telemetri tanı çubuğu, ritmik nabız animasyonuna sahip lazer eğik çizgi ayracı (`//`) ve alt tarih günlüğüyle özgün Netrunner HUD arayüzü.
 - **Minimalist Aura / Yüzen Saat:** Kart çerçevesi olmadan, ortam ışığı gölgesi (ambient drop-shadow) derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen zarif tipografi.
 - **Retro Piksel / LED Matris Saat:** Otantik 7x11 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve ferah dikey yüksekliğe sahip buzlu akrilik kontrast paneli.
+- **Canlı Pil ve Şarj Durumu Kapsülü:** Masaüstü bilgisayarlarda otomatik gizlenen, dizüstü bilgisayarlarda ise canlı pil yüzdesi ve şarj durumunu (`⚡` / `🔋`) gösteren akıllı güç kapsülü.
 - **12 / 24 Saat Formatı:** 24 saat gösterimi veya temalara özel tasarlanmış şık AM/PM rozetleriyle 12 saat formatı arasında geçiş imkanı.
-- **Saniye Göstergesi:** Canlı saniye gösterimi açıp kapatma (Cyberpunk HUD, Retro Pixel ve Aura stillerinde desteklenir).
-- **Dinamik Tarih Kapsülü:** Saatin altında konumlanan, sistem diline duyarlı gün ve ay göstergesi.
+- **Saniye Göstergesi:** Canlı saniye gösterimi açıp kapatma (Cyberpunk ve Retro Piksel stillerinde doğrudan desteklenir; Minimalist stillerde isteğe bağlıdır).
+- **Dinamik Tarih Kapsülü:** Saatin altında veya üstünde konumlanan, sistem diline duyarlı gün ve ay göstergesi.
 - **Varsayılan Kalabalığı Gizleme:** Kilit ekranındaki MSN hava durumu, spor, borsa ve haber widget'larını tek tıkla gizleme imkanı.
 - **Varsayılan Saati Değiştirme:** Windows 11'in standart kilit ekranı saatini gizleyip yerine özel tasarımı getirme.
 - **Geniş Özelleştirilebilirlik:** Cam opaklığı, font boyutu, hizalama ve dikey ofset gibi detayları ayarlar sekmesinden düzenleme.
@@ -37,13 +39,14 @@ Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/b
 
 | Ayar | Açıklama | Varsayılan |
 | :--- | :--- | :--- |
-| **Clock Style (Saat Stili)** | Retro Piksel LED Matris (`pixel`), Modern Flip Saat (`flip`), Klasik Flip Saat (`vintage`), Minimalist Aura Yüzen Saat (`aura`), Cyberpunk HUD Terminali (`cyberpunk`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
+| **Clock Style (Saat Stili)** | Minimalist Cupertino (`macos`), Modern Flip Saat (`flip`), Klasik Flip Saat (`vintage`), Minimalist Aura Yüzen Saat (`aura`), Cyberpunk HUD Terminali (`cyberpunk`), Retro Piksel LED Matris (`pixel`) veya Varsayılan Saat (`defaultOnly`) seçimi | `flip` |
 | **Time Format (Saat Formatı)** | 24 Saat (`24h`) veya 12 Saat AM/PM (`12h`) formatı | `24h` |
-| **Show Seconds (Saniyeyi Göster)** | Canlı saniye göstergesini açıp kapatma (Cyberpunk, Retro Pixel ve Aura) | `Kapalı` |
+| **Show Seconds (Saniyeyi Göster)** | Canlı saniye göstergesini açıp kapatma (Cyberpunk ve Retro Piksel; Minimalist stillerde isteğe bağlı) | `Kapalı` |
+| **Show Battery Status (Pil Durumu)** | Dizüstü bilgisayar pil yüzdesi ve şarj durumu kapsülü (masaüstü bilgisayarlarda otomatik gizlenir) | `Kapalı` |
 | **Glass Opacity (Cam Opaklığı)** | Kartların yarı saydamlık derecesi (0 - 255) | `45` |
 | **Digit Font Size (Font Boyutu)** | Saat ve dakika rakamlarının punto büyüklüğü | `92` |
 | **Vertical Offset (Dikey Ofset)** | Saati yukarı veya aşağı kaydırma ofseti (-200 ile +400 px) | `0` |
-| **Clock Alignment (Yatay Hizalama)** | Saatin ekrandaki yatay hizalaması (`center`, `left`, `right`) | `center` |
+| **Clock Alignment (Yatay Hizalama)** | Saatin ekrandaki hizalaması (`center`, `left`, `right`, `bottomLeft`) | `center` |
 | **Hide Default Widgets (Widget Gizle)** | MSN hava durumu, haber ve finans alanını gizler | `Etkin` |
 | **Hide Default Clock (Saati Gizle)** | Standart Windows 11 saat ve tarihini gizler | `Etkin` |
 | **Show Date Capsule (Tarih Kapsülü)** | Kartların altında gün ve ay kapsülünü görüntüler | `Etkin` |

@@ -8,14 +8,16 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 ## ✨ Features
 
+- **Minimalist Cupertino (Clean Typography):** Apple-inspired lock screen typography with date positioned elegantly above the time, slender display numerals, dual-layer atmospheric drop-shadow depth, and support for bottom-left (`bottomLeft`) or center placement.
 - **Modern Flip Clock:** Split frosted glass cards for hours and minutes with bold, near-square proportions and an elegant horizontal flip seam.
 - **Classic Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
-- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke Netrunner tactical HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow & hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
+- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke Netrunner tactical HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow & hot magenta, top telemetry diagnostic bar, electric cyan digits with pulsating tactical slash dividers (`//`), and bottom telemetry date logger.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
 - **Retro Pixel / LED Matrix Clock:** Authentic 7x11 double-pixel dot matrix display with subtle ambient dot illumination and frosted acrylic contrast backplate.
+- **Live Battery & Charging Capsule:** Smart power telemetry pill indicating live laptop battery percentage and charging state (`⚡` / `🔋`), automatically hidden on desktop systems.
 - **12-Hour / 24-Hour Format:** Switch between 24-hour time and 12-hour time with dedicated AM/PM indicators across themes.
-- **Seconds Display:** Optional real-time seconds toggle (supported on Cyberpunk HUD, Retro Pixel, and Aura styles).
-- **Dynamic Date Capsule:** Localized weekday and date display positioned neatly under the clock.
+- **Seconds Display:** Optional real-time seconds toggle (direct support on Cyberpunk & Retro Pixel; user-toggleable on Minimalist styles).
+- **Dynamic Date Capsule:** Localized weekday and date display positioned neatly under or above the clock.
 - **Hide Stock Clutter:** One-click toggles to hide default MSN weather, sports, and news widgets.
 - **Replace Default Clock:** Seamlessly replaces the stock Windows 11 lock screen clock.
 - **Customizable Appearance:** Adjust glass opacity, font size, alignment, and vertical offsets.
@@ -37,13 +39,14 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| **Clock Style** | Choose between Retro Pixel / LED Matrix (`pixel`), Modern Flip Clock (`flip`), Classic Flip Clock (`vintage`), Minimalist Aura / Floating Clock (`aura`), Cyberpunk HUD Terminal (`cyberpunk`), or Default Clock (`defaultOnly`) | `flip` |
+| **Clock Style** | Choose between Minimalist Cupertino (`macos`), Modern Flip Clock (`flip`), Classic Flip Clock (`vintage`), Minimalist Aura / Floating Clock (`aura`), Cyberpunk HUD Terminal (`cyberpunk`), Retro Pixel / LED Matrix (`pixel`), or Default Clock (`defaultOnly`) | `flip` |
 | **Time Format** | Select 24-Hour (`24h`) or 12-Hour AM/PM (`12h`) format | `24h` |
-| **Show Seconds** | Toggle seconds display (Cyberpunk, Retro Pixel, and Aura) | `Disabled` |
+| **Show Seconds** | Toggle seconds display (Cyberpunk and Retro Pixel; optional on Minimalist styles) | `Disabled` |
+| **Show Battery Status** | Display laptop battery percentage and charging status capsule (auto-hidden on desktop PCs) | `Disabled` |
 | **Glass Opacity** | Card translucency alpha value (0 - 255) | `45` |
 | **Digit Font Size** | Font size for clock digits | `92` |
 | **Vertical Offset** | Shift clock position up or down (-200 to +400 px) | `0` |
-| **Clock Alignment** | Screen alignment (`center`, `left`, `right`) | `center` |
+| **Clock Alignment** | Screen alignment (`center`, `left`, `right`, `bottomLeft`) | `center` |
 | **Hide Default Widgets**| Hide MSN weather, news, and finance widgets | `Enabled` |
 | **Hide Default Clock** | Hide the stock Windows 11 clock and date | `Enabled` |
 | **Show Date Capsule** | Display date capsule beneath cards | `Enabled` |

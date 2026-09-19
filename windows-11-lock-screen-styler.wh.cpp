@@ -4,7 +4,7 @@
 // @name:tr-TR      Windows 11 Kilit Ekranı Özelleştirici
 // @description     Customize the Windows 11 lock screen with modern clock styles, date display, and widget controls.
 // @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget denetimleriyle özelleştirin.
-// @version         0.2.0
+// @version         0.3.0
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
 // @include         LockApp.exe
@@ -19,15 +19,17 @@
 Customize and enhance the Windows 11 lock screen with modern clock designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
+- **Minimalist Cupertino (Clean Typography):** Apple-inspired lock screen typography with date positioned above the time, slender display numerals, dual-layer atmospheric shadow, and bottom-left or center placement.
 - **Modern Flip Clock:** Split glass cards for hour and minute with an elegant horizontal flip seam.
 - **Classic Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
-- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke tactical Netrunner HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow and hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
+- **Cyberpunk Sci-Fi HUD Terminal:** Bespoke tactical Netrunner HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow and hot magenta, top telemetry diagnostic bar, electric cyan digits with rhythmic tactical pulse, and bottom telemetry date logger.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
+- **Battery & Charging Capsule:** Live battery percentage and power indicator (⚡ %85) for laptop users, automatically hidden on desktop PCs.
 - **12-Hour / 24-Hour Format:** Switch between 24-hour time and 12-hour time with dedicated AM/PM indicators across themes.
-- **Show Seconds Toggle:** Optional live seconds display for Cyberpunk, Pixel, and Aura clock styles.
+- **Show Seconds Toggle:** Optional live seconds display (direct support on Cyberpunk & Retro Pixel; user-toggleable on Minimalist styles).
 - **Frosted Glass / Acrylic Styling:** Translucent glass panels with subtle border highlights and rounded corners.
-- **Dynamic Date Display:** Elegant date and day capsule positioned beneath the clock, adapting to the user's system locale.
+- **Dynamic Date Display:** Elegant date and day capsule positioned beneath or above the clock, adapting to the user's system locale.
 - **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
 - **Hide / Replace Default Clock:** Seamlessly replace the stock Windows 11 clock with custom styles or adjust vertical offsets.
 - **Extensive Customization:** Card opacity, font size, vertical offsets, and alignments are fully customizable via settings.
@@ -45,6 +47,7 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description: "The clock style to display on the lock screen."
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
+    - macos: "Minimalist Cupertino (Clean Typography)"
     - pixel: "Retro Pixel / LED Dot Matrix"
     - flip: "Modern Flip Clock"
     - vintage: "Classic Flip Clock"
@@ -62,8 +65,8 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 - showSeconds: false
   $name: "Show Seconds"
   $name:tr-TR: "Saniyeyi Göster"
-  $description: "Displays live seconds (supported on Cyberpunk, Retro Pixel, and Aura styles)."
-  $description:tr-TR: "Canlı saniye göstergesini etkinleştirir (Cyberpunk, Retro Pixel ve Aura stillerinde desteklenir)."
+  $description: "Displays live seconds (direct support on Cyberpunk and Retro Pixel; optional on Minimalist styles)."
+  $description:tr-TR: "Canlı saniye göstergesini etkinleştirir (Cyberpunk ve Retro Piksel stillerinde doğrudan etkindir; Minimalist stillerde isteğe bağlıdır)."
 - glassOpacity: 45
   $name: "Glass Opacity (Liquid Glass Alpha)"
   $name:tr-TR: "Cam Opaklığı (Alfa Değeri)"
@@ -82,10 +85,11 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 - clockAlignment: center
   $name: "Clock Horizontal Alignment"
   $name:tr-TR: "Saat Yatay Hizalaması"
-  $description: "Horizontal alignment of the clock on screen."
-  $description:tr-TR: "Saatin ekrandaki yatay hizalaması."
+  $description: "Horizontal alignment and layout of the clock on screen."
+  $description:tr-TR: "Saatin ekrandaki yerleşim ve hizalaması."
   $options:
     - center: "Center of Screen"
+    - bottomLeft: "Bottom-Left (Cupertino Style)"
     - left: "Left Side"
     - right: "Right Side"
 - hideDefaultWidgets: true
@@ -99,10 +103,15 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description: "Hides the default Windows 11 clock and date text to make way for the new clock."
   $description:tr-TR: "Windows 11'in standart saat ve tarih metnini gizleyerek yeni saatin görünmesini sağlar."
 - showDateCapsule: true
-  $name: "Show Date Capsule"
-  $name:tr-TR: "Tarih Kapsülünü Göster"
-  $description: "Displays a date and weekday capsule below the flip clock cards."
-  $description:tr-TR: "Flip saat kartlarının altında gün ve ay kapsülünü görüntüler."
+  $name: "Show Date Display"
+  $name:tr-TR: "Tarih Göstergesini Göster"
+  $description: "Displays a date and weekday display (above or below clock cards)."
+  $description:tr-TR: "Tarih ve gün göstergesini görüntüler."
+- showBatteryStatus: false
+  $name: "Show Battery & Charging Capsule"
+  $name:tr-TR: "Pil ve Şarj Kapsülünü Göster"
+  $description: "Displays battery percentage and charging status on laptops (automatically hidden on desktop PCs)."
+  $description:tr-TR: "Dizüstü bilgisayarlarda pil yüzdesi ve şarj durumu kapsülünü görüntüler (Masaüstü bilgisayarlarda otomatik gizlenir)."
 */
 // ==/WindhawkModSettings==
 
@@ -134,6 +143,7 @@ namespace wuxs = winrt::Windows::UI::Xaml::Shapes;
 namespace wu = winrt::Windows::UI;
 
 // Mod Configuration Settings
+// Mod Configuration Settings
 struct ModSettings {
     std::wstring clockStyle;
     std::wstring timeFormat;
@@ -146,10 +156,14 @@ struct ModSettings {
     bool hideDefaultWidgets;
     bool hideDefaultClock;
     bool showDateCapsule;
+    bool showBatteryStatus;
 } g_settings;
 
 // Settings Loader
 void LoadSettings() {
+    static std::wstring s_lastKnownStyle = L"";
+    static bool s_settingsInitialized = false;
+
     PCWSTR styleStr = Wh_GetStringSetting(L"clockStyle");
     g_settings.clockStyle = (styleStr && *styleStr) ? styleStr : L"flip";
     Wh_FreeStringSetting(styleStr);
@@ -158,7 +172,31 @@ void LoadSettings() {
     g_settings.timeFormat = (fmtStr && *fmtStr) ? fmtStr : L"24h";
     Wh_FreeStringSetting(fmtStr);
 
-    g_settings.showSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
+    bool rawShowSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
+    bool isPixelOrCyber = (g_settings.clockStyle == L"pixel" || g_settings.clockStyle == L"cyberpunk");
+
+    if (isPixelOrCyber) {
+        g_settings.showSeconds = rawShowSeconds;
+    } else {
+        std::wstring storageKey = L"userSec_" + g_settings.clockStyle;
+        bool themeChanged = (s_settingsInitialized && g_settings.clockStyle != s_lastKnownStyle);
+
+        if (!s_settingsInitialized) {
+            // First load: only enable seconds if user explicitly enabled it previously for this theme
+            g_settings.showSeconds = rawShowSeconds && (Wh_GetIntValue(storageKey.c_str(), 0) != 0);
+        } else if (themeChanged) {
+            // When switching to a theme other than pixel & cyberpunk:
+            // Automatically turn off seconds unless explicitly opted-in for this theme
+            g_settings.showSeconds = rawShowSeconds && (Wh_GetIntValue(storageKey.c_str(), 0) != 0);
+        } else {
+            // Theme stayed the same (user explicitly toggled showSeconds for this theme)
+            Wh_SetIntValue(storageKey.c_str(), rawShowSeconds ? 1 : 0);
+            g_settings.showSeconds = rawShowSeconds;
+        }
+    }
+
+    s_lastKnownStyle = g_settings.clockStyle;
+    s_settingsInitialized = true;
 
     g_settings.glassOpacity = Wh_GetIntSetting(L"glassOpacity");
     if (g_settings.glassOpacity < 0 || g_settings.glassOpacity > 255) {
@@ -181,10 +219,11 @@ void LoadSettings() {
     g_settings.hideDefaultWidgets = Wh_GetIntSetting(L"hideDefaultWidgets") != 0;
     g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
+    g_settings.showBatteryStatus = Wh_GetIntSetting(L"showBatteryStatus") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, hideWidgets=%d, hideClock=%d",
+    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, hideWidgets=%d, hideClock=%d, showBattery=%d",
            g_settings.clockStyle.c_str(), g_settings.timeFormat.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
-           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock);
+           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock, g_settings.showBatteryStatus);
 }
 
 // UI State References
@@ -202,6 +241,22 @@ wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
 
+// Minimalist Cupertino (Clean Typography) Theme State
+wuxc::TextBlock g_macosTimeTextBlock{ nullptr };
+wuxc::TextBlock g_macosShadowTextBlock{ nullptr };
+wuxc::TextBlock g_macosDateTextBlock{ nullptr };
+wuxc::TextBlock g_macosDateShadowBlock{ nullptr };
+
+// Battery Capsule State
+wuxc::Border g_batteryCapsule{ nullptr };
+wuxc::TextBlock g_batteryIconText{ nullptr };
+wuxc::TextBlock g_batteryStatusText{ nullptr };
+
+// Cyberpunk HUD Pulsing State
+wuxc::TextBlock g_cyberSlash1{ nullptr };
+wuxc::TextBlock g_cyberSlash2{ nullptr };
+wuxc::TextBlock g_cyberLiveLabel{ nullptr };
+
 // Tracked default elements for restoring on uninit or settings change
 std::vector<wux::FrameworkElement> g_hiddenClockElements;
 std::vector<wux::FrameworkElement> g_hiddenWidgetElements;
@@ -217,6 +272,10 @@ struct TimeCache {
     std::wstring lastAmPm;
     std::wstring lastAuraTime;
     std::wstring lastDateStr;
+    std::wstring lastMacosTime;
+    std::wstring lastMacosDate;
+    int lastBatteryPct = -1;
+    bool lastIsCharging = false;
 
     void Invalidate() {
         lastDisplayHour = -1;
@@ -228,6 +287,10 @@ struct TimeCache {
         lastAmPm.clear();
         lastAuraTime.clear();
         lastDateStr.clear();
+        lastMacosTime.clear();
+        lastMacosDate.clear();
+        lastBatteryPct = -1;
+        lastIsCharging = false;
     }
 } g_timeCache;
 
@@ -365,19 +428,102 @@ PixelDigitGrid g_pixelDigits[6]; // H1, H2, M1, M2, S1, S2
 wuxm::SolidColorBrush g_brushActiveDot{ nullptr };
 wuxm::SolidColorBrush g_brushInactiveDot{ nullptr };
 
-// Helper to apply root horizontal and vertical alignments
+// Win32 Battery Status Helper
+struct BatteryInfo {
+    bool hasBattery = false;
+    bool isCharging = false;
+    int percentage = -1;
+};
+
+BatteryInfo GetCurrentBatteryInfo() {
+    BatteryInfo info;
+    SYSTEM_POWER_STATUS sps;
+    if (GetSystemPowerStatus(&sps)) {
+        // BatteryFlag: 128 = No system battery, 255 = Unknown status
+        if ((sps.BatteryFlag & 128) == 0 && sps.BatteryFlag != 255 && sps.BatteryLifePercent <= 100) {
+            info.hasBattery = true;
+            info.percentage = (int)sps.BatteryLifePercent;
+            info.isCharging = (sps.ACLineStatus == 1) || ((sps.BatteryFlag & 8) != 0);
+        }
+    }
+    return info;
+}
+
+// Build Universal Frosted Battery & Power Status Capsule
+wux::UIElement CreateBatteryCapsule(bool alignLeft, bool isDarkTheme = false) {
+    auto batteryInfo = GetCurrentBatteryInfo();
+    if (!batteryInfo.hasBattery) {
+        return nullptr; // Desktop PC without battery: do not render
+    }
+
+    wuxc::Border capsule;
+    capsule.Name(L"WindhawkBatteryCapsule");
+    if (isDarkTheme) {
+        capsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(210, 14, 14, 14)));
+        capsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(40, 255, 255, 255)));
+    } else {
+        capsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(32, 255, 255, 255)));
+        capsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(55, 255, 255, 255)));
+    }
+    capsule.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+    capsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(10.0));
+    capsule.Padding(wux::Thickness{ 12.0, 4.0, 14.0, 4.0 });
+    capsule.Margin(wux::Thickness{ alignLeft ? 6.0 : 0.0, 12.0, 0.0, 0.0 });
+    capsule.HorizontalAlignment(alignLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+
+    wuxc::StackPanel panel;
+    panel.Orientation(wuxc::Orientation::Horizontal);
+    panel.VerticalAlignment(wux::VerticalAlignment::Center);
+
+    wuxc::TextBlock iconText;
+    iconText.Name(L"WindhawkBatteryIconText");
+    iconText.Text(batteryInfo.isCharging ? L"⚡ " : L"🔋 ");
+    iconText.FontSize(12.5);
+    iconText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    iconText.Foreground(batteryInfo.isCharging 
+        ? wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 252, 238, 10)) // Gold / Yellow
+        : wuxm::SolidColorBrush(wu::Colors::White()));
+    iconText.VerticalAlignment(wux::VerticalAlignment::Center);
+    panel.Children().Append(iconText);
+
+    wuxc::TextBlock statusText;
+    statusText.Name(L"WindhawkBatteryStatusText");
+    WCHAR buf[32];
+    swprintf_s(buf, L"%d%%", batteryInfo.percentage);
+    statusText.Text(buf);
+    statusText.FontSize(12.5);
+    statusText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
+    statusText.FontWeight(winrt::Windows::UI::Text::FontWeights::Medium());
+    statusText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 255, 255, 255)));
+    statusText.VerticalAlignment(wux::VerticalAlignment::Center);
+    panel.Children().Append(statusText);
+
+    capsule.Child(panel);
+    g_batteryCapsule = capsule;
+    g_batteryIconText = iconText;
+    g_batteryStatusText = statusText;
+    return capsule;
+}
+
+// Helper to apply root horizontal and vertical alignments (supports bottomLeft Cupertino style)
 void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     if (g_settings.clockAlignment == L"left") {
         rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Left);
+        rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
         rootContainer.Margin(wux::Thickness{ 80.0, (double)g_settings.verticalOffset, 0.0, 0.0 });
     } else if (g_settings.clockAlignment == L"right") {
         rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Right);
+        rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
         rootContainer.Margin(wux::Thickness{ 0.0, (double)g_settings.verticalOffset, 80.0, 0.0 });
+    } else if (g_settings.clockAlignment == L"bottomLeft") {
+        rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Left);
+        rootContainer.VerticalAlignment(wux::VerticalAlignment::Bottom);
+        rootContainer.Margin(wux::Thickness{ 80.0, 0.0, 0.0, 80.0 + (double)g_settings.verticalOffset });
     } else {
         rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Center);
+        rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
         rootContainer.Margin(wux::Thickness{ 0.0, (double)g_settings.verticalOffset, 0.0, 0.0 });
     }
-    rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
 }
 
 // Update single pixel digit dots (7x11 matrix) with dirty-checking
@@ -444,6 +590,41 @@ void UpdateTimeAndDate() {
             SetPixelDigitValue(g_pixelDigits[4], s1);
             SetPixelDigitValue(g_pixelDigits[5], s2);
         }
+    } else if (g_settings.clockStyle == L"macos") {
+        bool shouldUpdateTime = g_settings.showSeconds ? secondChanged : (minuteChanged || hourChanged || ampmChanged);
+        if (g_macosTimeTextBlock && (shouldUpdateTime || g_timeCache.lastMacosTime.empty())) {
+            WCHAR timeBuf[32];
+            if (is12h) {
+                if (g_settings.showSeconds) {
+                    swprintf_s(timeBuf, L"%d:%02d:%02d %s", displayHour, st.wMinute, st.wSecond, ampmStr);
+                } else {
+                    swprintf_s(timeBuf, L"%d:%02d %s", displayHour, st.wMinute, ampmStr);
+                }
+            } else {
+                if (g_settings.showSeconds) {
+                    swprintf_s(timeBuf, L"%02d:%02d:%02d", displayHour, st.wMinute, st.wSecond);
+                } else {
+                    swprintf_s(timeBuf, L"%02d:%02d", displayHour, st.wMinute);
+                }
+            }
+            g_macosTimeTextBlock.Text(timeBuf);
+            if (g_macosShadowTextBlock) {
+                g_macosShadowTextBlock.Text(timeBuf);
+            }
+            g_timeCache.lastMacosTime = timeBuf;
+        }
+
+        if (g_macosDateTextBlock && (dateChanged || g_timeCache.lastMacosDate.empty())) {
+            WCHAR dateBuf[128];
+            if (GetDateFormatW(LOCALE_USER_DEFAULT, 0, &st, L"dddd, d MMMM", dateBuf, ARRAYSIZE(dateBuf)) == 0) {
+                GetDateFormatW(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, nullptr, dateBuf, ARRAYSIZE(dateBuf));
+            }
+            g_macosDateTextBlock.Text(dateBuf);
+            if (g_macosDateShadowBlock) {
+                g_macosDateShadowBlock.Text(dateBuf);
+            }
+            g_timeCache.lastMacosDate = dateBuf;
+        }
     } else if (g_settings.clockStyle == L"aura") {
         bool shouldUpdateAura = g_settings.showSeconds ? secondChanged : (minuteChanged || hourChanged || ampmChanged);
         if (g_auraTimeTextBlock && (shouldUpdateAura || g_timeCache.lastAuraTime.empty())) {
@@ -496,6 +677,20 @@ void UpdateTimeAndDate() {
             swprintf_s(secBuf, L"%02d", st.wSecond);
             g_secTextBlock.Text(secBuf);
         }
+
+        // Cyberpunk HUD Tactical Separator Pulse
+        if (g_settings.clockStyle == L"cyberpunk" && secondChanged) {
+            bool pulseState = (st.wSecond % 2 == 0);
+            if (g_cyberSlash1) {
+                g_cyberSlash1.Opacity(pulseState ? 1.0 : 0.35);
+            }
+            if (g_cyberSlash2) {
+                g_cyberSlash2.Opacity(pulseState ? 1.0 : 0.35);
+            }
+            if (g_cyberLiveLabel) {
+                g_cyberLiveLabel.Opacity(pulseState ? 1.0 : 0.55);
+            }
+        }
     }
 
     if (g_dateTextBlock && g_settings.showDateCapsule && (dateChanged || g_timeCache.lastDateStr.empty())) {
@@ -507,6 +702,30 @@ void UpdateTimeAndDate() {
         g_timeCache.lastDay = st.wDay;
         g_timeCache.lastMonth = st.wMonth;
         g_timeCache.lastYear = st.wYear;
+    }
+
+    // Battery percentage and power status update
+    if (g_batteryStatusText && g_settings.showBatteryStatus && (minuteChanged || g_timeCache.lastBatteryPct == -1)) {
+        auto bInfo = GetCurrentBatteryInfo();
+        if (bInfo.hasBattery) {
+            if (bInfo.percentage != g_timeCache.lastBatteryPct || bInfo.isCharging != g_timeCache.lastIsCharging) {
+                WCHAR bBuf[32];
+                if (g_settings.clockStyle == L"cyberpunk") {
+                    swprintf_s(bBuf, bInfo.isCharging ? L"PWR: %d%% [CHG]" : L"BAT: %d%%", bInfo.percentage);
+                } else {
+                    swprintf_s(bBuf, L"%d%%", bInfo.percentage);
+                }
+                g_batteryStatusText.Text(bBuf);
+                if (g_batteryIconText) {
+                    g_batteryIconText.Text(bInfo.isCharging ? L"⚡ " : L"🔋 ");
+                    g_batteryIconText.Foreground(bInfo.isCharging 
+                        ? wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 252, 238, 10))
+                        : wuxm::SolidColorBrush(wu::Colors::White()));
+                }
+                g_timeCache.lastBatteryPct = bInfo.percentage;
+                g_timeCache.lastIsCharging = bInfo.isCharging;
+            }
+        }
     }
 
     g_timeCache.lastDisplayHour = displayHour;
@@ -697,6 +916,14 @@ wux::UIElement BuildFlipClockElement() {
         g_dateTextBlock = dateText;
     }
 
+    // Battery Capsule (if enabled and laptop battery present)
+    if (g_settings.showBatteryStatus) {
+        auto batteryCapsule = CreateBatteryCapsule(false);
+        if (batteryCapsule) {
+            verticalLayout.Children().Append(batteryCapsule);
+        }
+    }
+
     rootContainer.Children().Append(verticalLayout);
     UpdateTimeAndDate();
     StartClockTimer();
@@ -861,6 +1088,14 @@ wux::UIElement BuildVintageClockElement() {
         g_dateTextBlock = dateText;
     }
 
+    // Battery Capsule (if enabled and laptop battery present)
+    if (g_settings.showBatteryStatus) {
+        auto batteryCapsule = CreateBatteryCapsule(false, true);
+        if (batteryCapsule) {
+            verticalLayout.Children().Append(batteryCapsule);
+        }
+    }
+
     rootContainer.Children().Append(verticalLayout);
     UpdateTimeAndDate();
     StartClockTimer();
@@ -924,6 +1159,7 @@ wux::UIElement BuildCyberpunkClockElement() {
     liveLabel.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(220, 252, 238, 10))); // Acid Yellow
     liveLabel.VerticalAlignment(wux::VerticalAlignment::Center);
     telemetryPills.Children().Append(liveLabel);
+    g_cyberLiveLabel = liveLabel;
 
     for (int i = 0; i < 3; i++) {
         wuxs::Rectangle pill;
@@ -943,6 +1179,32 @@ wux::UIElement BuildCyberpunkClockElement() {
     yellowPill.Margin(wux::Thickness{ 2.0, 0.0, 0.0, 0.0 });
     yellowPill.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 252, 238, 10))); // Acid Yellow
     telemetryPills.Children().Append(yellowPill);
+
+    // Tactical laptop battery telemetry (if battery present)
+    auto bInfo = GetCurrentBatteryInfo();
+    if (g_settings.showBatteryStatus && bInfo.hasBattery) {
+        wuxc::Border cyberBat;
+        cyberBat.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(40, 0, 245, 255)));
+        cyberBat.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(90, 0, 245, 255)));
+        cyberBat.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        cyberBat.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(3.0));
+        cyberBat.Padding(wux::Thickness{ 6.0, 1.0, 6.0, 1.0 });
+        cyberBat.Margin(wux::Thickness{ 6.0, 0.0, 0.0, 0.0 });
+        cyberBat.VerticalAlignment(wux::VerticalAlignment::Center);
+
+        wuxc::TextBlock batText;
+        batText.Name(L"WindhawkCyberBatteryText");
+        WCHAR bBuf[32];
+        swprintf_s(bBuf, bInfo.isCharging ? L"PWR: %d%% [CHG]" : L"BAT: %d%%", bInfo.percentage);
+        batText.Text(bBuf);
+        batText.FontSize(9.5);
+        batText.FontFamily(wuxm::FontFamily(L"Consolas"));
+        batText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
+        batText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 0, 245, 255)));
+        cyberBat.Child(batText);
+        telemetryPills.Children().Append(cyberBat);
+        g_batteryStatusText = batText;
+    }
 
     topBar.Children().Append(topTag);
     topBar.Children().Append(telemetryPills);
@@ -988,6 +1250,7 @@ wux::UIElement BuildCyberpunkClockElement() {
     slash1.VerticalAlignment(wux::VerticalAlignment::Center);
     slash1.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
     digitsPanel.Children().Append(slash1);
+    g_cyberSlash1 = slash1;
 
     // Minute
     wuxc::TextBlock minText;
@@ -1013,6 +1276,7 @@ wux::UIElement BuildCyberpunkClockElement() {
         slash2.VerticalAlignment(wux::VerticalAlignment::Center);
         slash2.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
         digitsPanel.Children().Append(slash2);
+        g_cyberSlash2 = slash2;
 
         wuxc::TextBlock secText;
         secText.Name(L"WindhawkCyberSecText");
@@ -1435,6 +1699,111 @@ wux::UIElement BuildAuraClockElement() {
         g_dateTextBlock = dateText;
     }
 
+    // Battery Capsule (if enabled and laptop battery present)
+    if (g_settings.showBatteryStatus) {
+        auto batteryCapsule = CreateBatteryCapsule(false);
+        if (batteryCapsule) {
+            verticalLayout.Children().Append(batteryCapsule);
+        }
+    }
+
+    rootContainer.Children().Append(verticalLayout);
+    UpdateTimeAndDate();
+    StartClockTimer();
+
+    return rootContainer;
+}
+
+// Build Minimalist Cupertino (Clean Typography) Clock Element
+wux::UIElement BuildMacOSClockElement() {
+    wuxc::Grid rootContainer;
+    rootContainer.Name(L"WindhawkMacOSClockContainer");
+    ApplyAlignmentAndMargin(rootContainer);
+
+    bool isBottomLeft = (g_settings.clockAlignment == L"bottomLeft");
+
+    wuxc::StackPanel verticalLayout;
+    verticalLayout.Orientation(wuxc::Orientation::Vertical);
+    verticalLayout.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+
+    // 1. macOS Date Header (Positioned elegantly ABOVE the time)
+    if (g_settings.showDateCapsule) {
+        wuxc::Grid dateLayerGrid;
+        dateLayerGrid.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+        dateLayerGrid.Margin(wux::Thickness{ 0.0, 0.0, 0.0, 6.0 });
+
+        double dateFontSize = (double)g_settings.clockFontSize * 0.23;
+        if (dateFontSize < 18.0) dateFontSize = 18.0;
+
+        // Atmospheric Shadow Layer for Date
+        wuxc::TextBlock dateShadow;
+        dateShadow.FontSize(dateFontSize);
+        dateShadow.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+        dateShadow.FontWeight(winrt::Windows::UI::Text::FontWeights::Normal());
+        dateShadow.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(70, 0, 0, 0)));
+        dateShadow.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+        dateShadow.TextAlignment(isBottomLeft ? wux::TextAlignment::Left : wux::TextAlignment::Center);
+        dateShadow.Margin(wux::Thickness{ 0.0, 1.5, 0.0, 0.0 });
+        dateLayerGrid.Children().Append(dateShadow);
+        g_macosDateShadowBlock = dateShadow;
+
+        // Foreground Date Text
+        wuxc::TextBlock dateText;
+        dateText.Name(L"WindhawkMacOSDateText");
+        dateText.FontSize(dateFontSize);
+        dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+        dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::Normal());
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 255, 255, 255)));
+        dateText.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+        dateText.TextAlignment(isBottomLeft ? wux::TextAlignment::Left : wux::TextAlignment::Center);
+        dateLayerGrid.Children().Append(dateText);
+        g_macosDateTextBlock = dateText;
+
+        verticalLayout.Children().Append(dateLayerGrid);
+    }
+
+    // 2. Giant macOS Typography Time Display (Thin/Light, San Francisco aesthetic via Segoe UI Variable Display Light)
+    wuxc::Grid timeLayerGrid;
+    timeLayerGrid.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+
+    double timeFontSize = (double)g_settings.clockFontSize * 1.55;
+
+    // Atmospheric Soft Shadow Layer for Time
+    wuxc::TextBlock timeShadow;
+    timeShadow.FontSize(timeFontSize);
+    timeShadow.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    timeShadow.FontWeight(winrt::Windows::UI::Text::FontWeights::Light());
+    timeShadow.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(80, 0, 0, 0)));
+    timeShadow.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+    timeShadow.TextAlignment(isBottomLeft ? wux::TextAlignment::Left : wux::TextAlignment::Center);
+    timeShadow.Margin(wux::Thickness{ 0.0, 3.5, 0.0, 0.0 });
+    wuxd::Typography::SetNumeralAlignment(timeShadow, wux::FontNumeralAlignment::Tabular);
+    timeLayerGrid.Children().Append(timeShadow);
+    g_macosShadowTextBlock = timeShadow;
+
+    // Foreground Pure White Clean Time Text
+    wuxc::TextBlock timeText;
+    timeText.Name(L"WindhawkMacOSTimeText");
+    timeText.FontSize(timeFontSize);
+    timeText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
+    timeText.FontWeight(winrt::Windows::UI::Text::FontWeights::Light());
+    timeText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
+    timeText.HorizontalAlignment(isBottomLeft ? wux::HorizontalAlignment::Left : wux::HorizontalAlignment::Center);
+    timeText.TextAlignment(isBottomLeft ? wux::TextAlignment::Left : wux::TextAlignment::Center);
+    wuxd::Typography::SetNumeralAlignment(timeText, wux::FontNumeralAlignment::Tabular);
+    timeLayerGrid.Children().Append(timeText);
+    g_macosTimeTextBlock = timeText;
+
+    verticalLayout.Children().Append(timeLayerGrid);
+
+    // 3. macOS Sleek Battery Capsule (Underneath time if enabled)
+    if (g_settings.showBatteryStatus) {
+        auto batteryCapsule = CreateBatteryCapsule(isBottomLeft);
+        if (batteryCapsule) {
+            verticalLayout.Children().Append(batteryCapsule);
+        }
+    }
+
     rootContainer.Children().Append(verticalLayout);
     UpdateTimeAndDate();
     StartClockTimer();
@@ -1444,7 +1813,9 @@ wux::UIElement BuildAuraClockElement() {
 
 // Factory function for selected clock style
 wux::UIElement BuildClockElement() {
-    if (g_settings.clockStyle == L"pixel") {
+    if (g_settings.clockStyle == L"macos") {
+        return BuildMacOSClockElement();
+    } else if (g_settings.clockStyle == L"pixel") {
         return BuildPixelClockElement();
     } else if (g_settings.clockStyle == L"vintage") {
         return BuildVintageClockElement();
@@ -1501,6 +1872,16 @@ void RebuildClockUI() {
         g_ampmTextBlock = nullptr;
         g_auraTimeTextBlock = nullptr;
         g_auraShadowTextBlock = nullptr;
+        g_macosTimeTextBlock = nullptr;
+        g_macosShadowTextBlock = nullptr;
+        g_macosDateTextBlock = nullptr;
+        g_macosDateShadowBlock = nullptr;
+        g_batteryCapsule = nullptr;
+        g_batteryIconText = nullptr;
+        g_batteryStatusText = nullptr;
+        g_cyberSlash1 = nullptr;
+        g_cyberSlash2 = nullptr;
+        g_cyberLiveLabel = nullptr;
         g_dateTextBlock = nullptr;
         for (int i = 0; i < 6; i++) {
             g_pixelDigits[i].dots.clear();
@@ -2034,6 +2415,29 @@ void Wh_ModUninit() {
     g_clockInjected = false;
     g_activeClockElement = nullptr;
     g_lockRootGrid = nullptr;
+    g_hourTextBlock = nullptr;
+    g_hourBotTextBlock = nullptr;
+    g_minTextBlock = nullptr;
+    g_minBotTextBlock = nullptr;
+    g_secTextBlock = nullptr;
+    g_ampmTextBlock = nullptr;
+    g_auraTimeTextBlock = nullptr;
+    g_auraShadowTextBlock = nullptr;
+    g_macosTimeTextBlock = nullptr;
+    g_macosShadowTextBlock = nullptr;
+    g_macosDateTextBlock = nullptr;
+    g_macosDateShadowBlock = nullptr;
+    g_batteryCapsule = nullptr;
+    g_batteryIconText = nullptr;
+    g_batteryStatusText = nullptr;
+    g_cyberSlash1 = nullptr;
+    g_cyberSlash2 = nullptr;
+    g_cyberLiveLabel = nullptr;
+    g_dateTextBlock = nullptr;
+    for (int i = 0; i < 6; i++) {
+        g_pixelDigits[i].dots.clear();
+        g_pixelDigits[i].lastVal = -1;
+    }
     g_timeCache.Invalidate();
 }
 
