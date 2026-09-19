@@ -20,7 +20,7 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 
 ## Features:
 - **Modern Flip Clock:** Split glass cards for hour and minute with an elegant horizontal flip seam.
-- **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
+- **Classic Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Cyberpunk Sci-Fi HUD Terminal:** Bespoke tactical Netrunner HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow and hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
 - **Retro Pixel / LED Dot Matrix Clock:** Authentic dot matrix display inspired by classic digital boards with active and ambient inactive LED dots.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
@@ -30,7 +30,7 @@ Customize and enhance the Windows 11 lock screen with modern clock designs, fros
 - **Dynamic Date Display:** Elegant date and day capsule positioned beneath the clock, adapting to the user's system locale.
 - **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
 - **Hide / Replace Default Clock:** Seamlessly replace the stock Windows 11 clock with custom styles or adjust vertical offsets.
-- **Extensive Customization:** Card opacity, corner radius, font size, vertical offsets, and alignments are fully customizable via settings.
+- **Extensive Customization:** Card opacity, font size, vertical offsets, and alignments are fully customizable via settings.
 
 ## Security Note:
 This mod exclusively targets `LockApp.exe`. It does not inject into or interfere with `LogonUI.exe` or `winlogon.exe` in the Secure Desktop, preventing any system lockup or logon security risks.
@@ -45,11 +45,11 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $description: "The clock style to display on the lock screen."
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
-    - flip: "Frosted Glass Flip Clock"
-    - vintage: "Retro Vintage Flip Clock"
-    - cyberpunk: "Cyberpunk Sci-Fi HUD Terminal"
     - pixel: "Retro Pixel / LED Dot Matrix"
+    - flip: "Modern Flip Clock"
+    - vintage: "Classic Flip Clock"
     - aura: "Minimalist Aura / Floating Clock"
+    - cyberpunk: "Cyberpunk Sci-Fi HUD Terminal"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
 - timeFormat: 24h
   $name: "Time Format"
@@ -69,11 +69,6 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $name:tr-TR: "Cam Opaklığı (Alfa Değeri)"
   $description: "Translucency level of the flip cards (0 to 255; 0 is completely transparent, 255 is fully opaque)."
   $description:tr-TR: "Flip kartlarının yarı saydamlık derecesi (0 ile 255 arası; 0 tamamen saydam, 255 tam opak)."
-- cardCornerRadius: 22
-  $name: "Card Corner Radius (px)"
-  $name:tr-TR: "Kart Köşe Yuvarlaklığı (px)"
-  $description: "Corner curvature radius of the flip clock cards."
-  $description:tr-TR: "Flip saat kartlarının köşe kavis yarıçapı."
 - clockFontSize: 92
   $name: "Digit Font Size"
   $name:tr-TR: "Rakam Font Boyutu"
@@ -166,14 +161,11 @@ void LoadSettings() {
     g_settings.showSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
 
     g_settings.glassOpacity = Wh_GetIntSetting(L"glassOpacity");
-    if (g_settings.glassOpacity <= 0 || g_settings.glassOpacity > 255) {
+    if (g_settings.glassOpacity < 0 || g_settings.glassOpacity > 255) {
         g_settings.glassOpacity = 45;
     }
 
-    g_settings.cardCornerRadius = Wh_GetIntSetting(L"cardCornerRadius");
-    if (g_settings.cardCornerRadius < 0) {
-        g_settings.cardCornerRadius = 22;
-    }
+    g_settings.cardCornerRadius = 22;
 
     g_settings.clockFontSize = Wh_GetIntSetting(L"clockFontSize");
     if (g_settings.clockFontSize <= 0) {
@@ -190,9 +182,9 @@ void LoadSettings() {
     g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, hideWidgets=%d, hideClock=%d",
+    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, hideWidgets=%d, hideClock=%d",
            g_settings.clockStyle.c_str(), g_settings.timeFormat.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
-           g_settings.clockFontSize, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock);
+           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock);
 }
 
 // UI State References
@@ -209,6 +201,35 @@ wuxc::TextBlock g_auraShadowTextBlock{ nullptr };
 wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
+
+// Tracked default elements for restoring on uninit or settings change
+std::vector<wux::FrameworkElement> g_hiddenClockElements;
+std::vector<wux::FrameworkElement> g_hiddenWidgetElements;
+
+// Dirty-checking time cache for high-efficiency rendering (eliminates redundant DirectWrite invalidations)
+struct TimeCache {
+    int lastDisplayHour = -1;
+    int lastMinute = -1;
+    int lastSecond = -1;
+    int lastDay = -1;
+    int lastMonth = -1;
+    int lastYear = -1;
+    std::wstring lastAmPm;
+    std::wstring lastAuraTime;
+    std::wstring lastDateStr;
+
+    void Invalidate() {
+        lastDisplayHour = -1;
+        lastMinute = -1;
+        lastSecond = -1;
+        lastDay = -1;
+        lastMonth = -1;
+        lastYear = -1;
+        lastAmPm.clear();
+        lastAuraTime.clear();
+        lastDateStr.clear();
+    }
+} g_timeCache;
 
 // 7x11 Dot Matrix Font Table for Digits 0 to 9 with 2-Dot Stroke Thickness
 // Each digit consists of 11 rows; each row uses the lower 7 bits (bit 6 = col 0, bit 0 = col 6).
@@ -338,6 +359,7 @@ static const uint8_t FONT_7x11[10][11] = {
 // Pixel Clock State
 struct PixelDigitGrid {
     std::vector<wuxs::Ellipse> dots; // 77 dots per digit (7 cols x 11 rows)
+    int lastVal = -1; // Cached last rendered digit to avoid redundant updates
 };
 PixelDigitGrid g_pixelDigits[6]; // H1, H2, M1, M2, S1, S2
 wuxm::SolidColorBrush g_brushActiveDot{ nullptr };
@@ -358,11 +380,16 @@ void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     rootContainer.VerticalAlignment(wux::VerticalAlignment::Center);
 }
 
-// Update single pixel digit dots (7x11 matrix)
+// Update single pixel digit dots (7x11 matrix) with dirty-checking
 void SetPixelDigitValue(PixelDigitGrid& digitRef, int val) {
     if (val < 0 || val > 9 || digitRef.dots.size() != 77 || !g_brushActiveDot || !g_brushInactiveDot) {
         return;
     }
+    if (digitRef.lastVal == val) {
+        return; // Value unchanged; skip re-applying brushes to 77 Ellipses
+    }
+    digitRef.lastVal = val;
+
     const uint8_t* rows = FONT_7x11[val];
     for (int r = 0; r < 11; r++) {
         uint8_t rowBits = rows[r];
@@ -374,7 +401,7 @@ void SetPixelDigitValue(PixelDigitGrid& digitRef, int val) {
     }
 }
 
-// Update Time and Date
+// Update Time and Date with dirty-checking cache (eliminates 95%+ redundant DirectWrite passes)
 void UpdateTimeAndDate() {
     SYSTEMTIME st;
     GetLocalTime(&st);
@@ -389,8 +416,15 @@ void UpdateTimeAndDate() {
         if (displayHour == 0) displayHour = 12;
     }
 
-    if (g_ampmTextBlock) {
+    bool hourChanged = (displayHour != g_timeCache.lastDisplayHour);
+    bool minuteChanged = (st.wMinute != g_timeCache.lastMinute);
+    bool secondChanged = (st.wSecond != g_timeCache.lastSecond);
+    bool ampmChanged = (g_timeCache.lastAmPm != ampmStr);
+    bool dateChanged = (st.wDay != g_timeCache.lastDay || st.wMonth != g_timeCache.lastMonth || st.wYear != g_timeCache.lastYear);
+
+    if (g_ampmTextBlock && ampmChanged) {
         g_ampmTextBlock.Text(ampmStr);
+        g_timeCache.lastAmPm = ampmStr;
     }
 
     if (g_settings.clockStyle == L"pixel") {
@@ -411,7 +445,8 @@ void UpdateTimeAndDate() {
             SetPixelDigitValue(g_pixelDigits[5], s2);
         }
     } else if (g_settings.clockStyle == L"aura") {
-        if (g_auraTimeTextBlock) {
+        bool shouldUpdateAura = g_settings.showSeconds ? secondChanged : (minuteChanged || hourChanged || ampmChanged);
+        if (g_auraTimeTextBlock && (shouldUpdateAura || g_timeCache.lastAuraTime.empty())) {
             WCHAR timeBuf[32];
             if (is12h) {
                 if (g_settings.showSeconds) {
@@ -430,53 +465,64 @@ void UpdateTimeAndDate() {
             if (g_auraShadowTextBlock) {
                 g_auraShadowTextBlock.Text(timeBuf);
             }
+            g_timeCache.lastAuraTime = timeBuf;
         }
     } else {
         // Flip Clock, Retro Vintage, Cyberpunk HUD
-        if (g_hourTextBlock && g_minTextBlock) {
+        if (g_hourTextBlock && hourChanged) {
             WCHAR hourBuf[8];
             if (is12h && (g_settings.clockStyle == L"flip" || g_settings.clockStyle == L"vintage")) {
                 swprintf_s(hourBuf, L"%d", displayHour);
             } else {
                 swprintf_s(hourBuf, L"%02d", displayHour);
             }
-            WCHAR minBuf[8];
-            swprintf_s(minBuf, L"%02d", st.wMinute);
-
             g_hourTextBlock.Text(hourBuf);
-            g_minTextBlock.Text(minBuf);
-
             if (g_hourBotTextBlock) {
                 g_hourBotTextBlock.Text(hourBuf);
             }
+        }
+
+        if (g_minTextBlock && minuteChanged) {
+            WCHAR minBuf[8];
+            swprintf_s(minBuf, L"%02d", st.wMinute);
+            g_minTextBlock.Text(minBuf);
             if (g_minBotTextBlock) {
                 g_minBotTextBlock.Text(minBuf);
             }
+        }
 
-            if (g_secTextBlock && g_settings.showSeconds) {
-                WCHAR secBuf[8];
-                swprintf_s(secBuf, L"%02d", st.wSecond);
-                g_secTextBlock.Text(secBuf);
-            }
+        if (g_secTextBlock && g_settings.showSeconds && secondChanged) {
+            WCHAR secBuf[8];
+            swprintf_s(secBuf, L"%02d", st.wSecond);
+            g_secTextBlock.Text(secBuf);
         }
     }
 
-    if (g_dateTextBlock && g_settings.showDateCapsule) {
+    if (g_dateTextBlock && g_settings.showDateCapsule && (dateChanged || g_timeCache.lastDateStr.empty())) {
         WCHAR dateBuf[128];
         if (GetDateFormatW(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, nullptr, dateBuf, ARRAYSIZE(dateBuf)) > 0) {
             g_dateTextBlock.Text(dateBuf);
+            g_timeCache.lastDateStr = dateBuf;
         }
+        g_timeCache.lastDay = st.wDay;
+        g_timeCache.lastMonth = st.wMonth;
+        g_timeCache.lastYear = st.wYear;
     }
+
+    g_timeCache.lastDisplayHour = displayHour;
+    g_timeCache.lastMinute = st.wMinute;
+    g_timeCache.lastSecond = st.wSecond;
 }
 
-// Start Live Clock Timer
+// Start Live Clock Timer with adaptive throttling (500ms when seconds active, 1000ms otherwise)
 void StartClockTimer() {
     if (g_clockTimer) {
         g_clockTimer.Stop();
         g_clockTimer = nullptr;
     }
     g_clockTimer = wux::DispatcherTimer();
-    g_clockTimer.Interval(std::chrono::milliseconds(500));
+    int intervalMs = g_settings.showSeconds ? 500 : 1000;
+    g_clockTimer.Interval(std::chrono::milliseconds(intervalMs));
     g_clockTimer.Tick([](auto&&, auto&&) {
         UpdateTimeAndDate();
     });
@@ -611,10 +657,10 @@ wux::UIElement BuildFlipClockElement() {
     cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
     cardsLayout.Spacing(22.0);
 
-    // Near-square large chunky card proportions (aspect ratio ~0.95)
-    double cardWidth = (double)g_settings.clockFontSize * 1.95;
+    // Near-square large chunky card proportions (aspect ratio ~0.99)
+    double cardWidth = (double)g_settings.clockFontSize * 2.02;
     double cardHeight = (double)g_settings.clockFontSize * 2.05;
-    double flipFontSize = (double)g_settings.clockFontSize * 1.48;
+    double flipFontSize = (double)g_settings.clockFontSize * 1.72;
     double cornerRad = (double)g_settings.cardCornerRadius;
 
     // 1. Hour Card
@@ -664,22 +710,22 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     card.Width(width);
     card.Height(height);
 
-    // Matte Industrial Charcoal Flap Body
+    // Fliqlo Matte Charcoal Black Flap Body (#0e0e0e) - Çerçevesiz mat gövde
     wuxc::Border flapBackplate;
-    flapBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(235, 18, 20, 24)));
-    flapBackplate.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(95, 60, 68, 78)));
-    flapBackplate.BorderThickness(wux::Thickness{ 1.2, 1.2, 1.2, 1.2 });
+    flapBackplate.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(242, 14, 14, 14)));
     flapBackplate.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(cornerRadius));
 
-    // Vintage Warm Cream / Aged Ivory Typography
+    // Fliqlo Original Matte Light Silver Digit Typography (#b9b9b9 / rgb(185, 185, 185))
     wuxc::TextBlock cardText;
     cardText.Name(textName);
     cardText.FontSize(fontSize);
     cardText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Display"));
     cardText.FontWeight(winrt::Windows::UI::Text::FontWeights::ExtraBold());
-    cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 246, 241, 230)));
+    cardText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 185, 185, 185)));
     cardText.HorizontalAlignment(wux::HorizontalAlignment::Center);
     cardText.VerticalAlignment(wux::VerticalAlignment::Center);
+    double opticalOffset = fontSize * 0.045;
+    cardText.Margin(wux::Thickness{ 0.0, opticalOffset, 0.0, 0.0 });
     wuxd::Typography::SetNumeralAlignment(cardText, wux::FontNumeralAlignment::Tabular);
 
     // Center Mechanical Split: Upper shadow + Lower light catch bevel + Side axle hinge clips
@@ -696,14 +742,14 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     wuxs::Rectangle shadowGroove;
     shadowGroove.Height(2.0);
     shadowGroove.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    shadowGroove.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(250, 8, 9, 11)));
+    shadowGroove.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(255, 0, 0, 0)));
     shadowGroove.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
 
     // Subtle edge highlight on bottom flap catching ambient overhead light
     wuxs::Rectangle bevelHighlight;
     bevelHighlight.Height(1.0);
     bevelHighlight.HorizontalAlignment(wux::HorizontalAlignment::Stretch);
-    bevelHighlight.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(38, 255, 255, 255)));
+    bevelHighlight.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(40, 255, 255, 255)));
     bevelHighlight.Margin(wux::Thickness{ 4.0, 0.0, 4.0, 0.0 });
 
     seamLines.Children().Append(shadowGroove);
@@ -718,7 +764,7 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     leftClip.RadiusY(1.0);
     leftClip.HorizontalAlignment(wux::HorizontalAlignment::Left);
     leftClip.VerticalAlignment(wux::VerticalAlignment::Center);
-    leftClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(225, 10, 12, 15)));
+    leftClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 8, 8, 8)));
 
     wuxs::Rectangle rightClip;
     rightClip.Width(4.0);
@@ -727,7 +773,7 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
     rightClip.RadiusY(1.0);
     rightClip.HorizontalAlignment(wux::HorizontalAlignment::Right);
     rightClip.VerticalAlignment(wux::VerticalAlignment::Center);
-    rightClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(225, 10, 12, 15)));
+    rightClip.Fill(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 8, 8, 8)));
 
     splitSeam.Children().Append(leftClip);
     splitSeam.Children().Append(rightClip);
@@ -743,9 +789,7 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
         ampmBadge.HorizontalAlignment(wux::HorizontalAlignment::Left);
         ampmBadge.VerticalAlignment(wux::VerticalAlignment::Top);
         ampmBadge.Margin(wux::Thickness{ 12.0, 10.0, 0.0, 0.0 });
-        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(245, 12, 14, 18)));
-        ampmBadge.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(95, 60, 68, 78)));
-        ampmBadge.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        ampmBadge.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(245, 14, 14, 14)));
         ampmBadge.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(4.0));
         ampmBadge.Padding(wux::Thickness{ 6.0, 1.5, 6.0, 1.5 });
 
@@ -754,7 +798,7 @@ wuxc::Grid CreateVintageFlipCard(double width, double height, double cornerRadiu
         ampmText.FontSize(11.0);
         ampmText.FontFamily(wuxm::FontFamily(L"Consolas"));
         ampmText.FontWeight(winrt::Windows::UI::Text::FontWeights::Bold());
-        ampmText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 246, 241, 230)));
+        ampmText.Foreground(wuxm::SolidColorBrush(wu::Colors::White()));
         ampmBadge.Child(ampmText);
 
         card.Children().Append(ampmBadge);
@@ -779,11 +823,11 @@ wux::UIElement BuildVintageClockElement() {
     cardsLayout.HorizontalAlignment(wux::HorizontalAlignment::Center);
     cardsLayout.Spacing(20.0);
 
-    // Near-square large chunky card proportions (aspect ratio ~0.95)
-    double cardWidth = (double)g_settings.clockFontSize * 1.95;
+    // Near-square large chunky card proportions (aspect ratio ~0.99)
+    double cardWidth = (double)g_settings.clockFontSize * 2.02;
     double cardHeight = (double)g_settings.clockFontSize * 2.05;
-    double flipFontSize = (double)g_settings.clockFontSize * 1.48;
-    double cornerRad = 12.0;
+    double flipFontSize = (double)g_settings.clockFontSize * 1.72;
+    double cornerRad = 18.0;
 
     // 1. Hour Card
     auto hourCard = CreateVintageFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, L"WindhawkVintageHourText", true);
@@ -795,12 +839,10 @@ wux::UIElement BuildVintageClockElement() {
 
     verticalLayout.Children().Append(cardsLayout);
 
-    // Vintage Date Plate (Embossed Industrial Badge Style)
+    // Vintage Date Plate (Fliqlo Matte Dark Style)
     if (g_settings.showDateCapsule) {
         wuxc::Border dateCapsule;
-        dateCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(215, 20, 22, 28)));
-        dateCapsule.BorderBrush(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(85, 60, 68, 78)));
-        dateCapsule.BorderThickness(wux::Thickness{ 1.0, 1.0, 1.0, 1.0 });
+        dateCapsule.Background(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(220, 14, 14, 14)));
         dateCapsule.CornerRadius(wux::CornerRadiusHelper::FromUniformRadius(8.0));
         dateCapsule.Padding(wux::Thickness{ 22.0, 7.0, 22.0, 7.0 });
         dateCapsule.Margin(wux::Thickness{ 0.0, 18.0, 0.0, 0.0 });
@@ -811,7 +853,7 @@ wux::UIElement BuildVintageClockElement() {
         dateText.FontSize(18.0);
         dateText.FontFamily(wuxm::FontFamily(L"Segoe UI Variable Text"));
         dateText.FontWeight(winrt::Windows::UI::Text::FontWeights::SemiBold());
-        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 235, 228, 215)));
+        dateText.Foreground(wuxm::SolidColorBrush(wu::ColorHelper::FromArgb(240, 185, 185, 185)));
         dateText.HorizontalAlignment(wux::HorizontalAlignment::Center);
 
         dateCapsule.Child(dateText);
@@ -1414,6 +1456,24 @@ wux::UIElement BuildClockElement() {
     return BuildFlipClockElement();
 }
 
+// Update visibility of default Windows clock and widget elements dynamically
+void UpdateDefaultElementsVisibility() {
+    bool hideClock = g_settings.hideDefaultClock && (g_settings.clockStyle != L"defaultOnly");
+    auto clockVis = hideClock ? wux::Visibility::Collapsed : wux::Visibility::Visible;
+    for (auto& elem : g_hiddenClockElements) {
+        if (elem) {
+            try { elem.Visibility(clockVis); } catch (...) {}
+        }
+    }
+
+    auto widgetVis = g_settings.hideDefaultWidgets ? wux::Visibility::Collapsed : wux::Visibility::Visible;
+    for (auto& elem : g_hiddenWidgetElements) {
+        if (elem) {
+            try { elem.Visibility(widgetVis); } catch (...) {}
+        }
+    }
+}
+
 // Thread-safe dynamic UI rebuild on settings change
 void RebuildClockUI() {
     if (!g_lockRootGrid) return;
@@ -1422,6 +1482,8 @@ void RebuildClockUI() {
 
     dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, []() {
         if (!g_lockRootGrid) return;
+
+        UpdateDefaultElementsVisibility();
 
         if (g_activeClockElement) {
             uint32_t index = 0;
@@ -1442,7 +1504,9 @@ void RebuildClockUI() {
         g_dateTextBlock = nullptr;
         for (int i = 0; i < 6; i++) {
             g_pixelDigits[i].dots.clear();
+            g_pixelDigits[i].lastVal = -1;
         }
+        g_timeCache.Invalidate();
 
         if (g_settings.clockStyle != L"defaultOnly") {
             g_activeClockElement = BuildClockElement();
@@ -1464,7 +1528,7 @@ public:
 
         HANDLE thread = CreateThread(
             nullptr, 0,
-            [](LPVOID lpParam) -> DWORD {
+            [](LPVOID lpParam) WINAPI -> DWORD {
                 auto watcher = reinterpret_cast<VisualTreeWatcher*>(lpParam);
                 HRESULT hr = watcher->m_XamlDiagnostics.as<IVisualTreeService3>()->AdviseVisualTreeChange(watcher);
                 watcher->Release();
@@ -1506,20 +1570,37 @@ private:
                 {
                     std::wstring name = frameworkElement.Name().c_str();
 
-                    // 1. Lock Screen Root Grid: LockRootGrid
-                    if ((name == L"LockRootGrid" || name == L"MainPageContainer") && !g_clockInjected)
+                    // 1. Lock Screen Root Grid: LockRootGrid / MainPageContainer
+                    if (name == L"LockRootGrid" || name == L"MainPageContainer")
                     {
                         auto grid = frameworkElement.try_as<wuxc::Grid>();
                         if (grid)
                         {
-                            g_lockRootGrid = grid;
-                            Wh_Log(L"Found lock screen root grid: %s. Injecting Clock...", name.c_str());
-                            if (g_settings.clockStyle != L"defaultOnly")
+                            bool isClockAttached = false;
+                            if (g_activeClockElement && g_lockRootGrid)
                             {
-                                g_activeClockElement = BuildClockElement();
-                                grid.Children().Append(g_activeClockElement);
-                                g_clockInjected = true;
-                                Wh_Log(L"Clock successfully injected! Style: %s", g_settings.clockStyle.c_str());
+                                uint32_t idx = 0;
+                                try {
+                                    isClockAttached = g_lockRootGrid.Children().IndexOf(g_activeClockElement, idx);
+                                } catch (...) {}
+                            }
+
+                            if (!g_clockInjected || !isClockAttached || g_lockRootGrid != grid)
+                            {
+                                g_lockRootGrid = grid;
+                                Wh_Log(L"Found lock screen root grid: %s (isAttached=%d, injected=%d). Injecting Clock...",
+                                       name.c_str(), isClockAttached, g_clockInjected);
+                                if (g_settings.clockStyle != L"defaultOnly")
+                                {
+                                    g_timeCache.Invalidate();
+                                    for (int i = 0; i < 6; i++) {
+                                        g_pixelDigits[i].lastVal = -1;
+                                    }
+                                    g_activeClockElement = BuildClockElement();
+                                    grid.Children().Append(g_activeClockElement);
+                                    g_clockInjected = true;
+                                    Wh_Log(L"Clock successfully injected! Style: %s", g_settings.clockStyle.c_str());
+                                }
                             }
                         }
                     }
@@ -1527,6 +1608,17 @@ private:
                     // 2. Default Time & Date Panel: TimeAndDatePanel
                     if (name == L"TimeAndDatePanel" || name == L"Time" || name == L"Date")
                     {
+                        bool alreadyTracked = false;
+                        for (auto& tracked : g_hiddenClockElements) {
+                            if (tracked == frameworkElement) {
+                                alreadyTracked = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyTracked) {
+                            g_hiddenClockElements.push_back(frameworkElement);
+                        }
+
                         if (g_settings.hideDefaultClock && g_settings.clockStyle != L"defaultOnly")
                         {
                             Wh_Log(L"Hiding default clock/date element: %s", name.c_str());
@@ -1537,10 +1629,42 @@ private:
                     // 3. Default Widget / Weather Panels
                     if (name == L"AdaptiveCardDetailContainer" || name == L"DetailTextPanel" || name == L"LockWidgetCanvas")
                     {
+                        bool alreadyTracked = false;
+                        for (auto& tracked : g_hiddenWidgetElements) {
+                            if (tracked == frameworkElement) {
+                                alreadyTracked = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyTracked) {
+                            g_hiddenWidgetElements.push_back(frameworkElement);
+                        }
+
                         if (g_settings.hideDefaultWidgets)
                         {
                             Wh_Log(L"Hiding lock screen widget/weather area: %s", name.c_str());
                             frameworkElement.Visibility(wux::Visibility::Collapsed);
+                        }
+                    }
+                }
+            }
+        }
+        else if (mutationType == Remove)
+        {
+            winrt::Windows::Foundation::IInspectable obj;
+            HRESULT hr = m_XamlDiagnostics->GetIInspectableFromHandle(element.Handle, reinterpret_cast<::IInspectable**>(winrt::put_abi(obj)));
+            if (SUCCEEDED(hr) && obj)
+            {
+                auto frameworkElement = obj.try_as<wux::FrameworkElement>();
+                if (frameworkElement)
+                {
+                    std::wstring name = frameworkElement.Name().c_str();
+                    if (name == L"LockRootGrid" || name == L"MainPageContainer" || frameworkElement == g_activeClockElement)
+                    {
+                        Wh_Log(L"Lock screen element removed: %s", name.c_str());
+                        g_clockInjected = false;
+                        if (frameworkElement == g_activeClockElement) {
+                            g_activeClockElement = nullptr;
                         }
                     }
                 }
@@ -1580,9 +1704,9 @@ public:
 
         if (site) {
             HMODULE hSelf = nullptr;
-            GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                               (LPCWSTR)&LoadSettings, &hSelf);
-            if (hSelf) {
+            if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, (LPCWSTR)&LoadSettings, &hSelf)) {
+                // Balance GetModuleHandleExW and InitializeXamlDiagnosticsEx references
+                FreeLibrary(hSelf);
                 FreeLibrary(hSelf);
             }
             g_visualTreeWatcher = winrt::make_self<VisualTreeWatcher>(site);
@@ -1697,7 +1821,7 @@ HRESULT InjectWindhawkTAP() noexcept
     Wh_Log(L"Starting InitializeXamlDiagnosticsEx connection loop (TAP DLL: %s)...", location);
     
     HRESULT hr = E_FAIL;
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 100; i++)
     {
         WCHAR connectionName[256];
         wsprintfW(connectionName, L"VisualDiagConnection%d", i + 1);
@@ -1782,7 +1906,7 @@ HMODULE WINAPI LoadLibraryExW_Hook(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dw
 
 // Enumerate existing CoreWindow instances
 void SearchExistingCoreWindows() {
-    EnumWindows([](HWND hWnd, LPARAM) -> BOOL {
+    EnumWindows([](HWND hWnd, LPARAM) CALLBACK -> BOOL {
         DWORD pid = 0;
         GetWindowThreadProcessId(hWnd, &pid);
         if (pid == GetCurrentProcessId()) {
@@ -1862,14 +1986,63 @@ void Wh_ModUninit() {
         g_visualTreeWatcher->Unadvise();
         g_visualTreeWatcher = nullptr;
     }
+
+    // Clean up injected UI and restore hidden Windows default clock and widget elements
+    if (g_lockRootGrid) {
+        auto dispatcher = g_lockRootGrid.Dispatcher();
+        if (dispatcher) {
+            auto cleanup = []() {
+                if (g_lockRootGrid && g_activeClockElement) {
+                    uint32_t index = 0;
+                    if (g_lockRootGrid.Children().IndexOf(g_activeClockElement, index)) {
+                        g_lockRootGrid.Children().RemoveAt(index);
+                    }
+                    g_activeClockElement = nullptr;
+                }
+                for (auto& elem : g_hiddenClockElements) {
+                    if (elem) {
+                        try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
+                    }
+                }
+                g_hiddenClockElements.clear();
+
+                for (auto& elem : g_hiddenWidgetElements) {
+                    if (elem) {
+                        try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
+                    }
+                }
+                g_hiddenWidgetElements.clear();
+            };
+
+            if (dispatcher.HasThreadAccess()) {
+                cleanup();
+            } else {
+                HANDLE hEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+                dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, [cleanup, hEvent]() {
+                    cleanup();
+                    if (hEvent) SetEvent(hEvent);
+                });
+                if (hEvent) {
+                    WaitForSingleObject(hEvent, 300);
+                    CloseHandle(hEvent);
+                }
+            }
+        }
+    }
+
     g_tapInjected = false;
     g_clockInjected = false;
     g_activeClockElement = nullptr;
     g_lockRootGrid = nullptr;
+    g_timeCache.Invalidate();
 }
 
 void Wh_ModSettingsChanged() {
     Wh_Log(L"Mod settings changed (Wh_ModSettingsChanged)...");
     LoadSettings();
+    g_timeCache.Invalidate();
+    for (int i = 0; i < 6; i++) {
+        g_pixelDigits[i].lastVal = -1;
+    }
     RebuildClockUI();
 }

@@ -9,7 +9,7 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 ## ✨ Features
 
 - **Modern Flip Clock:** Split frosted glass cards for hours and minutes with bold, near-square proportions and an elegant horizontal flip seam.
-- **Retro Vintage Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
+- **Classic Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Cyberpunk Sci-Fi HUD Terminal:** Bespoke Netrunner tactical HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow & hot magenta, top telemetry diagnostic bar, electric cyan digits with slash dividers, and bottom telemetry date logger.
 - **Minimalist Aura / Floating Clock:** Frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date pill.
 - **Retro Pixel / LED Matrix Clock:** Authentic 7x11 double-pixel dot matrix display with subtle ambient dot illumination and frosted acrylic contrast backplate.
@@ -18,7 +18,7 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 - **Dynamic Date Capsule:** Localized weekday and date display positioned neatly under the clock.
 - **Hide Stock Clutter:** One-click toggles to hide default MSN weather, sports, and news widgets.
 - **Replace Default Clock:** Seamlessly replaces the stock Windows 11 lock screen clock.
-- **Customizable Appearance:** Adjust glass opacity, card corner radius, font size, alignment, and vertical offsets.
+- **Customizable Appearance:** Adjust glass opacity, font size, alignment, and vertical offsets.
 - **Multi-Language Support:** Native English and Turkish (`tr-TR`) UI settings.
 
 ---
@@ -37,11 +37,10 @@ A [Windhawk](https://windhawk.net/) mod that customizes the Windows 11 lock scre
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| **Clock Style** | Choose between Frosted Glass Flip Clock (`flip`), Retro Vintage Flip Clock (`vintage`), Cyberpunk HUD Terminal (`cyberpunk`), Minimalist Aura / Floating Clock (`aura`), Retro Pixel / LED Matrix (`pixel`), or Default Clock (`defaultOnly`) | `flip` |
+| **Clock Style** | Choose between Retro Pixel / LED Matrix (`pixel`), Modern Flip Clock (`flip`), Classic Flip Clock (`vintage`), Minimalist Aura / Floating Clock (`aura`), Cyberpunk HUD Terminal (`cyberpunk`), or Default Clock (`defaultOnly`) | `flip` |
 | **Time Format** | Select 24-Hour (`24h`) or 12-Hour AM/PM (`12h`) format | `24h` |
 | **Show Seconds** | Toggle seconds display (Cyberpunk, Retro Pixel, and Aura) | `Disabled` |
 | **Glass Opacity** | Card translucency alpha value (0 - 255) | `45` |
-| **Card Corner Radius** | Curvature radius of the cards (px) | `22` |
 | **Digit Font Size** | Font size for clock digits | `92` |
 | **Vertical Offset** | Shift clock position up or down (-200 to +400 px) | `0` |
 | **Clock Alignment** | Screen alignment (`center`, `left`, `right`) | `center` |
