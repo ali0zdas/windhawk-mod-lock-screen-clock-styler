@@ -4,12 +4,12 @@
 // @name:tr-TR      Windows 11 Kilit Ekranı Özelleştirici
 // @description     Customize the Windows 11 lock screen with modern clock styles, date display, and widget controls.
 // @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget denetimleriyle özelleştirin.
-// @version         0.3.0
+// @version         0.3.1
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
 // @include         LockApp.exe
 // @architecture    x86-64
-// @compilerOptions -lole32 -loleaut32 -lruntimeobject -lshlwapi
+// @compilerOptions -lole32 -loleaut32 -lruntimeobject
 // ==/WindhawkMod==
 
 // ==WindhawkModReadme==
@@ -19,7 +19,7 @@
 Customize and enhance the Windows 11 lock screen with modern clock designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
-- **Minimalist Cupertino (Clean Typography):** Apple-inspired lock screen typography with date positioned above the time, slender display numerals, dual-layer atmospheric shadow, and bottom-left or center placement.
+- **Minimalist Sonoma (Clean Typography):** Apple-inspired lock screen typography with date positioned above the time, slender display numerals, dual-layer atmospheric shadow, and bottom-left or center placement.
 - **Modern Flip Clock:** Split glass cards for hour and minute with an elegant horizontal flip seam.
 - **Classic Flip Clock:** Classic mechanical Solari-inspired flip clock with matte charcoal flap cards, aged ivory cream typography, mechanical split seam, and hinge axle clips.
 - **Cyberpunk Sci-Fi HUD Terminal:** Bespoke tactical Netrunner HUD terminal with dark obsidian glass chassis, tactical corner brackets in acid yellow and hot magenta, top telemetry diagnostic bar, electric cyan digits with rhythmic tactical pulse, and bottom telemetry date logger.
@@ -41,18 +41,18 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 
 // ==WindhawkModSettings==
 /*
-- clockStyle: flip
+- clockStyle: pixel
   $name: "Clock Style"
   $name:tr-TR: "Saat Tasarım Stili"
   $description: "The clock style to display on the lock screen."
   $description:tr-TR: "Kilit ekranında görüntülenecek saat stili."
   $options:
-    - macos: "Minimalist Cupertino (Clean Typography)"
     - pixel: "Retro Pixel / LED Dot Matrix"
     - flip: "Modern Flip Clock"
     - vintage: "Classic Flip Clock"
-    - aura: "Minimalist Aura / Floating Clock"
+    - macos: "Minimalist Sonoma (Clean Typography)"
     - cyberpunk: "Cyberpunk Sci-Fi HUD Terminal"
+    - aura: "Minimalist Aura / Floating Clock"
     - defaultOnly: "Default Clock Only (Widgets Hidden)"
 - timeFormat: 24h
   $name: "Time Format"
@@ -82,14 +82,15 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
   $name:tr-TR: "Dikey Konum Ofseti (px)"
   $description: "Offset to shift the clock vertically up or down (-200 to +400)."
   $description:tr-TR: "Saatin ekrandaki dikey konumunu yukarı veya aşağı kaydırma ofseti (-200 ile +400 arası)."
-- clockAlignment: center
+- clockAlignment: auto
   $name: "Clock Horizontal Alignment"
   $name:tr-TR: "Saat Yatay Hizalaması"
-  $description: "Horizontal alignment and layout of the clock on screen."
-  $description:tr-TR: "Saatin ekrandaki yerleşim ve hizalaması."
+  $description: "Horizontal alignment and layout of the clock on screen. Automatic uses the theme default (bottom-left for Minimalist Sonoma, center for other styles)."
+  $description:tr-TR: "Saatin ekrandaki yerleşim ve hizalaması. Otomatik seçeneği tema varsayılanını kullanır (Minimalist Sonoma için sol alt, diğer stiller için merkez)."
   $options:
+    - auto: "Automatic (Theme Default)"
     - center: "Center of Screen"
-    - bottomLeft: "Bottom-Left (Cupertino Style)"
+    - bottomLeft: "Bottom-Left (Sonoma Style)"
     - left: "Left Side"
     - right: "Right Side"
 - hideDefaultWidgets: true
@@ -131,6 +132,8 @@ This mod exclusively targets `LockApp.exe`. It does not inject into or interfere
 #include <winrt/Windows.UI.Xaml.Documents.h>
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Shapes.h>
+#include <algorithm>
+#include <atomic>
 #include <string>
 #include <vector>
 #include <chrono>
@@ -143,13 +146,11 @@ namespace wuxs = winrt::Windows::UI::Xaml::Shapes;
 namespace wu = winrt::Windows::UI;
 
 // Mod Configuration Settings
-// Mod Configuration Settings
 struct ModSettings {
     std::wstring clockStyle;
     std::wstring timeFormat;
     bool showSeconds;
     int glassOpacity;
-    int cardCornerRadius;
     int clockFontSize;
     int verticalOffset;
     std::wstring clockAlignment;
@@ -162,48 +163,56 @@ struct ModSettings {
 // Settings Loader
 void LoadSettings() {
     static std::wstring s_lastKnownStyle = L"";
+    static std::wstring s_lastKnownRawAlign = L"";
+    static bool s_lastKnownRawSeconds = false;
     static bool s_settingsInitialized = false;
 
     PCWSTR styleStr = Wh_GetStringSetting(L"clockStyle");
-    g_settings.clockStyle = (styleStr && *styleStr) ? styleStr : L"flip";
+    g_settings.clockStyle = (styleStr && *styleStr) ? styleStr : L"pixel";
     Wh_FreeStringSetting(styleStr);
 
     PCWSTR fmtStr = Wh_GetStringSetting(L"timeFormat");
     g_settings.timeFormat = (fmtStr && *fmtStr) ? fmtStr : L"24h";
     Wh_FreeStringSetting(fmtStr);
 
-    bool rawShowSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
-    bool isPixelOrCyber = (g_settings.clockStyle == L"pixel" || g_settings.clockStyle == L"cyberpunk");
+    bool themeChanged = (s_settingsInitialized && g_settings.clockStyle != s_lastKnownStyle);
 
-    if (isPixelOrCyber) {
+    bool rawShowSeconds = Wh_GetIntSetting(L"showSeconds") != 0;
+    bool rawSecondsToggled = (s_settingsInitialized && rawShowSeconds != s_lastKnownRawSeconds);
+    bool isPixelOrCyber = (g_settings.clockStyle == L"pixel" || g_settings.clockStyle == L"cyberpunk");
+    // Flip stilleri saniye göstergesini desteklemez; bu ayar onlarda etkisizdir.
+    bool supportsSeconds = isPixelOrCyber || g_settings.clockStyle == L"macos" || g_settings.clockStyle == L"aura";
+
+    if (!supportsSeconds) {
+        g_settings.showSeconds = false;
+    } else if (isPixelOrCyber) {
         g_settings.showSeconds = rawShowSeconds;
     } else {
         std::wstring storageKey = L"userSec_" + g_settings.clockStyle;
-        bool themeChanged = (s_settingsInitialized && g_settings.clockStyle != s_lastKnownStyle);
 
-        if (!s_settingsInitialized) {
-            // First load: only enable seconds if user explicitly enabled it previously for this theme
+        if (!s_settingsInitialized || themeChanged) {
+            // Tema değişti veya mod yeni yüklendi: yalnızca kullanıcının bu tema için
+            // daha önce açıkça tercih ettiği değeri kullan.
             g_settings.showSeconds = rawShowSeconds && (Wh_GetIntValue(storageKey.c_str(), 0) != 0);
-        } else if (themeChanged) {
-            // When switching to a theme other than pixel & cyberpunk:
-            // Automatically turn off seconds unless explicitly opted-in for this theme
-            g_settings.showSeconds = rawShowSeconds && (Wh_GetIntValue(storageKey.c_str(), 0) != 0);
-        } else {
-            // Theme stayed the same (user explicitly toggled showSeconds for this theme)
+            if (rawSecondsToggled) {
+                // Tema ve saniye ayarı birlikte değiştirildiyse tercihi yeni temaya yaz.
+                Wh_SetIntValue(storageKey.c_str(), rawShowSeconds ? 1 : 0);
+                g_settings.showSeconds = rawShowSeconds;
+            }
+        } else if (rawSecondsToggled) {
+            // Kullanıcı saniye anahtarını değiştirdi: bu temanın tercihini kaydet.
             Wh_SetIntValue(storageKey.c_str(), rawShowSeconds ? 1 : 0);
             g_settings.showSeconds = rawShowSeconds;
         }
+        // Aksi halde (alakasız bir ayar değişti) mevcut etkin değeri koru.
+        // Böylece başka bir temada açık kalan saniye tercihi bu temaya sızmaz.
     }
-
-    s_lastKnownStyle = g_settings.clockStyle;
-    s_settingsInitialized = true;
+    s_lastKnownRawSeconds = rawShowSeconds;
 
     g_settings.glassOpacity = Wh_GetIntSetting(L"glassOpacity");
     if (g_settings.glassOpacity < 0 || g_settings.glassOpacity > 255) {
         g_settings.glassOpacity = 45;
     }
-
-    g_settings.cardCornerRadius = 22;
 
     g_settings.clockFontSize = Wh_GetIntSetting(L"clockFontSize");
     if (g_settings.clockFontSize <= 0) {
@@ -212,18 +221,36 @@ void LoadSettings() {
 
     g_settings.verticalOffset = Wh_GetIntSetting(L"verticalOffset");
 
+    // Hizalama: "auto" tema varsayılanını kullanır (Sonoma -> sol alt, diğerleri -> merkez).
+    // Kullanıcının açıkça seçtiği bir değer ise her zaman doğrudan uygulanır.
     PCWSTR alignStr = Wh_GetStringSetting(L"clockAlignment");
-    g_settings.clockAlignment = (alignStr && *alignStr) ? alignStr : L"center";
+    std::wstring rawAlign = (alignStr && *alignStr) ? alignStr : L"auto";
     Wh_FreeStringSetting(alignStr);
+
+    if (rawAlign != L"auto" && rawAlign != L"center" && rawAlign != L"bottomLeft" &&
+        rawAlign != L"left" && rawAlign != L"right") {
+        rawAlign = L"auto";
+    }
+
+    if (rawAlign != s_lastKnownRawAlign && s_settingsInitialized) {
+        Wh_Log(L"Clock alignment explicitly changed to: %s", rawAlign.c_str());
+    }
+
+    std::wstring defaultAlignForTheme = (g_settings.clockStyle == L"macos") ? L"bottomLeft" : L"center";
+    g_settings.clockAlignment = (rawAlign == L"auto") ? defaultAlignForTheme : rawAlign;
+
+    s_lastKnownRawAlign = rawAlign;
+    s_lastKnownStyle = g_settings.clockStyle;
+    s_settingsInitialized = true;
 
     g_settings.hideDefaultWidgets = Wh_GetIntSetting(L"hideDefaultWidgets") != 0;
     g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
     g_settings.showBatteryStatus = Wh_GetIntSetting(L"showBatteryStatus") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, hideWidgets=%d, hideClock=%d, showBattery=%d",
+    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, align=%s, hideWidgets=%d, hideClock=%d, showBattery=%d",
            g_settings.clockStyle.c_str(), g_settings.timeFormat.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
-           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.hideDefaultWidgets, g_settings.hideDefaultClock, g_settings.showBatteryStatus);
+           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.clockAlignment.c_str(), g_settings.hideDefaultWidgets, g_settings.hideDefaultClock, g_settings.showBatteryStatus);
 }
 
 // UI State References
@@ -241,7 +268,7 @@ wuxc::TextBlock g_dateTextBlock{ nullptr };
 wux::DispatcherTimer g_clockTimer{ nullptr };
 bool g_clockInjected = false;
 
-// Minimalist Cupertino (Clean Typography) Theme State
+// Minimalist Sonoma (Clean Typography) Theme State
 wuxc::TextBlock g_macosTimeTextBlock{ nullptr };
 wuxc::TextBlock g_macosShadowTextBlock{ nullptr };
 wuxc::TextBlock g_macosDateTextBlock{ nullptr };
@@ -505,7 +532,7 @@ wux::UIElement CreateBatteryCapsule(bool alignLeft, bool isDarkTheme = false) {
     return capsule;
 }
 
-// Helper to apply root horizontal and vertical alignments (supports bottomLeft Cupertino style)
+// Helper to apply root horizontal and vertical alignments (supports bottomLeft Sonoma style)
 void ApplyAlignmentAndMargin(wuxc::Grid& rootContainer) {
     if (g_settings.clockAlignment == L"left") {
         rootContainer.HorizontalAlignment(wux::HorizontalAlignment::Left);
@@ -880,7 +907,7 @@ wux::UIElement BuildFlipClockElement() {
     double cardWidth = (double)g_settings.clockFontSize * 2.02;
     double cardHeight = (double)g_settings.clockFontSize * 2.05;
     double flipFontSize = (double)g_settings.clockFontSize * 1.72;
-    double cornerRad = (double)g_settings.cardCornerRadius;
+    double cornerRad = 22.0;
 
     // 1. Hour Card
     auto hourCard = CreateFlipCard(cardWidth, cardHeight, cornerRad, flipFontSize, g_hourTextBlock, g_hourBotTextBlock, L"WindhawkFlipHourText", true);
@@ -1448,7 +1475,7 @@ wux::UIElement BuildCyberpunkClockElement() {
     return rootContainer;
 }
 
-// Build Pixel Digit Grid Helper (7 cols x 9 rows, 63 dots)
+// Build Pixel Digit Grid Helper (7 cols x 11 rows, 77 dots)
 wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double spacing) {
     wuxc::Grid grid;
     for (int c = 0; c < 7; c++) {
@@ -1482,7 +1509,7 @@ wuxc::Grid CreatePixelDigitGrid(PixelDigitGrid& digitRef, double dotSize, double
     return grid;
 }
 
-// Build Pixel Colon Helper (2 cols x 11 rows, 2x2 active dots for each colon point)
+// Build Pixel Colon Helper (2 cols x 11 rows, 4 rows x 2 dots active per colon point)
 wuxc::Grid CreatePixelColon(double dotSize, double spacing) {
     wuxc::Grid grid;
     for (int c = 0; c < 2; c++) {
@@ -1623,6 +1650,14 @@ wux::UIElement BuildPixelClockElement() {
         g_dateTextBlock = dateText;
     }
 
+    // Battery Capsule (if enabled and laptop battery present)
+    if (g_settings.showBatteryStatus) {
+        auto batteryCapsule = CreateBatteryCapsule(false);
+        if (batteryCapsule) {
+            verticalLayout.Children().Append(batteryCapsule);
+        }
+    }
+
     darkBackplate.Child(verticalLayout);
     rootContainer.Children().Append(darkBackplate);
 
@@ -1714,7 +1749,7 @@ wux::UIElement BuildAuraClockElement() {
     return rootContainer;
 }
 
-// Build Minimalist Cupertino (Clean Typography) Clock Element
+// Build Minimalist Sonoma (Clean Typography) Clock Element
 wux::UIElement BuildMacOSClockElement() {
     wuxc::Grid rootContainer;
     rootContainer.Name(L"WindhawkMacOSClockContainer");
@@ -1824,7 +1859,7 @@ wux::UIElement BuildClockElement() {
     } else if (g_settings.clockStyle == L"aura") {
         return BuildAuraClockElement();
     }
-    return BuildFlipClockElement();
+    return BuildPixelClockElement();
 }
 
 // Update visibility of default Windows clock and widget elements dynamically
@@ -1845,57 +1880,84 @@ void UpdateDefaultElementsVisibility() {
     }
 }
 
-// Thread-safe dynamic UI rebuild on settings change
-void RebuildClockUI() {
-    if (!g_lockRootGrid) return;
-    auto dispatcher = g_lockRootGrid.Dispatcher();
-    if (!dispatcher) return;
-
-    dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, []() {
-        if (!g_lockRootGrid) return;
-
-        UpdateDefaultElementsVisibility();
-
-        if (g_activeClockElement) {
-            uint32_t index = 0;
+// Enjekte edilen saat öğesini barındırıcı grid'den ayırır (yalnızca XAML UI thread'inde).
+void RemoveActiveClockElement() {
+    if (!g_activeClockElement) {
+        return;
+    }
+    if (g_lockRootGrid) {
+        uint32_t index = 0;
+        try {
             if (g_lockRootGrid.Children().IndexOf(g_activeClockElement, index)) {
                 g_lockRootGrid.Children().RemoveAt(index);
             }
-            g_activeClockElement = nullptr;
-        }
+        } catch (...) {}
+    }
+    g_activeClockElement = nullptr;
+}
 
-        g_hourTextBlock = nullptr;
-        g_hourBotTextBlock = nullptr;
-        g_minTextBlock = nullptr;
-        g_minBotTextBlock = nullptr;
-        g_secTextBlock = nullptr;
-        g_ampmTextBlock = nullptr;
-        g_auraTimeTextBlock = nullptr;
-        g_auraShadowTextBlock = nullptr;
-        g_macosTimeTextBlock = nullptr;
-        g_macosShadowTextBlock = nullptr;
-        g_macosDateTextBlock = nullptr;
-        g_macosDateShadowBlock = nullptr;
-        g_batteryCapsule = nullptr;
-        g_batteryIconText = nullptr;
-        g_batteryStatusText = nullptr;
-        g_cyberSlash1 = nullptr;
-        g_cyberSlash2 = nullptr;
-        g_cyberLiveLabel = nullptr;
-        g_dateTextBlock = nullptr;
-        for (int i = 0; i < 6; i++) {
-            g_pixelDigits[i].dots.clear();
-            g_pixelDigits[i].lastVal = -1;
-        }
-        g_timeCache.Invalidate();
+// Saat zamanlayıcısını güvenle durdurur.
+void StopClockTimer() {
+    if (g_clockTimer) {
+        try { g_clockTimer.Stop(); } catch (...) {}
+        g_clockTimer = nullptr;
+    }
+}
 
-        if (g_settings.clockStyle != L"defaultOnly") {
+// Tüm XAML öğe referanslarını sıfırlar (yalnızca XAML UI thread'inde).
+void ResetClockElementReferences() {
+    g_hourTextBlock = nullptr;
+    g_hourBotTextBlock = nullptr;
+    g_minTextBlock = nullptr;
+    g_minBotTextBlock = nullptr;
+    g_secTextBlock = nullptr;
+    g_ampmTextBlock = nullptr;
+    g_auraTimeTextBlock = nullptr;
+    g_auraShadowTextBlock = nullptr;
+    g_macosTimeTextBlock = nullptr;
+    g_macosShadowTextBlock = nullptr;
+    g_macosDateTextBlock = nullptr;
+    g_macosDateShadowBlock = nullptr;
+    g_batteryCapsule = nullptr;
+    g_batteryIconText = nullptr;
+    g_batteryStatusText = nullptr;
+    g_cyberSlash1 = nullptr;
+    g_cyberSlash2 = nullptr;
+    g_cyberLiveLabel = nullptr;
+    g_dateTextBlock = nullptr;
+    for (int i = 0; i < 6; i++) {
+        g_pixelDigits[i].dots.clear();
+        g_pixelDigits[i].lastVal = -1;
+    }
+}
+
+// Ayar değişikliğinde UI'ı yeniden kurar. Yalnızca XAML UI thread'inde çağrılmalıdır.
+void RebuildClockUIOnUIThread() {
+    if (!g_lockRootGrid) return;
+
+    UpdateDefaultElementsVisibility();
+    RemoveActiveClockElement();
+    ResetClockElementReferences();
+    g_timeCache.Invalidate();
+
+    if (g_settings.clockStyle != L"defaultOnly") {
+        try {
             g_activeClockElement = BuildClockElement();
             g_lockRootGrid.Children().Append(g_activeClockElement);
+            g_clockInjected = true;
             Wh_Log(L"Clock UI successfully rebuilt for style: %s (showSec=%d)",
                    g_settings.clockStyle.c_str(), g_settings.showSeconds);
+        } catch (...) {
+            Wh_Log(L"Failed to rebuild clock UI for style: %s", g_settings.clockStyle.c_str());
+            g_activeClockElement = nullptr;
+            g_clockInjected = false;
+            StopClockTimer();
         }
-    });
+    } else {
+        // Varsayılan saat modunda özel saat yoktur; boşuna çalışan timer'ı durdur.
+        StopClockTimer();
+        g_clockInjected = false;
+    }
 }
 
 // Visual Tree Watcher (IVisualTreeServiceCallback2)
@@ -1957,30 +2019,45 @@ private:
                         auto grid = frameworkElement.try_as<wuxc::Grid>();
                         if (grid)
                         {
+                            bool sameHost = (g_lockRootGrid == grid);
                             bool isClockAttached = false;
-                            if (g_activeClockElement && g_lockRootGrid)
+                            if (sameHost && g_activeClockElement)
                             {
                                 uint32_t idx = 0;
                                 try {
-                                    isClockAttached = g_lockRootGrid.Children().IndexOf(g_activeClockElement, idx);
+                                    isClockAttached = grid.Children().IndexOf(g_activeClockElement, idx);
                                 } catch (...) {}
                             }
 
-                            if (!g_clockInjected || !isClockAttached || g_lockRootGrid != grid)
+                            if (!sameHost || !isClockAttached)
                             {
-                                g_lockRootGrid = grid;
+                                // Yeni bir kök ağaç ya da saat kopmuş: aynı anda yalnızca tek
+                                // saat örneği kalması için önce eski barındırıcıdan ayır.
                                 Wh_Log(L"Found lock screen root grid: %s (isAttached=%d, injected=%d). Injecting Clock...",
                                        name.c_str(), isClockAttached, g_clockInjected);
+                                RemoveActiveClockElement();
+                                g_lockRootGrid = grid;
+                                ResetClockElementReferences();
+                                g_timeCache.Invalidate();
+
                                 if (g_settings.clockStyle != L"defaultOnly")
                                 {
-                                    g_timeCache.Invalidate();
-                                    for (int i = 0; i < 6; i++) {
-                                        g_pixelDigits[i].lastVal = -1;
+                                    try {
+                                        g_activeClockElement = BuildClockElement();
+                                        grid.Children().Append(g_activeClockElement);
+                                        g_clockInjected = true;
+                                        Wh_Log(L"Clock successfully injected! Style: %s", g_settings.clockStyle.c_str());
+                                    } catch (...) {
+                                        Wh_Log(L"Failed to inject clock for style: %s", g_settings.clockStyle.c_str());
+                                        g_activeClockElement = nullptr;
+                                        g_clockInjected = false;
+                                        StopClockTimer();
                                     }
-                                    g_activeClockElement = BuildClockElement();
-                                    grid.Children().Append(g_activeClockElement);
-                                    g_clockInjected = true;
-                                    Wh_Log(L"Clock successfully injected! Style: %s", g_settings.clockStyle.c_str());
+                                }
+                                else
+                                {
+                                    StopClockTimer();
+                                    g_clockInjected = false;
                                 }
                             }
                         }
@@ -2040,13 +2117,34 @@ private:
                 if (frameworkElement)
                 {
                     std::wstring name = frameworkElement.Name().c_str();
-                    if (name == L"LockRootGrid" || name == L"MainPageContainer" || frameworkElement == g_activeClockElement)
+
+                    if (frameworkElement == g_activeClockElement)
                     {
-                        Wh_Log(L"Lock screen element removed: %s", name.c_str());
+                        Wh_Log(L"Injected clock element removed from visual tree.");
+                        g_activeClockElement = nullptr;
                         g_clockInjected = false;
-                        if (frameworkElement == g_activeClockElement) {
-                            g_activeClockElement = nullptr;
+                        StopClockTimer();
+                    }
+
+                    // Ölü ağaç referanslarını takip listelerinden çıkar (bellek sızıntısını önler).
+                    g_hiddenClockElements.erase(
+                        std::remove(g_hiddenClockElements.begin(), g_hiddenClockElements.end(), frameworkElement),
+                        g_hiddenClockElements.end());
+                    g_hiddenWidgetElements.erase(
+                        std::remove(g_hiddenWidgetElements.begin(), g_hiddenWidgetElements.end(), frameworkElement),
+                        g_hiddenWidgetElements.end());
+
+                    if (name == L"LockRootGrid" || name == L"MainPageContainer")
+                    {
+                        Wh_Log(L"Lock screen root removed: %s", name.c_str());
+                        if (g_lockRootGrid == frameworkElement) {
+                            g_lockRootGrid = nullptr;
                         }
+                        g_activeClockElement = nullptr;
+                        g_clockInjected = false;
+                        StopClockTimer();
+                        g_hiddenClockElements.clear();
+                        g_hiddenWidgetElements.clear();
                     }
                 }
             }
@@ -2208,10 +2306,17 @@ HRESULT InjectWindhawkTAP() noexcept
         wsprintfW(connectionName, L"VisualDiagConnection%d", i + 1);
 
         hr = ixde(connectionName, GetCurrentProcessId(), L"", location, CLSID_WindhawkTAP, nullptr);
-        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
+        if (SUCCEEDED(hr))
         {
             Wh_Log(L"InitializeXamlDiagnosticsEx successfully connected! (%s, hr=%08X)", connectionName, hr);
             return hr;
+        }
+        if (hr != HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
+        {
+            // Beklenmeyen hata: tüm isimleri denemek yerine erkenden çık,
+            // ancak bayrağı sıfırla ki sonraki fırsatta yeniden denenebilsin.
+            Wh_Log(L"InitializeXamlDiagnosticsEx failed unexpectedly (%s, hr=%08X)", connectionName, hr);
+            break;
         }
     }
 
@@ -2359,56 +2464,71 @@ void Wh_ModAfterInit() {
 
 void Wh_ModUninit() {
     Wh_Log(L"Windows 11 Lock Screen Mod uninitializing (Wh_ModUninit)...");
-    if (g_clockTimer) {
-        g_clockTimer.Stop();
-        g_clockTimer = nullptr;
-    }
     if (g_visualTreeWatcher) {
         g_visualTreeWatcher->Unadvise();
         g_visualTreeWatcher = nullptr;
     }
 
-    // Clean up injected UI and restore hidden Windows default clock and widget elements
-    if (g_lockRootGrid) {
-        auto dispatcher = g_lockRootGrid.Dispatcher();
-        if (dispatcher) {
-            auto cleanup = []() {
-                if (g_lockRootGrid && g_activeClockElement) {
-                    uint32_t index = 0;
-                    if (g_lockRootGrid.Children().IndexOf(g_activeClockElement, index)) {
-                        g_lockRootGrid.Children().RemoveAt(index);
-                    }
-                    g_activeClockElement = nullptr;
-                }
-                for (auto& elem : g_hiddenClockElements) {
-                    if (elem) {
-                        try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
-                    }
-                }
-                g_hiddenClockElements.clear();
+    // Enjekte edilen UI'ı temizle ve gizlenen varsayılan saat/widget öğelerini geri getir.
+    // Tüm XAML işlemleri (timer durdurma dahil) UI thread'inde yürütülmelidir.
+    // Referanslar kopyalanır: dispatch gecikirse globaller temizlendikten sonra da
+    // doğru öğeler üzerinde çalışılır.
+    wuxc::Grid rootGrid = g_lockRootGrid;
+    wux::UIElement activeClock = g_activeClockElement;
+    std::vector<wux::FrameworkElement> hiddenClock = g_hiddenClockElements;
+    std::vector<wux::FrameworkElement> hiddenWidget = g_hiddenWidgetElements;
 
-                for (auto& elem : g_hiddenWidgetElements) {
-                    if (elem) {
-                        try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
-                    }
-                }
-                g_hiddenWidgetElements.clear();
-            };
+    auto cleanup = [rootGrid, activeClock, hiddenClock, hiddenWidget]() {
+        StopClockTimer();
 
-            if (dispatcher.HasThreadAccess()) {
-                cleanup();
-            } else {
-                HANDLE hEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
-                dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, [cleanup, hEvent]() {
-                    cleanup();
-                    if (hEvent) SetEvent(hEvent);
-                });
-                if (hEvent) {
-                    WaitForSingleObject(hEvent, 300);
-                    CloseHandle(hEvent);
+        if (activeClock) {
+            try {
+                uint32_t index = 0;
+                if (rootGrid && rootGrid.Children().IndexOf(activeClock, index)) {
+                    rootGrid.Children().RemoveAt(index);
                 }
+            } catch (...) {}
+        }
+
+        for (const auto& elem : hiddenClock) {
+            if (elem) {
+                try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
             }
         }
+        for (const auto& elem : hiddenWidget) {
+            if (elem) {
+                try { elem.Visibility(wux::Visibility::Visible); } catch (...) {}
+            }
+        }
+    };
+
+    auto dispatcher = rootGrid ? rootGrid.Dispatcher() : nullptr;
+    if (dispatcher && !dispatcher.HasThreadAccess()) {
+        HANDLE hEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+        bool dispatched = false;
+        try {
+            dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, [cleanup, hEvent]() {
+                cleanup();
+                if (hEvent) SetEvent(hEvent);
+            });
+            dispatched = true;
+        } catch (...) {
+            Wh_Log(L"Failed to dispatch cleanup to the UI thread.");
+        }
+
+        if (dispatched && hEvent) {
+            // Zaman aşımında handle'ı kapatmıyoruz: kapanmış bir handle'a sonradan
+            // SetEvent çağrılmasındansa süreç kapanırken tek handle sızması yeğdir.
+            if (WaitForSingleObject(hEvent, 500) == WAIT_OBJECT_0) {
+                CloseHandle(hEvent);
+            }
+        } else {
+            if (hEvent) CloseHandle(hEvent);
+            cleanup();
+        }
+    } else {
+        // UI ağacı yoksa (veya zaten UI thread'indeysek) doğrudan temizle.
+        cleanup();
     }
 
     g_tapInjected = false;
@@ -2443,10 +2563,37 @@ void Wh_ModUninit() {
 
 void Wh_ModSettingsChanged() {
     Wh_Log(L"Mod settings changed (Wh_ModSettingsChanged)...");
-    LoadSettings();
-    g_timeCache.Invalidate();
-    for (int i = 0; i < 6; i++) {
-        g_pixelDigits[i].lastVal = -1;
+
+    // g_settings yalnızca XAML UI thread'inde yazılır; timer ve UI kurulumu aynı
+    // thread'de okuduğu için std::wstring üyelerinde veri yarışı oluşmaz.
+    auto dispatcher = g_lockRootGrid ? g_lockRootGrid.Dispatcher() : nullptr;
+    if (!dispatcher) {
+        // Kilit ekranı ağacı henüz yok: okuyan bir UI thread'i olmadığı için
+        // ayarları doğrudan yüklemek güvenlidir.
+        LoadSettings();
+        g_timeCache.Invalidate();
+        for (int i = 0; i < 6; i++) {
+            g_pixelDigits[i].lastVal = -1;
+        }
+        return;
     }
-    RebuildClockUI();
+
+    try {
+        dispatcher.RunAsync(winrt::Windows::UI::Core::CoreDispatcherPriority::Normal, []() {
+            LoadSettings();
+            g_timeCache.Invalidate();
+            for (int i = 0; i < 6; i++) {
+                g_pixelDigits[i].lastVal = -1;
+            }
+            RebuildClockUIOnUIThread();
+        });
+    } catch (...) {
+        // Dispatcher kapanıyorsa ayarları yine de yükle; bir sonraki oturumda geçerli olur.
+        Wh_Log(L"Failed to dispatch settings change to the UI thread.");
+        LoadSettings();
+        g_timeCache.Invalidate();
+        for (int i = 0; i < 6; i++) {
+            g_pixelDigits[i].lastVal = -1;
+        }
+    }
 }
