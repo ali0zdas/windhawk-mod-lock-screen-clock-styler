@@ -5,14 +5,14 @@
 **Elevate your Windows 11 lock screen with modern bespoke clock aesthetics, frosted acrylic cards, live power telemetry, and clean clutter-free layout controls.**
 
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
-[![Windows 11](https://img.shields.io/badge/Windows_11-23H2_%7C_24H2_%7C_25H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
 [![Version](https://img.shields.io/badge/Version-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/WindhawkMod-Windows-Lock-Screen-Styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**[ 🇬🇧 English ](README.md)** &nbsp;&bull;&nbsp; **[ 🇹🇷 Türkçe ](README-TÜRKÇE.md)**
+**[ EN English ](README.md)** &nbsp;&bull;&nbsp; **[ 🇹🇷 Türkçe ](README-TÜRKÇE.md)**
 
 ---
 
