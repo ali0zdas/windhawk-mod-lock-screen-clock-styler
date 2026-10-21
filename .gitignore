@@ -7,3 +7,7 @@
 !/README-TÜRKÇE.md
 !/.gitignore
 !/LICENSE
+
+# Track screenshot assets used by the README files
+!/screenshots/
+!/screenshots/**

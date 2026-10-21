@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Version](https://img.shields.io/badge/Version-0.4.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -22,7 +22,7 @@
 
 **Lock Screen Clock Styler** is a high-performance native [Windhawk](https://windhawk.net/) customization mod for the Windows 11 lock screen application (`LockApp.exe`).
 
-It replaces the default Windows lock screen clock and MSN news/widget clutter with six distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices and tactical Cyberpunk HUD terminals. Built from the ground up using **C++/WinRT** and the Windows UI XAML visual tree diagnostics API, it integrates directly into the compositor with zero background battery drain and full thread safety.
+It replaces the default Windows lock screen clock and MSN news/widget clutter with six distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices and tactical Cyberpunk HUD terminals. Built with **C++/WinRT**, it discovers the lock screen visual tree from the lock screen's own UI thread and injects custom XAML directly into the compositor with no XAML DispatcherTimer and full thread safety.
 
 > [!NOTE]
 > **Safety First:** This mod exclusively modifies the user-space lock app (`LockApp.exe`). It does **not** inject into or hook `LogonUI.exe` or `winlogon.exe` (Secure Desktop), ensuring system stability and zero security risks.
@@ -39,7 +39,23 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 | 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. | Bottom-Left |
 | ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). | Center |
 | 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. | Center |
-| 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock while giving you one-click suppression of MSN news, stocks, and weather cards. | Stock |
+| 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. | Stock |
+
+---
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/Retro%20Pixel.png" width="49%" alt="Retro Pixel / LED Matrix" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
+</p>
+
+> Captured on Windows 11 (24H2 / 25H2). The Minimalist Aura preview will be added soon.
 
 ---
 
@@ -51,14 +67,18 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 - 🕒 **12-Hour & 24-Hour Time Engine:**
   - Full support for standard 24-hour time or 12-hour AM/PM format.
   - Bespoke, theme-tailored AM/PM status badges (vintage flip stamp, tactical HUD status pill, minimal text).
-- ⏱️ **Real-Time Seconds Toggle with Memory:**
-  - Opt-in live seconds display (supported on Cyberpunk, Retro Pixel, and Minimalist styles; automatically disabled on physical flip clocks).
-  - Remembers user preferences per theme independently without cross-theme interference.
+- ⏱️ **Real-Time Seconds Toggle:**
+  - Opt-in live seconds display, supported by every style except the two mechanical flip clocks.
+  - The settings toggle is the single source of truth, so switching styles never leaves a stale per-theme preference behind.
 - 🛡️ **Single-Instance Guard & Reconnect Engine:**
-  - Automatically watches for Windows LockApp visual tree re-creation.
-  - Dynamically cleans up stale references and re-injects the clock safely, preventing duplicate clock glitches.
-- 🧵 **Thread-Safe Reactive UI:**
-  - All setting updates, UI rebuilds, and uninitialization cleanups are strictly dispatched to the XAML UI thread via `CoreDispatcher.RunAsync`, eliminating data races and crashes.
+  - Periodically rescans the lock screen visual tree and re-injects the clock safely when Windows rebuilds it.
+  - Removes the previous clock before attaching the new one, preventing duplicate clock glitches.
+- 🧵 **Thread-Safe UI Dispatch:**
+  - A `WH_GETMESSAGE` hook on the lock screen UI thread drives updates; every XAML read and write stays on that thread.
+  - Settings reloads and unload cleanup are dispatched synchronously with a `WH_CALLWNDPROC` message, so no mod code can be left running when the DLL unloads.
+- 🧩 **No XAML Diagnostics TAP:**
+  - Finds the lock screen tree through `Window::Current().Content()` and `VisualTreeHelper` instead of registering a XAML Diagnostics TAP.
+  - Can run alongside other XAML-based Windhawk mods such as Windows 11 Start Menu Styler.
 - 🧹 **Stock Widget & Clutter Cleaner:**
   - Instantly hide MSN weather, sports scores, finance stocks, and news cards with a single toggle.
 - 📐 **Smart Theme-Aware Alignment:**
@@ -75,13 +95,13 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 | **Clock Style** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Selects visual clock theme. |
 | **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
 | **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
-| **Show Seconds** | `showSeconds` | `true`, `false` | `false` | Real-time seconds counter (theme-aware). |
+| **Show Seconds** | `showSeconds` | `true`, `false` | `false` | Live seconds (all styles except `flip` and `vintage`). |
 | **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
 | **Show Date Capsule** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display capsule. |
-| **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency alpha value for frosted cards. |
-| **Digit Font Size** | `clockFontSize` | `40` to `160` | `92` | Base font size for clock digits. |
+| **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency of the Modern/Classic flip cards. |
+| **Digit Font Size** | `clockFontSize` | `20` to `300` | `92` | Base font size for clock digits. |
 | **Vertical Offset** | `verticalOffset` | `-200` to `+400` px | `0` | Vertical screen shift adjustment. |
-| **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `true` | Hides MSN weather, news, and stock widgets. |
+| **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `false` | Hides MSN weather, news, and stock widgets. |
 | **Hide Default Clock** | `hideDefaultClock` | `true`, `false` | `true` | Replaces the stock Windows 11 lock screen clock. |
 
 ---
@@ -102,10 +122,10 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 
 ## 🔒 Security & Architecture
 
-- **Target Process:** Injects strictly into `LockApp.exe` using standard Windows Diagnostics TAP (`InitializeXamlDiagnosticsEx`).
+- **Target Process:** Injects strictly into `LockApp.exe`, installs a message hook on its `Windows.UI.Core.CoreWindow` thread, and walks the visual tree from that UI thread. No XAML Diagnostics TAP is registered.
 - **No Secure Desktop Access:** Never hooks into or touches `LogonUI.exe` or `winlogon.exe`. Credential entry and authentication remain 100% untouched and secure.
-- **Resource Efficient:** Utilizes dirty-checking caches and disables timers when the screen is unlocked or when running default clock mode, ensuring virtually zero CPU and battery impact.
-- **Compatibility:** Tested and validated on Windows 11 versions **24H2**, **25H2**, and **26H2** (Build 26200+).
+- **Resource Efficient:** Uses dirty-checking caches and message-driven updates (500 ms with seconds, 1000 ms otherwise) instead of a polling timer. Default-clock mode performs no clock rendering at all.
+- **Compatibility:** Tested and validated on Windows 11 versions **24H2**, **25H2**, and **26H2** (Build 26200+). The TAP-free design allows coexistence with other XAML-based Windhawk mods.
 
 ---
 
