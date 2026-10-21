@@ -1,67 +1,114 @@
-# Windows 11 Kilit Ekranı Özelleştirici (Lock Screen Styler)
+<div align="center">
 
-Windows 11 kilit ekranını (`LockApp.exe`) modern saat tasarımları, akrilik/buzlu cam kartlar, dinamik tarih kapsülü ve widget gizleme seçenekleriyle özelleştiren bir [Windhawk](https://windhawk.net/) modudur.
+# 🔒 Windows 11 Kilit Ekranı Özelleştirici (Lock Screen Styler)
 
-[English Readme](README.md)
+**Windows 11 kilit ekranınızı modern saat tasarımları, akrilik buzlu cam paneller, canlı pil telemetrisi ve temiz yerleşim denetimleriyle baştan yaratın.**
 
----
+[![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
+[![Windows 11](https://img.shields.io/badge/Windows_11-23H2_%7C_24H2_%7C_25H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
+[![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/WindhawkMod-Windows-Lock-Screen-Styler/releases)
+[![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-## ✨ Özellikler
+<br/>
 
-- **Minimalist Sonoma (Temiz Tipografi):** Saatin üzerine yerleştirilen yerelleştirilmiş gün ve ay başlığı, ultra zarif ve hafif tipografi (`Segoe UI Variable Display Light`), çift katmanlı atmosferik gölge derinliği ve varsayılan sol-alt (`bottomLeft`) veya merkez hizalama desteğiyle Apple kilit ekranı estetiği.
-- **Modern Flip Saat:** Saat ve dakika için bölünmüş, kareye yakın dolgun oranları, ortasında şık makas kesiği yarığı ve 24px kavisli köşeleri bulunan akrilik cam kartlar.
-- **Klasik Flip Saat:** Klasik mekanik Solari tren garı / havalimanı esintili koyu mat kömür kartlar, fildişi/krem rakamlar, kareye yakın oranlar, belirgin mekanik katlanma yarığı ve menteşe klipsleri.
-- **Cyberpunk Bilim Kurgu HUD Terminali:** Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, üst telemetri tanı çubuğu, ritmik nabız animasyonuna sahip lazer eğik çizgi ayracı (`//`) ve alt tarih günlüğüyle özgün Netrunner HUD arayüzü.
-- **Minimalist Aura / Yüzen Saat:** Kart çerçevesi olmadan, ortam ışığı gölgesi (ambient drop-shadow) derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen zarif tipografi.
-- **Retro Piksel / LED Matris Saat:** Otantik 7x11 çift piksel (çift nokta) kalınlığında nokta matris ekranı, sönük arka plan LED ışıması ve ferah dikey yüksekliğe sahip buzlu akrilik kontrast paneli.
-- **Canlı Pil ve Şarj Durumu Kapsülü:** Masaüstü bilgisayarlarda otomatik gizlenen, dizüstü bilgisayarlarda ise canlı pil yüzdesi ve şarj durumunu (`⚡` / `🔋`) gösteren akıllı güç kapsülü.
-- **12 / 24 Saat Formatı:** 24 saat gösterimi veya temalara özel tasarlanmış şık AM/PM rozetleriyle 12 saat formatı arasında geçiş imkanı.
-- **Saniye Göstergesi:** Canlı saniye gösterimi açıp kapatma (Cyberpunk, Retro Piksel ve Minimalist stillerde desteklenir; flip saatlerinde otomatik olarak devre dışıdır).
-- **Tek Saat Koruması:** Windows kilit ekranı görsel ağacını yeniden oluşturduğunda saati güvenle yeniden bağlar; çift saat oluşmasını engeller.
-- **Dinamik Tarih Kapsülü:** Saatin altında veya üstünde konumlanan, sistem diline duyarlı gün ve ay göstergesi.
-- **Varsayılan Kalabalığı Gizleme:** Kilit ekranındaki MSN hava durumu, spor, borsa ve haber widget'larını tek tıkla gizleme imkanı.
-- **Varsayılan Saati Değiştirme:** Windows 11'in standart kilit ekranı saatini gizleyip yerine özel tasarımı getirme.
-- **Geniş Özelleştirilebilirlik:** Cam opaklığı, font boyutu, hizalama ve dikey ofset gibi detayları ayarlar sekmesinden düzenleme.
-- **Çoklu Dil Desteği:** Windhawk içinde yerleşik İngilizce ve Türkçe (`tr-TR`) arayüz metinleri.
+**[ 🇬🇧 English ](README.md)** &nbsp;&bull;&nbsp; **[ 🇹🇷 Türkçe ](README-TÜRKÇE.md)**
 
 ---
 
-## 🛠️ Nasıl Kurulur ve Kullanılır?
+</div>
 
-1. [Windhawk](https://windhawk.net/) uygulamasını indirip açın.
-2. **Gelişmiş (Advanced)** -> **Mod Oluştur (Create Mod)** sekmesine gidin (veya resmi katalogda yayınlandıktan sonra doğrudan arayın).
-3. [`windows-11-lock-screen-styler.wh.cpp`](./windows-11-lock-screen-styler.wh.cpp) dosyasının içeriğini editöre yapıştırın.
-4. **Derle (Compile)** (`Ctrl + B`) butonuna basın ve modu kaydedip etkinleştirin.
-5. Modu test etmek için bilgisayarınızı kilitleyin (**`Win + L`**).
+## 🌟 Genel Bakış
 
----
+**Windows 11 Lock Screen Styler**, Windows 11 kilit ekranı uygulamasını (`LockApp.exe`) zenginleştirmek ve özelleştirmek için geliştirilmiş yerel ve yüksek performanslı bir [Windhawk](https://windhawk.net/) modudur.
 
-## ⚙️ Mod Ayarları
+Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartlarını gizleyerek yerine 6 farklı özel tasarım saat estetiği getirir: Apple macOS Sonoma tipografisi, çift yapraklı Fliqlo tarzı buzlu cam flip saat, Solari mekanik tren garı saati, otantik 7x11 retro LED nokta matrisi ve taktiksel Cyberpunk HUD terminali. **C++/WinRT** mimarisi ve XAML görsel ağaç teşhis arayüzü ile doğrudan arayüz katmanına enjekte olur; arka planda pil tüketmez ve tam thread güvenliği sağlar.
 
-| Ayar | Açıklama | Varsayılan |
-| :--- | :--- | :--- |
-| **Clock Style (Saat Stili)** | Retro Piksel LED Matris (`pixel`), Modern Flip Saat (`flip`), Klasik Flip Saat (`vintage`), Minimalist Sonoma (`macos`), Cyberpunk HUD Terminali (`cyberpunk`), Minimalist Aura Yüzen Saat (`aura`) veya Varsayılan Saat (`defaultOnly`) seçimi | `pixel` |
-| **Time Format (Saat Formatı)** | 24 Saat (`24h`) veya 12 Saat AM/PM (`12h`) formatı | `24h` |
-| **Show Seconds (Saniyeyi Göster)** | Canlı saniye göstergesini açıp kapatma (Cyberpunk, Retro Piksel ve Minimalist stiller; flip saatlerinde otomatik kapalı) | `Kapalı` |
-| **Show Battery Status (Pil Durumu)** | Dizüstü bilgisayar pil yüzdesi ve şarj durumu kapsülü (masaüstü bilgisayarlarda otomatik gizlenir) | `Kapalı` |
-| **Glass Opacity (Cam Opaklığı)** | Kartların yarı saydamlık derecesi (0 - 255) | `45` |
-| **Digit Font Size (Font Boyutu)** | Saat ve dakika rakamlarının punto büyüklüğü | `92` |
-| **Vertical Offset (Dikey Ofset)** | Saati yukarı veya aşağı kaydırma ofseti (-200 ile +400 px) | `0` |
-| **Clock Alignment (Yatay Hizalama)** | Saatin ekrandaki hizalaması (`auto`, `center`, `left`, `right`, `bottomLeft`; `auto` Sonoma için sol alt, diğer stiller için merkez kullanır) | `auto` |
-| **Hide Default Widgets (Widget Gizle)** | MSN hava durumu, haber ve finans alanını gizler | `Etkin` |
-| **Hide Default Clock (Saati Gizle)** | Standart Windows 11 saat ve tarihini gizler | `Etkin` |
-| **Show Date Capsule (Tarih Kapsülü)** | Kartların altında gün ve ay kapsülünü görüntüler | `Etkin` |
+> [!NOTE]
+> **Güvenlik Önceliği:** Bu mod yalnızca kullanıcı oturumundaki kilit ekranı arayüz sürecine (`LockApp.exe`) müdahale eder. Güvenli Masaüstü (Secure Desktop) ortamındaki `LogonUI.exe` veya `winlogon.exe` bileşenlerine **asla** dokunmaz; sistem kilitlenme veya güvenlik riski oluşturmaz.
 
 ---
 
-## 🔒 Güvenlik ve Uyumluluk
+## 🎨 Temalar ve Saat Tasarımları
 
-- Yalnızca kilit ekranı arayüz sürecine (`LockApp.exe`) müdahale eder.
-- Güvenli Masaüstü (Secure Desktop) ortamındaki `LogonUI.exe` ve `winlogon.exe` süreçlerine dokunmaz, sistem kilitlenme riski oluşturmaz.
-- Windows 11 ile tam uyumludur (Windows 11 23H2 / 24H2 / 25H2 sürümlerinde test edilmiştir).
+| Saat Stili | Kod | Tasarım ve Estetik Özellikleri | Varsayılan Hizalama |
+| :--- | :---: | :--- | :---: |
+| 👾 **Retro Piksel / LED Matris** | `pixel` | Otantik 7x11 çift piksel nokta matrisi, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli. | Merkez |
+| ⏳ **Modern Flip Saat** | `flip` | Akrilik buzlu cam kartlar, Fliqlo esintili yatay makas kesiği yaprak yarığı, dolgun oranlar ve 22px kavisli köşeler. | Merkez |
+| 📜 **Klasik Flip Saat** | `vintage` | Solari mekanik tren garı tarzı koyu mat kömür flap kartları, fildişi/krem rakamlar, menteşe klipsleri ve yaprak yarığı. | Merkez |
+| 🪐 **Minimalist Sonoma** | `macos` | Saatin üzerinde yerel gün/ay başlığı, ultra zarif hafif tipografi, çift katmanlı atmosferik gölge ve estetik sol yerleşim. | Sol-Alt |
+| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, telemetri teşhis çubuğu ve nabız atan lazer ayraçlar (`//`). | Merkez |
+| 🌌 **Minimalist Aura** | `aura` | Kart çerçevesi olmadan, ortam ışığı gölgesi derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen tipografi. | Merkez |
+| 🪟 **Yalnızca Varsayılan Saat** | `defaultOnly` | Standart Windows 11 saatini korurken hava durumu, haber ve borsa widget kalabalığını tek tıkla gizler. | Standart |
+
+---
+
+## ✨ Öne Çıkan Yetenekler ve Özellikler
+
+- 🔋 **Canlı Akıllı Pil ve Güç Kapsülü:**
+  - Canlı dizüstü bilgisayar pil yüzdesini ve şarj durumunu (`⚡` şarj oluyor, `🔋` pil seviyesi) şık bir kapsülde gösterir.
+  - Masaüstü bilgisayarlarda kilit ekranını kalabalıklaştırmamak için otomatik olarak gizlenir.
+- 🕒 **12 / 24 Saat Zaman Motoru:**
+  - Standart 24 saat formatı veya 12 saat AM/PM formatı arasında anında geçiş.
+  - Her temaya özel tasarlanmış AM/PM göstergeleri (klasik damga, taktiksel HUD kapsülü veya minimalist metin).
+- ⏱️ **Hafızalı Canlı Saniye Göstergesi:**
+  - İsteğe bağlı canlı saniye gösterimi (Cyberpunk, Retro Piksel ve Minimalist temalarda desteklenir; mekanik flip saatlerinde otomatik kapalıdır).
+  - Her tema için saniye tercihini bağımsız olarak hafızada tutar; temalar arası geçişte tercihler birbirine karışmaz.
+- 🛡️ **Tek Saat Koruması ve Otomatik Yeniden Bağlanma:**
+  - Windows kilit ekranı görsel ağacını yeniden kurduğunda bunu anında algılar.
+  - Eski öğe referanslarını güvenle temizler ve yeni ağaca tek bir saat olarak yeniden bağlanır; çift saat çıkma hatasını engeller.
+- 🧵 **Thread Güvenli Reaktif Mimari:**
+  - Tüm ayar yüklemeleri, UI yenilemeleri ve kaldırma temizlikleri XAML UI thread'ine (`CoreDispatcher.RunAsync`) aktarılır; veri yarışları (data race) ve çökmeler önlenir.
+- 🧹 **MSN Widget ve Kalabalık Temizleyici:**
+  - Kilit ekranındaki MSN hava durumu, spor skorları, borsa ve haber kartlarını tek tıkla gizleme olanağı.
+- 📐 **Akıllı Temaya Duyarlı Hizalama:**
+  - Otomatik (`auto`) hizalama seçeneği Minimalist Sonoma temasını sol-alt köşeye, diğer tüm temaları ise ekranda merkeze yerleştirir. İstenirse elle (`center`, `bottomLeft`, `left`, `right`) değiştirilebilir.
+
+---
+
+## ⚙️ Mod Ayarları Kılavuzu
+
+Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca düzenlenebilir:
+
+| Ayar Başlığı | Ayar Anahtarı | Geçerli Değerler / Aralık | Varsayılan | İşlev |
+| :--- | :--- | :--- | :---: | :--- |
+| **Saat Tasarım Stili** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Görüntülenecek saat temasını belirler. |
+| **Saat Formatı** | `timeFormat` | `24h`, `12h` | `24h` | 24 Saat veya 12 Saat AM/PM gösterimi. |
+| **Saat Yatay Hizalaması** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Saatin ekran hizalaması (`auto` tema varsayılanını uygular). |
+| **Saniyeyi Göster** | `showSeconds` | `true`, `false` | `false` | Canlı saniye sayacı (temaya duyarlı). |
+| **Pil Durumu** | `showBatteryStatus`| `true`, `false` | `false` | Dizüstü pil yüzdesi ve şarj durumu kapsülü. |
+| **Tarih Kapsülü** | `showDateCapsule` | `true`, `false` | `true` | Saatin altında veya üstünde yerel tarih göstergesi. |
+| **Cam Opaklığı** | `glassOpacity` | `0` - `255` | `45` | Buzlu cam kartların yarı saydamlık derecesi. |
+| **Rakam Boyutu** | `clockFontSize` | `40` - `160` | `92` | Saat rakamlarının punto büyüklüğü. |
+| **Dikey Konum Ofseti** | `verticalOffset` | `-200` ile `+400` px | `0` | Saati ekranda yukarı veya aşağı kaydırma ofseti. |
+| **Widget'ları Gizle** | `hideDefaultWidgets`| `true`, `false` | `true` | MSN hava durumu, haber ve borsa widget'larını gizler. |
+| **Varsayılan Saati Gizle** | `hideDefaultClock` | `true`, `false` | `true` | Standart Windows 11 saatini gizler. |
+
+---
+
+## 🚀 Kurulum ve Kullanım
+
+1. Henüz yüklü değilse **[Windhawk](https://windhawk.net/)** uygulamasını indirip kurun.
+2. Windhawk arayüzünü açın, **Gelişmiş (Advanced)** sekmesine gelin ve **Mod Oluştur (Create Mod)** butonuna tıklayın.
+3. [`windows-11-lock-screen-styler.wh.cpp`](./windows-11-lock-screen-styler.wh.cpp) dosyasındaki tüm kaynak kodu kopyalayıp editöre yapıştırın.
+4. **Derle (Compile)** (`Ctrl + B`) butonuna basın.
+5. Derleme tamamlandıktan sonra modu kaydedip etkinleştirin.
+6. <kbd>Win</kbd> + <kbd>L</kbd> tuşlarına basarak kilit ekranını açın ve yeni saatinizin tadını çıkarın!
+
+> [!TIP]
+> Modu yeniden derlemenize gerek kalmadan dilediğiniz zaman Windhawk içindeki **Ayarlar** sekmesinden temayı, yazı boyutunu ve hizalamayı anında değiştirebilirsiniz.
+
+---
+
+## 🔒 Güvenlik ve Mimari
+
+- **Hedef Süreç:** Yalnızca `LockApp.exe` sürecine Windows Teşhis Arayüzü (`InitializeXamlDiagnosticsEx`) ile enjekte olur.
+- **Güvenli Masaüstü Koruması:** `LogonUI.exe` ve `winlogon.exe` gibi oturum açma ve kimlik doğrulama süreçlerine kesinlikle müdahale etmez. Parola giriş ekranınız tamamen korunur.
+- **Düşük Kaynak Tüketimi:** Akıllı önbellek mimarisi sayesinde ekran açıkken saniyede bir kez hafifçe güncellenir; ekran kilidi kapandığında veya varsayılan saat modunda zamanlayıcı otomatik durdurularak sıfır işlemci ve pil tüketimi sağlanır.
+- **Geniş Uyumluluk:** Windows 11 **23H2**, **24H2** ve **25H2** (Build 26200+) sürümlerinde kapsamlı olarak test edilmiştir.
 
 ---
 
 ## 📄 Lisans
 
-Bu proje [MIT Lisansı](LICENSE) altında sunulmaktadır.
+Bu proje [MIT Lisansı](LICENSE) kapsamında sunulmaktadır &copy; 2026 [ali0zdas](https://github.com/ali0zdas).
