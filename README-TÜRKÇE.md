@@ -1,18 +1,18 @@
 <div align="center">
 
-# 🔒 Windows 11 Kilit Ekranı Özelleştirici (Lock Screen Styler)
+# 🔒 Kilit Ekranı Saat Özelleştirici (Lock Screen Clock Styler)
 
-**Windows 11 kilit ekranınızı modern saat tasarımları, akrilik buzlu cam paneller, canlı pil telemetrisi ve temiz yerleşim denetimleriyle baştan yaratın.**
+**Windows 11 kilit ekranı saatinizi modern tasarımlar, akrilik buzlu cam paneller, canlı pil telemetrisi ve temiz yerleşim denetimleriyle baştan yaratın.**
 
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
-[![Windows 11](https://img.shields.io/badge/Windows_11-23H2_%7C_24H2_%7C_25H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
+[![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
 [![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/WindhawkMod-Windows-Lock-Screen-Styler/releases)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**[ 🇬🇧 English ](README.md)** &nbsp;&bull;&nbsp; **[ 🇹🇷 Türkçe ](README-TÜRKÇE.md)**
+**[ English ](README.md)** &nbsp;&bull;&nbsp; **[ 🇹🇷 Türkçe ](README-TÜRKÇE.md)**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ## 🌟 Genel Bakış
 
-**Windows 11 Lock Screen Styler**, Windows 11 kilit ekranı uygulamasını (`LockApp.exe`) zenginleştirmek ve özelleştirmek için geliştirilmiş yerel ve yüksek performanslı bir [Windhawk](https://windhawk.net/) modudur.
+**Lock Screen Clock Styler**, Windows 11 kilit ekranı uygulamasını (`LockApp.exe`) zenginleştirmek ve özelleştirmek için geliştirilmiş yerel ve yüksek performanslı bir [Windhawk](https://windhawk.net/) modudur.
 
 Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartlarını gizleyerek yerine 6 farklı özel tasarım saat estetiği getirir: Apple macOS Sonoma tipografisi, çift yapraklı Fliqlo tarzı buzlu cam flip saat, Solari mekanik tren garı saati, otantik 7x11 retro LED nokta matrisi ve taktiksel Cyberpunk HUD terminali. **C++/WinRT** mimarisi ve XAML görsel ağaç teşhis arayüzü ile doğrudan arayüz katmanına enjekte olur; arka planda pil tüketmez ve tam thread güvenliği sağlar.
 
@@ -105,7 +105,7 @@ Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca 
 - **Hedef Süreç:** Yalnızca `LockApp.exe` sürecine Windows Teşhis Arayüzü (`InitializeXamlDiagnosticsEx`) ile enjekte olur.
 - **Güvenli Masaüstü Koruması:** `LogonUI.exe` ve `winlogon.exe` gibi oturum açma ve kimlik doğrulama süreçlerine kesinlikle müdahale etmez. Parola giriş ekranınız tamamen korunur.
 - **Düşük Kaynak Tüketimi:** Akıllı önbellek mimarisi sayesinde ekran açıkken saniyede bir kez hafifçe güncellenir; ekran kilidi kapandığında veya varsayılan saat modunda zamanlayıcı otomatik durdurularak sıfır işlemci ve pil tüketimi sağlanır.
-- **Geniş Uyumluluk:** Windows 11 **23H2**, **24H2** ve **25H2** (Build 26200+) sürümlerinde kapsamlı olarak test edilmiştir.
+- **Geniş Uyumluluk:** Windows 11 **24H2**, **25H2** ve **26H2** (Build 26200+) sürümlerinde kapsamlı olarak test edilmiştir.
 
 ---
 

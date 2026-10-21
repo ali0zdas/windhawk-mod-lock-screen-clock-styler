@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🔒 Windows 11 Lock Screen Styler
+# 🔒 Lock Screen Clock Styler
 
-**Elevate your Windows 11 lock screen with modern bespoke clock aesthetics, frosted acrylic cards, live power telemetry, and clean clutter-free layout controls.**
+**Elevate your Windows 11 lock screen clock with modern bespoke aesthetics, frosted acrylic cards, live power telemetry, and clean clutter-free layout controls.**
 
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
@@ -20,7 +20,7 @@
 
 ## 🌟 Overview
 
-**Windows 11 Lock Screen Styler** is a high-performance native [Windhawk](https://windhawk.net/) customization mod for the Windows 11 lock screen application (`LockApp.exe`).
+**Lock Screen Clock Styler** is a high-performance native [Windhawk](https://windhawk.net/) customization mod for the Windows 11 lock screen application (`LockApp.exe`).
 
 It replaces the default Windows lock screen clock and MSN news/widget clutter with six distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices and tactical Cyberpunk HUD terminals. Built from the ground up using **C++/WinRT** and the Windows UI XAML visual tree diagnostics API, it integrates directly into the compositor with zero background battery drain and full thread safety.
 
@@ -105,7 +105,7 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 - **Target Process:** Injects strictly into `LockApp.exe` using standard Windows Diagnostics TAP (`InitializeXamlDiagnosticsEx`).
 - **No Secure Desktop Access:** Never hooks into or touches `LogonUI.exe` or `winlogon.exe`. Credential entry and authentication remain 100% untouched and secure.
 - **Resource Efficient:** Utilizes dirty-checking caches and disables timers when the screen is unlocked or when running default clock mode, ensuring virtually zero CPU and battery impact.
-- **Compatibility:** Tested and validated on Windows 11 versions **23H2**, **24H2**, and **25H2** (Build 26200+).
+- **Compatibility:** Tested and validated on Windows 11 versions **24H2**, **25H2**, and **26H2** (Build 26200+).
 
 ---
 

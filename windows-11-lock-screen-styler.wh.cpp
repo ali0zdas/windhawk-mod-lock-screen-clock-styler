@@ -1,9 +1,9 @@
 // ==WindhawkMod==
 // @id              windows-11-lock-screen-styler
-// @name            Windows 11 Lock Screen Styler
-// @name:tr-TR      Windows 11 Kilit Ekranı Özelleştirici
-// @description     Customize the Windows 11 lock screen with modern clock styles, date display, and widget controls.
-// @description:tr-TR Windows 11 kilit ekranını modern saat stilleri, tarih göstergesi ve widget denetimleriyle özelleştirin.
+// @name            Lock Screen Clock Styler
+// @name:tr-TR      Kilit Ekranı Saat Özelleştirici
+// @description     Customize the Windows 11 lock screen clock with modern styles, date display, and widget controls.
+// @description:tr-TR Windows 11 kilit ekranı saatini modern stiller, tarih göstergesi ve widget denetimleriyle özelleştirin.
 // @version         0.3.1
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
@@ -14,9 +14,9 @@
 
 // ==WindhawkModReadme==
 /*
-# Windows 11 Lock Screen Styler
+# Lock Screen Clock Styler
 
-Customize and enhance the Windows 11 lock screen with modern clock designs, frosted glass panels, dynamic date capsules, and clean layout controls.
+Customize and enhance the Windows 11 lock screen clock with modern designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
 - **Minimalist Sonoma (Clean Typography):** Apple-inspired lock screen typography with date positioned above the time, slender display numerals, dual-layer atmospheric shadow, and bottom-left or center placement.
@@ -2411,7 +2411,7 @@ void SearchExistingCoreWindows() {
 
 // Windhawk Lifecycle Functions
 BOOL Wh_ModInit() {
-    Wh_Log(L"Windows 11 Lock Screen Mod initializing (Wh_ModInit)...");
+    Wh_Log(L"Lock Screen Clock Styler initializing (Wh_ModInit)...");
 
     LoadSettings();
 
@@ -2463,7 +2463,7 @@ void Wh_ModAfterInit() {
 }
 
 void Wh_ModUninit() {
-    Wh_Log(L"Windows 11 Lock Screen Mod uninitializing (Wh_ModUninit)...");
+    Wh_Log(L"Lock Screen Clock Styler uninitializing (Wh_ModUninit)...");
     if (g_visualTreeWatcher) {
         g_visualTreeWatcher->Unadvise();
         g_visualTreeWatcher = nullptr;
