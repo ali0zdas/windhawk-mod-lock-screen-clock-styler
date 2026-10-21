@@ -1,5 +1,5 @@
 // ==WindhawkMod==
-// @id              windows-11-lock-screen-styler
+// @id              lock-screen-clock-styler
 // @name            Lock Screen Clock Styler
 // @name:tr-TR      Kilit Ekranı Saat Özelleştirici
 // @description     Customize the Windows 11 lock screen clock with modern styles, date display, and widget controls.

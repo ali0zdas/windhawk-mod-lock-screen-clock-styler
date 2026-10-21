@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/WindhawkMod-Windows-Lock-Screen-Styler/releases)
+[![Version](https://img.shields.io/badge/Version-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -90,7 +90,7 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 
 1. Download and install **[Windhawk](https://windhawk.net/)** (if not already installed).
 2. Open the Windhawk manager, navigate to the **Advanced** tab, and click **Create Mod**.
-3. Copy the entire source code from [`windows-11-lock-screen-styler.wh.cpp`](./windows-11-lock-screen-styler.wh.cpp) and paste it into the Windhawk editor.
+3. Copy the entire source code from [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) and paste it into the Windhawk editor.
 4. Click **Compile** (`Ctrl + B`).
 5. Once compiled, save and enable the mod.
 6. Press <kbd>Win</kbd> + <kbd>L</kbd> to lock your screen and enjoy your new lock screen clock!

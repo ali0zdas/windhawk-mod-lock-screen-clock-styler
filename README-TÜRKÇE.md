@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/WindhawkMod-Windows-Lock-Screen-Styler/releases)
+[![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.3.1-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -90,7 +90,7 @@ Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca 
 
 1. Henüz yüklü değilse **[Windhawk](https://windhawk.net/)** uygulamasını indirip kurun.
 2. Windhawk arayüzünü açın, **Gelişmiş (Advanced)** sekmesine gelin ve **Mod Oluştur (Create Mod)** butonuna tıklayın.
-3. [`windows-11-lock-screen-styler.wh.cpp`](./windows-11-lock-screen-styler.wh.cpp) dosyasındaki tüm kaynak kodu kopyalayıp editöre yapıştırın.
+3. [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) dosyasındaki tüm kaynak kodu kopyalayıp editöre yapıştırın.
 4. **Derle (Compile)** (`Ctrl + B`) butonuna basın.
 5. Derleme tamamlandıktan sonra modu kaydedip etkinleştirin.
 6. <kbd>Win</kbd> + <kbd>L</kbd> tuşlarına basarak kilit ekranını açın ve yeni saatinizin tadını çıkarın!

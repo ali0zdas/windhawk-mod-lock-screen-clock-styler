@@ -2,7 +2,7 @@
 /*
 
 # Track only essential repository files
-!/windows-11-lock-screen-styler.wh.cpp
+!/lock-screen-clock-styler.wh.cpp
 !/README.md
 !/README-TÜRKÇE.md
 !/.gitignore
