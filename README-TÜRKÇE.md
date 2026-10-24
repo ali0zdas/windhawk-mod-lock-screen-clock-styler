@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.4.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -46,11 +46,11 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
 ## 📸 Ekran Görüntüleri
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/Retro%20Pixel.png" width="49%" alt="Retro Piksel / LED Matris" />
-  <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Saat" />
+  <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Klasik Flip Saat" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
@@ -95,11 +95,11 @@ Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca 
 | **Saat Tasarım Stili** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Görüntülenecek saat temasını belirler. |
 | **Saat Formatı** | `timeFormat` | `24h`, `12h` | `24h` | 24 Saat veya 12 Saat AM/PM gösterimi. |
 | **Saat Yatay Hizalaması** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Saatin ekran hizalaması (`auto` tema varsayılanını uygular). |
-| **Saniyeyi Göster** | `showSeconds` | `true`, `false` | `false` | Canlı saniye (yalnızca `flip` ve `vintage` dışındaki stiller). |
+| **Saniyeyi Göster** | `showSeconds` | `true`, `false` | `true` | Canlı saniye (yalnızca `flip` ve `vintage` dışındaki stiller). |
 | **Pil Durumu** | `showBatteryStatus`| `true`, `false` | `false` | Dizüstü pil yüzdesi ve şarj durumu kapsülü. |
 | **Tarih Kapsülü** | `showDateCapsule` | `true`, `false` | `true` | Saatin altında veya üstünde yerel tarih göstergesi. |
-| **Cam Opaklığı** | `glassOpacity` | `0` - `255` | `45` | Modern/Klasik flip kartlarının yarı saydamlığı. |
-| **Rakam Boyutu** | `clockFontSize` | `20` - `300` | `92` | Saat rakamlarının temel punto büyüklüğü. |
+| **Cam Opaklığı** | `glassOpacity` | `0` - `255` | `45` | Modern Flip kartlarının yarı saydamlığı. |
+| **Rakam Boyutu** | `clockFontSize` | `20` - `300` | `140` | Saat rakamlarının temel punto büyüklüğü. |
 | **Dikey Konum Ofseti** | `verticalOffset` | `-200` ile `+400` px | `0` | Saati ekranda yukarı veya aşağı kaydırma ofseti. |
 | **Widget'ları Gizle** | `hideDefaultWidgets`| `true`, `false` | `false` | MSN hava durumu, haber ve borsa widget'larını gizler. |
 | **Varsayılan Saati Gizle** | `hideDefaultClock` | `true`, `false` | `true` | Standart Windows 11 saatini gizler. |
@@ -126,6 +126,14 @@ Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca 
 - **Güvenli Masaüstü Koruması:** `LogonUI.exe` ve `winlogon.exe` gibi oturum açma ve kimlik doğrulama süreçlerine kesinlikle müdahale etmez. Parola giriş ekranınız tamamen korunur.
 - **Düşük Kaynak Tüketimi:** Polling zamanlayıcısı yerine mesaj güdümlü güncelleme kullanır (saniye açıkken 500 ms, aksi halde 1000 ms). Varsayılan saat modunda hiçbir saat çizimi yapılmaz.
 - **Geniş Uyumluluk:** Windows 11 **24H2**, **25H2** ve **26H2** (Build 26200+) sürümlerinde kapsamlı olarak test edilmiştir. TAP kullanmayan tasarımı sayesinde diğer XAML tabanlı Windhawk modlarıyla birlikte çalışabilir.
+
+---
+
+## 🤝 Katkıda Bulunma ve Geri Bildirim
+
+Geri bildirimler, hata bildirimleri ve yeni tema önerileri modun gelişimi için çok değerlidir! Yeni bir saat stili fikriniz varsa, bir hatayla karşılaştıysanız veya koda katkı sunmak isterseniz:
+- [GitHub deposu](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler) üzerinde yeni bir issue veya pull request açabilirsiniz.
+- Eklenmesini istediğiniz estetik saat tasarımlarını bize iletebilirsiniz!
 
 ---
 

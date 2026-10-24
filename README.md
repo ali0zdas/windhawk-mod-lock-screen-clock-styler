@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.4.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Version](https://img.shields.io/badge/Version-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -46,11 +46,11 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/Retro%20Pixel.png" width="49%" alt="Retro Pixel / LED Matrix" />
-  <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
+  <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
@@ -95,11 +95,11 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 | **Clock Style** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Selects visual clock theme. |
 | **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
 | **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
-| **Show Seconds** | `showSeconds` | `true`, `false` | `false` | Live seconds (all styles except `flip` and `vintage`). |
+| **Show Seconds** | `showSeconds` | `true`, `false` | `true` | Live seconds (all styles except `flip` and `vintage`). |
 | **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
 | **Show Date Capsule** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display capsule. |
-| **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency of the Modern/Classic flip cards. |
-| **Digit Font Size** | `clockFontSize` | `20` to `300` | `92` | Base font size for clock digits. |
+| **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency of the Modern Flip cards. |
+| **Digit Font Size** | `clockFontSize` | `20` to `300` | `140` | Base font size for clock digits. |
 | **Vertical Offset** | `verticalOffset` | `-200` to `+400` px | `0` | Vertical screen shift adjustment. |
 | **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `false` | Hides MSN weather, news, and stock widgets. |
 | **Hide Default Clock** | `hideDefaultClock` | `true`, `false` | `true` | Replaces the stock Windows 11 lock screen clock. |
@@ -126,6 +126,14 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 - **No Secure Desktop Access:** Never hooks into or touches `LogonUI.exe` or `winlogon.exe`. Credential entry and authentication remain 100% untouched and secure.
 - **Resource Efficient:** Uses dirty-checking caches and message-driven updates (500 ms with seconds, 1000 ms otherwise) instead of a polling timer. Default-clock mode performs no clock rendering at all.
 - **Compatibility:** Tested and validated on Windows 11 versions **24H2**, **25H2**, and **26H2** (Build 26200+). The TAP-free design allows coexistence with other XAML-based Windhawk mods.
+
+---
+
+## 🤝 Contributing & Feedback
+
+Feedback, bug reports, and theme suggestions are warmly welcomed! If you have an idea for a new clock style, encounter an issue, or would like to contribute code:
+- Open an issue or submit a pull request on the [GitHub repository](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler).
+- Share your setup or suggest new aesthetic styles for upcoming releases!
 
 ---
 
