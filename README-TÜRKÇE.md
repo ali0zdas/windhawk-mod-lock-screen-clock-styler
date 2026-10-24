@@ -55,7 +55,7 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
 
-> Windows 11 (24H2 / 25H2) üzerinde alınmıştır. Minimalist Aura görseli yakında eklenecek.
+> Windows 11 (24H2 / 25H2) üzerinde alınmıştır.
 
 ---
 

@@ -55,7 +55,7 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
 
-> Captured on Windows 11 (24H2 / 25H2). The Minimalist Aura preview will be added soon.
+> Captured on Windows 11 (24H2 / 25H2).
 
 ---
 
