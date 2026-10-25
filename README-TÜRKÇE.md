@@ -4,7 +4,7 @@
 
 **Windows 11 kilit ekranı saatinizi modern tasarımlar, akrilik buzlu cam paneller, canlı pil telemetrisi ve temiz yerleşim denetimleriyle baştan yaratın.**
 
-[![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
+[![Windhawk Mod](https://img.shields.io/badge/Get_it_on-Windhawk-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
 [![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
@@ -108,15 +108,22 @@ Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca 
 
 ## 🚀 Kurulum ve Kullanım
 
+### Yöntem 1: Resmi Windhawk Mod Kataloğu (Önerilen)
+
 1. Henüz yüklü değilse **[Windhawk](https://windhawk.net/)** uygulamasını indirip kurun.
-2. Windhawk arayüzünü açın, **Gelişmiş (Advanced)** sekmesine gelin ve **Mod Oluştur (Create Mod)** butonuna tıklayın.
-3. [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) dosyasındaki tüm kaynak kodu kopyalayıp editöre yapıştırın.
-4. **Derle (Compile)** (`Ctrl + B`) butonuna basın.
-5. Derleme tamamlandıktan sonra modu kaydedip etkinleştirin.
-6. <kbd>Win</kbd> + <kbd>L</kbd> tuşlarına basarak kilit ekranını açın ve yeni saatinizin tadını çıkarın!
+2. Resmi mod sayfasını açın: **[Windhawk - Lock Screen Clock Styler](https://windhawk.net/mods/lock-screen-clock-styler)** (veya Windhawk arayüzündeki **Modları Keşfet / Explore** sekmesinde **Lock Screen Clock Styler** olarak aratın).
+3. **Detaylar (Details)** &rarr; **Yükle (Install)** butonuna tıklayın.
+4. <kbd>Win</kbd> + <kbd>L</kbd> tuşlarına basarak kilit ekranını açın ve yeni saatinizin tadını çıkarın!
+
+### Yöntem 2: Manuel Kurulum (Geliştiriciler İçin)
+
+1. Windhawk arayüzünü açın, **Gelişmiş (Advanced)** sekmesine gelin ve **Mod Oluştur (Create Mod)** butonuna tıklayın.
+2. [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) dosyasındaki tüm kaynak kodu kopyalayıp editöre yapıştırın.
+3. **Derle (Compile)** (`Ctrl + B`) butonuna basın.
+4. Derleme tamamlandıktan sonra modu kaydedip etkinleştirin.
 
 > [!TIP]
-> Modu yeniden derlemenize gerek kalmadan dilediğiniz zaman Windhawk içindeki **Ayarlar** sekmesinden temayı, yazı boyutunu ve hizalamayı anında değiştirebilirsiniz.
+> Modu yeniden derlemenize gerek kalmadan dilediğiniz zaman Windhawk içindeki **Ayarlar** sekmesinden temayı, yazı boyutunu, saniye gösterimini ve hizalamayı anında değiştirebilirsiniz.
 
 ---
 

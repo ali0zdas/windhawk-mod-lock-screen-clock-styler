@@ -4,7 +4,7 @@
 
 **Elevate your Windows 11 lock screen clock with modern bespoke aesthetics, frosted acrylic cards, live power telemetry, and clean clutter-free layout controls.**
 
-[![Windhawk Mod](https://img.shields.io/badge/Windhawk-Mod-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/)
+[![Windhawk Mod](https://img.shields.io/badge/Get_it_on-Windhawk-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
 [![Version](https://img.shields.io/badge/Version-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
@@ -108,15 +108,22 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 
 ## 🚀 Installation & Usage
 
+### Method 1: Official Windhawk Repository (Recommended)
+
 1. Download and install **[Windhawk](https://windhawk.net/)** (if not already installed).
-2. Open the Windhawk manager, navigate to the **Advanced** tab, and click **Create Mod**.
-3. Copy the entire source code from [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) and paste it into the Windhawk editor.
-4. Click **Compile** (`Ctrl + B`).
-5. Once compiled, save and enable the mod.
-6. Press <kbd>Win</kbd> + <kbd>L</kbd> to lock your screen and enjoy your new lock screen clock!
+2. Open the official mod page: **[Lock Screen Clock Styler on Windhawk](https://windhawk.net/mods/lock-screen-clock-styler)** (or search for **Lock Screen Clock Styler** inside the Windhawk **Explore** tab).
+3. Click **Details** &rarr; **Install**.
+4. Press <kbd>Win</kbd> + <kbd>L</kbd> to lock your screen and enjoy your new lock screen clock!
+
+### Method 2: Manual Installation (for Developers)
+
+1. Open the Windhawk manager, navigate to the **Advanced** tab, and click **Create Mod**.
+2. Copy the entire source code from [`lock-screen-clock-styler.wh.cpp`](./lock-screen-clock-styler.wh.cpp) and paste it into the Windhawk editor.
+3. Click **Compile** (`Ctrl + B`).
+4. Once compiled, save and enable the mod.
 
 > [!TIP]
-> You can tweak themes, font sizes, and alignments on the fly in the **Settings** tab inside Windhawk without needing to recompile.
+> You can tweak themes, font sizes, live seconds, and alignments on the fly in the **Settings** tab inside Windhawk without needing to recompile.
 
 ---
 
