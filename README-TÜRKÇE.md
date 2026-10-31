@@ -10,8 +10,8 @@
 [![Sürüm](https://img.shields.io/badge/S%C3%BCr%C3%BCm-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![Lisans: MIT](https://img.shields.io/badge/Lisans-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-[![Active Users on Windhawk](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users&color=6366f1&style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
-[![Community Rating](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.rating&label=Rating&suffix=%2F10&color=eab308&style=for-the-badge&logo=star&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
+[![Active Users on Windhawk](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users%20on%20Windhawk&color=6366f1&labelColor=0f172a&logo=windows11&logoColor=38bdf8&style=for-the-badge)](https://windhawk.net/mods/lock-screen-clock-styler)
+[![Community Rating](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.rating&label=%E2%98%85%20Rating&suffix=%2F10&color=eab308&labelColor=0f172a&style=for-the-badge)](https://windhawk.net/mods/lock-screen-clock-styler)
 
 <br/>
 
