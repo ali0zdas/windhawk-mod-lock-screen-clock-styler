@@ -28,7 +28,7 @@
 // @description:pl-PL Dostosuj zegar ekranu blokady systemu Windows 11 za pomocą nowoczesnych stylów, wyświetlania daty i kontroli widżetów.
 // @description:ru-RU Настройте часы экрана блокировки Windows 11 с современными стилями, отображением даты и управлением виджетами.
 // @description:uk-UA Налаштуйте годинник екрана блокування Windows 11 за допомогою сучасних стилів, відображення дати та керування віджетами.
-// @version         0.5.0
+// @version         0.6.0
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
 // @license         MIT
@@ -3326,8 +3326,8 @@ void Wh_ModSettingsChanged() {
         Wh_Log(L"Deferring settings change to the UI thread.");
         g_settingsDirty = true;
     } else {
-        // No visual tree yet, so nothing else can be reading these settings.
-        LoadSettings();
+        // Not attached yet: the first UI tick reloads settings on the UI
+        // thread (RebuildOnUiThread), so don't touch g_settings from here.
         g_settingsDirty = true;
     }
 }
