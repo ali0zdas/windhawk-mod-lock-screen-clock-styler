@@ -34,15 +34,15 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 
 ## 🎨 Themes & Clock Styles
 
-| Style | Key | Aesthetic Description | Default Placement |
-| :--- | :---: | :--- | :---: |
-| 👾 **Retro Pixel / LED Matrix** | `pixel` | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. | Center |
-| ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. | Center |
-| 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. | Center |
-| 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. | Bottom-Left |
-| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). | Center |
-| 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. | Center |
-| 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. | Stock |
+| Style | Key | Aesthetic Description |
+| :--- | :---: | :--- |
+| 👾 **Retro Pixel / LED Matrix** | `pixel` | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. |
+| ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. |
+| 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. |
+| 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. |
+| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). |
+| 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. |
+| 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. |
 
 ---
 

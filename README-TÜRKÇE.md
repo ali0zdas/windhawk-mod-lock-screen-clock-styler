@@ -34,15 +34,15 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
 
 ## 🎨 Temalar ve Saat Tasarımları
 
-| Saat Stili | Kod | Tasarım ve Estetik Özellikleri | Varsayılan Hizalama |
-| :--- | :---: | :--- | :---: |
-| 👾 **Retro Piksel / LED Matris** | `pixel` | Otantik 7x11 çift piksel nokta matrisi, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli. | Merkez |
-| ⏳ **Modern Flip Saat** | `flip` | Akrilik buzlu cam kartlar, Fliqlo esintili yatay makas kesiği yaprak yarığı, dolgun oranlar ve 22px kavisli köşeler. | Merkez |
-| 📜 **Klasik Flip Saat** | `vintage` | Solari mekanik tren garı tarzı koyu mat kömür flap kartları, fildişi/krem rakamlar, menteşe klipsleri ve yaprak yarığı. | Merkez |
-| 🪐 **Minimalist Sonoma** | `macos` | Saatin üzerinde yerel gün/ay başlığı, ultra zarif hafif tipografi, çift katmanlı atmosferik gölge ve estetik sol yerleşim. | Sol-Alt |
-| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, telemetri teşhis çubuğu ve nabız atan lazer ayraçlar (`//`). | Merkez |
-| 🌌 **Minimalist Aura** | `aura` | Kart çerçevesi olmadan, ortam ışığı gölgesi derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen tipografi. | Merkez |
-| 🪟 **Yalnızca Varsayılan Saat** | `defaultOnly` | Standart Windows 11 saatini korur. Widget gizleme, kendi anahtarından ayrıca açılabilir. | Standart |
+| Saat Stili | Kod | Tasarım ve Estetik Özellikleri |
+| :--- | :---: | :--- |
+| 👾 **Retro Piksel / LED Matris** | `pixel` | Otantik 7x11 çift piksel nokta matrisi, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli. |
+| ⏳ **Modern Flip Saat** | `flip` | Akrilik buzlu cam kartlar, Fliqlo esintili yatay makas kesiği yaprak yarığı, dolgun oranlar ve 22px kavisli köşeler. |
+| 📜 **Klasik Flip Saat** | `vintage` | Solari mekanik tren garı tarzı koyu mat kömür flap kartları, fildişi/krem rakamlar, menteşe klipsleri ve yaprak yarığı. |
+| 🪐 **Minimalist Sonoma** | `macos` | Saatin üzerinde yerel gün/ay başlığı, ultra zarif hafif tipografi, çift katmanlı atmosferik gölge ve estetik sol yerleşim. |
+| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, telemetri teşhis çubuğu ve nabız atan lazer ayraçlar (`//`). |
+| 🌌 **Minimalist Aura** | `aura` | Kart çerçevesi olmadan, ortam ışığı gölgesi derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen tipografi. |
+| 🪟 **Yalnızca Varsayılan Saat** | `defaultOnly` | Standart Windows 11 saatini korur. Widget gizleme, kendi anahtarından ayrıca açılabilir. |
 
 ---
 
