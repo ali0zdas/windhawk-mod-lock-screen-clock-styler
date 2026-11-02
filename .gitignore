@@ -4,7 +4,6 @@
 # Track only essential repository files
 !/lock-screen-clock-styler.wh.cpp
 !/README.md
-!/README-TÜRKÇE.md
 !/.gitignore
 !/LICENSE
 
