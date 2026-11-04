@@ -31,10 +31,12 @@
 // @version         0.6.0
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
+// @twitter         https://twitter.com/ali0zdas
+// @homepage        https://aliozdas.is-a.dev
 // @license         MIT
 // @include         LockApp.exe
 // @architecture    x86-64
-// @compilerOptions -lole32 -loleaut32 -lruntimeobject
+// @compilerOptions -lole32 -loleaut32 -lruntimeobject -ldwmapi -lpowrprof
 // ==/WindhawkMod==
 
 // ==WindhawkModReadme==
@@ -676,6 +678,8 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
 
 #include <windows.h>
 #undef GetCurrentTime
+#include <dwmapi.h>
+#include <powrprof.h>
 #include <windhawk_api.h>
 #include <windhawk_utils.h>
 #include <winrt/Windows.Foundation.h>
@@ -2725,6 +2729,89 @@ std::atomic<bool> g_settingsDirty{ false };
 HANDLE g_stopEvent = nullptr;
 HANDLE g_workerThread = nullptr;
 
+// ---------------------------------------------------------------------------
+// Power management and display state tracking
+// ---------------------------------------------------------------------------
+
+#ifndef DEVICE_NOTIFY_CALLBACK
+#define DEVICE_NOTIFY_CALLBACK 2
+#endif
+
+#ifndef PBT_APMSUSPEND
+#define PBT_APMSUSPEND 0x0004
+#endif
+
+#ifndef PBT_APMRESUMEAUTOMATIC
+#define PBT_APMRESUMEAUTOMATIC 0x0012
+#endif
+
+#ifndef PBT_APMRESUMESUSPEND
+#define PBT_APMRESUMESUSPEND 0x0007
+#endif
+
+#ifndef PBT_POWERSETTINGCHANGE
+#define PBT_POWERSETTINGCHANGE 0x8013
+#endif
+
+typedef ULONG(CALLBACK* DEVICE_NOTIFY_CALLBACK_ROUTINE)(PVOID Context,
+                                                        ULONG Type,
+                                                        PVOID Setting);
+
+typedef struct _DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS {
+    DEVICE_NOTIFY_CALLBACK_ROUTINE Callback;
+    PVOID Context;
+} DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS, *PDEVICE_NOTIFY_SUBSCRIBE_PARAMETERS;
+
+// 6fe69556-704a-47a0-8f24-c21edfb930cb
+static constexpr GUID GUID_CONSOLE_DISPLAY_STATE_LOCAL = {
+    0x6fe69556,
+    0x704a,
+    0x47a0,
+    {0x8f, 0x24, 0xc2, 0x1e, 0xdf, 0xb9, 0x30, 0xcb}};
+
+std::atomic<bool> g_isDisplayOn{true};
+std::atomic<bool> g_isSystemAwake{true};
+std::atomic<ULONGLONG> g_resumeTimeMs{0};
+HPOWERNOTIFY g_hDisplayNotify = nullptr;
+HPOWERNOTIFY g_hSuspendResumeNotify = nullptr;
+
+ULONG CALLBACK SuspendResumeCallback(PVOID /*context*/,
+                                     ULONG type,
+                                     PVOID /*setting*/) {
+    if (type == PBT_APMSUSPEND) {
+        Wh_Log(L"Power notification: System suspending (PBT_APMSUSPEND).");
+        g_isSystemAwake.store(false);
+    } else if (type == PBT_APMRESUMEAUTOMATIC || type == PBT_APMRESUMESUSPEND) {
+        Wh_Log(L"Power notification: System resumed (type=0x%x).", type);
+        g_isSystemAwake.store(true);
+        g_resumeTimeMs.store(GetTickCount64());
+        g_settingsDirty.store(true);
+    }
+    return 0;
+}
+
+ULONG CALLBACK DisplaySettingCallback(PVOID /*context*/,
+                                      ULONG type,
+                                      PVOID setting) {
+    if (type == PBT_POWERSETTINGCHANGE && setting) {
+        auto* pbs = reinterpret_cast<const POWERBROADCAST_SETTING*>(setting);
+        if (pbs->DataLength >= sizeof(DWORD)) {
+            DWORD state = *reinterpret_cast<const DWORD*>(pbs->Data);
+            if (state == 0) {
+                Wh_Log(L"Display notification: Console display is OFF.");
+                g_isDisplayOn.store(false);
+            } else {
+                Wh_Log(L"Display notification: Console display is ON (state=%u).",
+                       state);
+                g_isDisplayOn.store(true);
+                g_resumeTimeMs.store(GetTickCount64());
+                g_settingsDirty.store(true);
+            }
+        }
+    }
+    return 0;
+}
+
 UINT g_runOnUiThreadMessage = 0;
 
 using RunOnUiThreadProc = void(WINAPI*)(PVOID);
@@ -3026,7 +3113,26 @@ void ScanNode(wux::DependencyObject const& node, ScanResult& result, int depth) 
 // Finds the lock screen root and the stock clock/widget elements, then injects
 // or refreshes the selected clock. Must run on the lock screen UI thread.
 void AttachToTree() {
-    auto content = wux::Window::Current().Content();
+    if (!g_isSystemAwake.load() || !g_isDisplayOn.load()) {
+        return;
+    }
+
+    wux::Window currentWindow{nullptr};
+    try {
+        currentWindow = wux::Window::Current();
+        if (!currentWindow || !currentWindow.Visible()) {
+            return;
+        }
+    } catch (...) {
+        return;
+    }
+
+    wux::UIElement content{nullptr};
+    try {
+        content = currentWindow.Content();
+    } catch (...) {
+        return;
+    }
     if (!content) {
         return;
     }
@@ -3104,6 +3210,24 @@ ULONGLONG g_lastUiTick = 0;
 ULONGLONG g_lastFullScan = 0;
 
 void OnUiThreadTick() {
+    if (!g_isSystemAwake.load() || !g_isDisplayOn.load()) {
+        return;
+    }
+
+    HWND coreWnd = g_coreWindow.load();
+    if (!coreWnd || !IsWindow(coreWnd) || !IsWindowVisible(coreWnd)) {
+        return;
+    }
+
+    try {
+        auto currentWindow = wux::Window::Current();
+        if (!currentWindow || !currentWindow.Visible()) {
+            return;
+        }
+    } catch (...) {
+        return;
+    }
+
     ULONGLONG now = GetTickCount64();
     int intervalMs = g_settings.showSeconds ? 500 : 1000;
     if ((now - g_lastUiTick) < static_cast<ULONGLONG>(intervalMs)) {
@@ -3196,8 +3320,12 @@ DWORD WINAPI WorkerThreadProc(LPVOID) {
             break;
         }
 
+        if (!g_isSystemAwake.load() || !g_isDisplayOn.load()) {
+            continue;
+        }
+
         HWND window = FindCoreWindow();
-        if (!window) {
+        if (!window || !IsWindowVisible(window)) {
             continue;
         }
 
@@ -3216,6 +3344,15 @@ DWORD WINAPI WorkerThreadProc(LPVOID) {
     // Wake the UI thread periodically. The hook itself throttles updates to
     // 500 ms when seconds are shown and to 1000 ms otherwise.
     while (WaitForSingleObject(g_stopEvent, 500) == WAIT_TIMEOUT) {
+        if (!g_isSystemAwake.load() || !g_isDisplayOn.load()) {
+            continue;
+        }
+
+        ULONGLONG resumeTime = g_resumeTimeMs.load();
+        if (resumeTime != 0 && (GetTickCount64() - resumeTime) < 1000) {
+            continue;
+        }
+
         HWND window = g_coreWindow.load();
         if (!window) {
             continue;
@@ -3223,6 +3360,9 @@ DWORD WINAPI WorkerThreadProc(LPVOID) {
         if (!IsWindow(window)) {
             Wh_Log(L"The lock screen window disappeared; stopping the worker.");
             break;
+        }
+        if (!IsWindowVisible(window)) {
+            continue;
         }
         PostMessageW(window, WM_NULL, 0, 0);
     }
@@ -3255,10 +3395,43 @@ BOOL Wh_ModInit() {
     g_coreWindow = nullptr;
     g_getMessageHook = nullptr;
     g_settingsDirty = false;
+    g_isDisplayOn = true;
+    g_isSystemAwake = true;
+    g_resumeTimeMs = 0;
+
+    // Register for console display state (on/off) notifications
+    DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS displayParams = {DisplaySettingCallback, nullptr};
+    DWORD dispRes = PowerSettingRegisterNotification(
+        &GUID_CONSOLE_DISPLAY_STATE_LOCAL,
+        DEVICE_NOTIFY_CALLBACK,
+        reinterpret_cast<HANDLE>(&displayParams),
+        &g_hDisplayNotify);
+    if (dispRes != ERROR_SUCCESS) {
+        Wh_Log(L"PowerSettingRegisterNotification failed: %u", dispRes);
+        g_hDisplayNotify = nullptr;
+    }
+
+    // Register for system suspend / resume notifications
+    DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS suspendParams = {SuspendResumeCallback, nullptr};
+    g_hSuspendResumeNotify = RegisterSuspendResumeNotification(
+        reinterpret_cast<HANDLE>(&suspendParams),
+        DEVICE_NOTIFY_CALLBACK);
+    if (!g_hSuspendResumeNotify) {
+        Wh_Log(L"RegisterSuspendResumeNotification failed: %u", GetLastError());
+        g_hSuspendResumeNotify = nullptr;
+    }
 
     g_workerThread = CreateThread(nullptr, 0, WorkerThreadProc, nullptr, 0, nullptr);
     if (!g_workerThread) {
         Wh_Log(L"CreateThread failed: %u", GetLastError());
+        if (g_hDisplayNotify) {
+            PowerSettingUnregisterNotification(g_hDisplayNotify);
+            g_hDisplayNotify = nullptr;
+        }
+        if (g_hSuspendResumeNotify) {
+            UnregisterSuspendResumeNotification(g_hSuspendResumeNotify);
+            g_hSuspendResumeNotify = nullptr;
+        }
         CloseHandle(g_stopEvent);
         g_stopEvent = nullptr;
         return FALSE;
@@ -3269,6 +3442,15 @@ BOOL Wh_ModInit() {
 
 void Wh_ModUninit() {
     Wh_Log(L"Lock Screen Clock Styler uninitializing (Wh_ModUninit)...");
+
+    if (g_hDisplayNotify) {
+        PowerSettingUnregisterNotification(g_hDisplayNotify);
+        g_hDisplayNotify = nullptr;
+    }
+    if (g_hSuspendResumeNotify) {
+        UnregisterSuspendResumeNotification(g_hSuspendResumeNotify);
+        g_hSuspendResumeNotify = nullptr;
+    }
 
     if (g_stopEvent) {
         SetEvent(g_stopEvent);
