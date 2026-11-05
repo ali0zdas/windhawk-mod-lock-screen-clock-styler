@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Get_it_on-Windhawk-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Version](https://img.shields.io/badge/Version-0.6.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <a href="https://windhawk.net/mods/lock-screen-clock-styler"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users%20on%20Windhawk&color=6366f1&labelColor=0f172a&logo=windows11&logoColor=38bdf8&style=for-the-badge" height="34" alt="Active Users on Windhawk" /></a>
@@ -25,7 +25,7 @@
 
 **Lock Screen Clock Styler** is a high-performance native [Windhawk](https://windhawk.net/) customization mod for the Windows 11 lock screen application (`LockApp.exe`).
 
-It replaces the default Windows lock screen clock and MSN news/widget clutter with six distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices and tactical Cyberpunk HUD terminals. Built with **C++/WinRT**, it discovers the lock screen visual tree from the lock screen's own UI thread and injects custom XAML directly into the compositor with no XAML DispatcherTimer and full thread safety.
+It replaces the default Windows lock screen clock and MSN news/widget clutter with 9 distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices, 2-row vertical stack layouts, and tactical Cyberpunk HUD terminals. Built with **C++/WinRT**, it discovers the lock screen visual tree from the lock screen's own UI thread and injects custom XAML directly into the compositor with no XAML DispatcherTimer and full thread safety.
 
 > [!NOTE]
 > **Safety First:** This mod exclusively modifies the user-space lock app (`LockApp.exe`). It does **not** inject into or hook `LogonUI.exe` or `winlogon.exe` (Secure Desktop), ensuring system stability and zero security risks.
@@ -39,6 +39,9 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 | 👾 **Retro Pixel / LED Matrix** | `pixel` | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. | Center |
 | ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. | Center |
 | 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. | Center |
+| 📱 **Vertical Pixel / Nothing OS (Bahnschrift)** | `verticalBahnschrift` | Nothing OS and DIN-standard geometric typography in a 2-row vertical stack, featuring SemiBold Bahnschrift numerals with subtle minute contrast and compact line spacing. | Center |
+| ✨ **Vertical Modern / Dual Weight (Segoe UI)** | `verticalSegoe` | Striking dual-weight vertical presentation pairing bold hour digits with extra-light Segoe UI Variable Display minutes for high typographic hierarchy and ultra-clean modern framing. | Center |
+| 📰 **Vertical Poster / Heavy Impact (Impact)** | `verticalImpact` | Bold condensed Swiss poster aesthetic utilizing ultra-heavy Impact typography, tight vertical spacing, and high-impact visual presence reminiscent of brutalist editorial layouts. | Center |
 | 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. | Bottom-Left |
 | ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). | Center |
 | 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. | Center |
@@ -53,8 +56,12 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20pixel.png" width="49%" alt="Vertical Pixel / Nothing OS (Bahnschrift)" />
   <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20modern.png" width="49%" alt="Vertical Modern / Dual Weight (Segoe UI)" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20poster.png" width="49%" alt="Vertical Poster / Heavy Impact (Impact)" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
 
@@ -71,7 +78,7 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
   - Full support for standard 24-hour time or 12-hour AM/PM format.
   - Bespoke, theme-tailored AM/PM status badges (vintage flip stamp, tactical HUD status pill, minimal text).
 - ⏱️ **Real-Time Seconds Toggle:**
-  - Opt-in live seconds display, supported by every style except the two mechanical flip clocks.
+  - Opt-in live seconds display, supported by every style except the mechanical flip clocks and 2-row vertical stack styles.
   - The settings toggle is the single source of truth, so switching styles never leaves a stale per-theme preference behind.
 - 🛡️ **Single-Instance Guard & Reconnect Engine:**
   - Periodically rescans the lock screen visual tree and re-injects the clock safely when Windows rebuilds it.
@@ -89,16 +96,24 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 
 ---
 
+## 🆕 What's New in v0.6.0
+
+- 📱 **3 Brand-New Vertical Stack Clock Styles:** Added **Vertical Pixel / Nothing OS (Bahnschrift)**, **Vertical Modern / Dual Weight (Segoe UI Variable)**, and **Vertical Poster / Heavy Impact (Impact)** featuring custom line overlapping, high-contrast weight pairing, and localized natural long-date capsules.
+- 💤 **Laptop Sleep/Wake Black Screen Fix (#6978):** Fixed lock screen background turning black after laptop sleep/wake (Modern Standby & S3/S4) via native console display and power state callbacks (`RegisterSuspendResumeNotification` & `PowerSettingRegisterNotification`) with zero UI thread contention during quiesce.
+- ⚡ **Startup Settings Synchronization:** Closed startup race conditions to guarantee clock style, alignment, and formatting preferences apply reliably upon initial shell launch.
+
+---
+
 ## ⚙️ Configuration Reference
 
 All settings can be customized instantly from the **Settings** tab in the Windhawk user interface:
 
 | Option | Setting Key | Allowed Values / Range | Default | Purpose |
 | :--- | :--- | :--- | :---: | :--- |
-| **Clock Style** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Selects visual clock theme. |
+| **Clock Style** | `clockStyle` | `pixel`, `flip`, `vintage`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Selects visual clock theme. |
 | **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
 | **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
-| **Show Seconds** | `showSeconds` | `true`, `false` | `true` | Live seconds (all styles except `flip` and `vintage`). |
+| **Show Seconds** | `showSeconds` | `true`, `false` | `true` | Live seconds (all styles except `flip`, `vintage`, and vertical stack themes). |
 | **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
 | **Show Date Capsule** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display capsule. |
 | **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency of the Modern Flip cards. |

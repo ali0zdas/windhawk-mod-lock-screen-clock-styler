@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Get_it_on-Windhawk-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.5.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Version](https://img.shields.io/badge/Version-0.6.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 <a href="https://windhawk.net/mods/lock-screen-clock-styler"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users%20on%20Windhawk&color=6366f1&labelColor=0f172a&logo=windows11&logoColor=38bdf8&style=for-the-badge" height="34" alt="Active Users on Windhawk" /></a>
@@ -25,7 +25,7 @@
 
 **Lock Screen Clock Styler**, Windows 11 kilit ekranı uygulamasını (`LockApp.exe`) zenginleştirmek ve özelleştirmek için geliştirilmiş yerel ve yüksek performanslı bir [Windhawk](https://windhawk.net/) modudur.
 
-Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartlarını gizleyerek yerine 6 farklı özel tasarım saat estetiği getirir: Apple macOS Sonoma tipografisi, çift yapraklı Fliqlo tarzı buzlu cam flip saat, Solari mekanik tren garı saati, otantik 7x11 retro LED nokta matrisi ve taktiksel Cyberpunk HUD terminali. **C++/WinRT** ile geliştirilmiştir; kilit ekranı görsel ağacını doğrudan LockApp'in kendi UI thread'inden keşfeder, özel XAML öğelerini arayüz katmanına enjekte eder ve XAML `DispatcherTimer` kullanmadan tam thread güvenliği sağlar.
+Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartlarını gizleyerek yerine 9 farklı özel tasarım saat estetiği getirir: Apple macOS Sonoma tipografisi, çift yapraklı Fliqlo tarzı buzlu cam flip saat, Solari mekanik tren garı saati, otantik 7x11 retro LED nokta matrisi, 2 satırlı dikey yığın (vertical stack) stilleri ve taktiksel Cyberpunk HUD terminali. **C++/WinRT** ile geliştirilmiştir; kilit ekranı görsel ağacını doğrudan LockApp'in kendi UI thread'inden keşfeder, özel XAML öğelerini arayüz katmanına enjekte eder ve XAML `DispatcherTimer` kullanmadan tam thread güvenliği sağlar.
 
 > [!NOTE]
 > **Güvenlik Önceliği:** Bu mod yalnızca kullanıcı oturumundaki kilit ekranı arayüz sürecine (`LockApp.exe`) müdahale eder. Güvenli Masaüstü (Secure Desktop) ortamındaki `LogonUI.exe` veya `winlogon.exe` bileşenlerine **asla** dokunmaz; sistem kilitlenme veya güvenlik riski oluşturmaz.
@@ -39,6 +39,9 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
 | 👾 **Retro Piksel / LED Matris** | `pixel` | Otantik 7x11 çift piksel nokta matrisi, sönük arka plan LED ışıması ve buzlu akrilik kontrast paneli. | Merkez |
 | ⏳ **Modern Flip Saat** | `flip` | Akrilik buzlu cam kartlar, Fliqlo esintili yatay makas kesiği yaprak yarığı, dolgun oranlar ve 22px kavisli köşeler. | Merkez |
 | 📜 **Klasik Flip Saat** | `vintage` | Solari mekanik tren garı tarzı koyu mat kömür flap kartları, fildişi/krem rakamlar, menteşe klipsleri ve yaprak yarığı. | Merkez |
+| 📱 **Vertical Pixel / Nothing OS (Bahnschrift)** | `verticalBahnschrift` | Nothing OS ve DIN normu geometrik tipografiden ilham alan 2 satırlı dikey yığın; yarı kalın Bahnschrift rakamları, ince dakika kontrastı ve kompakt dikey satır aralığı. | Merkez |
+| ✨ **Vertical Modern / Dual Weight (Segoe UI)** | `verticalSegoe` | Kalın saat rakamları ile ultra ince (ExtraLight) Segoe UI Variable Display dakika rakamlarını buluşturan, yüksek kontrastlı ve modern hiyerarşik 2 satırlı dikey tipografi. | Merkez |
+| 📰 **Vertical Poster / Heavy Impact (Impact)** | `verticalImpact` | İsviçre afiş ve modern brutalist yayıncılık estetiğini yansıtan, yoğun gölgeli, ultra kalın ve sıkı satır aralıklı Impact tipografisine sahip etkileyici dikey tasarım. | Merkez |
 | 🪐 **Minimalist Sonoma** | `macos` | Saatin üzerinde yerel gün/ay başlığı, ultra zarif hafif tipografi, çift katmanlı atmosferik gölge ve estetik sol yerleşim. | Sol-Alt |
 | ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Koyu obsidyen gövde, asit sarısı ve neon pembe taktiksel köşe braketleri, telemetri teşhis çubuğu ve nabız atan lazer ayraçlar (`//`). | Merkez |
 | 🌌 **Minimalist Aura** | `aura` | Kart çerçevesi olmadan, ortam ışığı gölgesi derinliği ve buzlu cam tarih kapsülüyle doğrudan duvar kağıdı üzerinde süzülen tipografi. | Merkez |
@@ -53,8 +56,12 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Saat" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Klasik Flip Saat" />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20pixel.png" width="49%" alt="Vertical Pixel / Nothing OS (Bahnschrift)" />
   <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20modern.png" width="49%" alt="Vertical Modern / Dual Weight (Segoe UI)" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20poster.png" width="49%" alt="Vertical Poster / Heavy Impact (Impact)" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
 
@@ -71,7 +78,7 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
   - Standart 24 saat formatı veya 12 saat AM/PM formatı arasında anında geçiş.
   - Her temaya özel tasarlanmış AM/PM göstergeleri (klasik damga, taktiksel HUD kapsülü veya minimalist metin).
 - ⏱️ **Canlı Saniye Göstergesi:**
-  - İsteğe bağlı canlı saniye gösterimi; iki mekanik flip saat dışındaki tüm stillerde desteklenir.
+  - İsteğe bağlı canlı saniye gösterimi; iki mekanik flip saat ve 2 satırlı dikey yığın stilleri dışındaki tüm temalarda desteklenir.
   - Ayardaki anahtar tek doğruluk kaynağıdır; stil değiştirildiğinde eski temaya ait saniye tercihi takılı kalmaz.
 - 🛡️ **Tek Saat Koruması ve Otomatik Yeniden Bağlanma:**
   - Kilit ekranı görsel ağacını düzenli aralıklarla yeniden tarar ve Windows ağacı yeniden kurduğunda saati güvenle yeniden enjekte eder.
@@ -89,16 +96,24 @@ Standart Windows kilit ekranı saatini ve kalabalık MSN haber/widget kartların
 
 ---
 
+## 🆕 v0.6.0 Yenilikleri
+
+- 📱 **3 Yeni Dikey Yığın (Vertical Stack) Saat Stili:** Özel satır aralığı, yüksek kontrastlı font ağırlıkları ve yerel uzun tarih biçimlendirmesi içeren **Vertical Pixel / Nothing OS (Bahnschrift)**, **Vertical Modern / Dual Weight (Segoe UI)** ve **Vertical Poster / Heavy Impact (Impact)** stilleri eklendi.
+- 💤 **Dizüstü Uyku/Uyanma Sonrası Siyah Ekran Düzeltmesi (#6978):** Modern Standby ve S3/S4 uyku modundan çıkışta kilit ekranının siyaha dönme sorunu (`#6978`); yerel konsol ekranı ve güç durumu geri çağırma mekanizmaları (`RegisterSuspendResumeNotification` & `PowerSettingRegisterNotification`) ile güç duraklatma (quiesce) anında UI thread çekişmesini sıfırlayarak giderildi.
+- ⚡ **Açılış Ayar Senkronizasyonu İyileştirmeleri:** İlk kabuk (shell) başlangıcında ayarların güvenle ve tutarlı yüklenmesini sağlayan senkronizasyon kararlılık optimizasyonları yapıldı.
+
+---
+
 ## ⚙️ Mod Ayarları Kılavuzu
 
 Tüm ayarlar Windhawk arayüzündeki **Ayarlar (Settings)** sekmesinden kolayca düzenlenebilir:
 
 | Ayar Başlığı | Ayar Anahtarı | Geçerli Değerler / Aralık | Varsayılan | İşlev |
 | :--- | :--- | :--- | :---: | :--- |
-| **Saat Tasarım Stili** | `clockStyle` | `pixel`, `flip`, `vintage`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Görüntülenecek saat temasını belirler. |
+| **Saat Tasarım Stili** | `clockStyle` | `pixel`, `flip`, `vintage`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Görüntülenecek saat temasını belirler. |
 | **Saat Formatı** | `timeFormat` | `24h`, `12h` | `24h` | 24 Saat veya 12 Saat AM/PM gösterimi. |
 | **Saat Yatay Hizalaması** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Saatin ekran hizalaması (`auto` tema varsayılanını uygular). |
-| **Saniyeyi Göster** | `showSeconds` | `true`, `false` | `true` | Canlı saniye (yalnızca `flip` ve `vintage` dışındaki stiller). |
+| **Saniyeyi Göster** | `showSeconds` | `true`, `false` | `true` | Canlı saniye (`flip`, `vintage` ve dikey yığın temaları dışındaki stiller). |
 | **Pil Durumu** | `showBatteryStatus`| `true`, `false` | `false` | Dizüstü pil yüzdesi ve şarj durumu kapsülü. |
 | **Tarih Kapsülü** | `showDateCapsule` | `true`, `false` | `true` | Saatin altında veya üstünde yerel tarih göstergesi. |
 | **Cam Opaklığı** | `glassOpacity` | `0` - `255` | `45` | Modern Flip kartlarının yarı saydamlığı. |
