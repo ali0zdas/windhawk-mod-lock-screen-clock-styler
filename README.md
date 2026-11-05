@@ -32,16 +32,16 @@ It replaces the default Windows lock screen clock and MSN news/widget clutter wi
 
 | Style | Key | Aesthetic Description |
 | :--- | :---: | :--- |
-| 👾 **Retro Pixel / LED Matrix** | pixel | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. |
-| ⏳ **Modern Flip Clock** | lip | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. |
-| 📜 **Classic Flip Clock** | intage | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. |
-| 📱 **Vertical Pixel / Nothing OS (Bahnschrift)** | erticalBahnschrift | Nothing OS and DIN-standard geometric typography in a 2-row vertical stack, featuring SemiBold Bahnschrift numerals with subtle minute contrast and compact line spacing. |
-| ✨ **Vertical Modern / Dual Weight (Segoe UI)** | erticalSegoe | Striking dual-weight vertical presentation pairing bold hour digits with extra-light Segoe UI Variable Display minutes for high typographic hierarchy and ultra-clean modern framing. |
-| 📰 **Vertical Poster / Heavy Impact (Impact)** | erticalImpact | Bold condensed Swiss poster aesthetic utilizing ultra-heavy Impact typography, tight vertical spacing, and high-impact visual presence reminiscent of brutalist editorial layouts. |
-| 🪐 **Minimalist Sonoma** | macos | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. |
-| ⚡ **Cyberpunk Sci-Fi HUD** | cyberpunk | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (//). |
-| 🌌 **Minimalist Aura** | ura | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. |
-| 🪟 **Default Clock Only** | defaultOnly | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. |
+| 👾 **Retro Pixel / LED Matrix** | `pixel` | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. |
+| ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. |
+| 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. |
+| 📱 **Vertical Pixel / Nothing OS (Bahnschrift)** | `verticalBahnschrift` | Nothing OS and DIN-standard geometric typography in a 2-row vertical stack, featuring SemiBold Bahnschrift numerals with subtle minute contrast and compact line spacing. |
+| ✨ **Vertical Modern / Dual Weight (Segoe UI)** | `verticalSegoe` | Striking dual-weight vertical presentation pairing bold hour digits with extra-light Segoe UI Variable Display minutes for high typographic hierarchy and ultra-clean modern framing. |
+| 📰 **Vertical Poster / Heavy Impact (Impact)** | `verticalImpact` | Bold condensed Swiss poster aesthetic utilizing ultra-heavy Impact typography, tight vertical spacing, and high-impact visual presence reminiscent of brutalist editorial layouts. |
+| 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. |
+| ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). |
+| 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. |
+| 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. |
 
 ---
 

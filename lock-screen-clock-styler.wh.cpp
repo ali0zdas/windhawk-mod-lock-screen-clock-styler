@@ -46,13 +46,11 @@
 Customize and enhance the Windows 11 lock screen clock with modern designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
 ## Features:
-- **Multiple Distinct Clock Styles:** Choose from a curated collection of clock designs including Retro Pixel / LED Dot Matrix, Modern Flip Clock, Classic Solari Flip Clock, Minimalist Sonoma, Cyberpunk Sci-Fi HUD, Minimalist Aura, and Vertical Stack Clocks (Pixel / Nothing OS, Modern Dual Weight, and Heavy Poster).
+- **✨ NEW in v0.6.0 — 3 VERTICAL CLOCK STYLES:** Pixel, Dual Weight & Impact.
+- **Multiple Distinct Clock Styles:** Choose from a curated collection of clock designs including Retro Pixel / LED Dot Matrix, Modern Flip Clock, Classic Solari Flip Clock, Minimalist Sonoma, Cyberpunk Sci-Fi HUD, Minimalist Aura, and Vertical Stack Clocks.
 - **Lightweight & Thread-Safe:** Ultra-lightweight native XAML injection via the LockApp UI thread with ultra-low background CPU overhead. Direct visual tree navigation without XAML Diagnostics TAP, ensuring seamless compatibility with mods like Windows 11 Start Menu Styler.
-- **🎨 More Themes Coming Soon:** Have an idea for an aesthetic clock design or want your favorite style added? Reach out or open an issue on GitHub to suggest new themes!
 - **12-Hour / 24-Hour Format:** Switch between 24-hour time and 12-hour time with dedicated AM/PM indicators across themes.
 - **Show Seconds Toggle:** Optional live seconds display (supported across all non-flip and non-vertical styles).
-- **Dynamic Date Display:** Elegant date and day capsule positioned beneath or above the clock, adapting to the user's system locale.
-- **Hide Default Widgets:** Clean up the lock screen by hiding MSN weather, sports, and news widgets.
 - **Extensive Customization:** Card opacity, font size, vertical offsets, and screen alignments are fully customizable via settings.
 
 ## Screenshots:
