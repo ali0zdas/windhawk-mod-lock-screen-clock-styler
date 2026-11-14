@@ -2185,7 +2185,7 @@ wux::UIElement BuildPixelClockElement() {
     matrixLayout.VerticalAlignment(wux::VerticalAlignment::Center);
 
     // Scale dot size appropriately for 7x11 double-pixel thickness
-    double dotSize = (double)g_settings.clockFontSize * 0.116;
+    double dotSize = (double)g_settings.clockFontSize * 0.095;
     double spacing = dotSize * 0.35;
     double digitGap = dotSize * 1.3;
     double colonGap = dotSize * 1.0;
