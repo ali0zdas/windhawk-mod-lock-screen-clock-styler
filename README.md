@@ -17,11 +17,11 @@
 
 </div>
 
-## 🌟 Overview
+##  Overview
 
 **Lock Screen Clock Styler** is a high-performance native [Windhawk](https://windhawk.net/) customization mod for the Windows 11 lock screen application (`LockApp.exe`).
 
-It replaces the default Windows lock screen clock and MSN news/widget clutter with 9 distinct clock aesthetics — ranging from Apple macOS Sonoma typography and physical split-flap mechanical flip cards to authentic 7x11 retro LED dot matrices, 2-row vertical stack layouts, and tactical Cyberpunk HUD terminals. Built with **C++/WinRT**, it discovers the lock screen visual tree from the lock screen's own UI thread and injects custom XAML directly into the compositor with no XAML DispatcherTimer and full thread safety.
+It replaces the default Windows lock screen clock with 9 distinct clock aesthetics — ranging from macOS Sonoma typography and physical split-flap mechanical flip cards to authentic retro LED dot matrices, vertical stack layouts, and tactical Cyberpunk HUD terminals. Built with **C++/WinRT**, it discovers the lock screen visual tree from the lock screen's own UI thread and injects custom XAML directly into the compositor with no XAML DispatcherTimer and full thread safety.
 
 > [!NOTE]
 > **Safety First:** This mod exclusively modifies the user-space lock app (`LockApp.exe`). It does **not** inject into or hook `LogonUI.exe` or `winlogon.exe` (Secure Desktop), ensuring system stability and zero security risks.
