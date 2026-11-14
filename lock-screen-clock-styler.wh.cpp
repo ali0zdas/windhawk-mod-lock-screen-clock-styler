@@ -588,35 +588,6 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
   $description:ja-JP: "ロック画面上の MSN 天気、スポーツ、ニュースのウィジェット領域を非表示にします。指定がない限り時計のスタイル変更のみを行うよう、デフォルトでは無効になっています。"
   $description:ko-KR: "잠금 화면의 MSN 날씨, 스포츠, 뉴스 위젯 영역을 숨깁니다. 별도로 설정하지 않는 한 시계 스타일만 변경되도록 기본적으로 비활성화되어 있습니다."
   $description:uk-UA: "Приховує області віджетів погоди MSN, спорту та новин на екрані блокування. За замовчуванням вимкнено, щоб мод змінював лише стиль годинника, якщо не вказано інше."
-- hideDefaultClock: true
-  $name: "Hide Default Lock Screen Clock"
-  $name:tr-TR: "Varsayılan Kilit Ekranı Saatini Gizle"
-  $name:zh-CN: "隐藏默认锁屏时钟"
-  $name:zh-TW: "隱藏預設鎖定畫面時鐘"
-  $name:ru-RU: "Скрыть стандартные часы экрана блокировки"
-  $name:de-DE: "Standard-Sperrbildschirmuhr ausblenden"
-  $name:es-ES: "Ocultar reloj predeterminado de la pantalla de bloqueo"
-  $name:pt-BR: "Ocultar relógio padrão da tela de bloqueio"
-  $name:fr-FR: "Masquer l'horloge par défaut de l'écran de verrouillage"
-  $name:it-IT: "Nascondi orologio predefinito schermata di blocco"
-  $name:pl-PL: "Ukryj domyślny zegar ekranu blokady"
-  $name:ja-JP: "デフォルトのロック画面の時計を非表示にする"
-  $name:ko-KR: "기본 잠금 화면 시계 숨기기"
-  $name:uk-UA: "Приховати стандартний годинник екрана блокування"
-  $description: "Hides the default Windows 11 clock and date text to make way for the new clock."
-  $description:tr-TR: "Windows 11'in standart saat ve tarih metnini gizleyerek yeni saatin görünmesini sağlar."
-  $description:zh-CN: "隐藏默认的 Windows 11 时钟和日期文本，以便显示新的定制时钟。"
-  $description:zh-TW: "隱藏預設的 Windows 11 時鐘與日期文字，以便顯示新的自訂時鐘。"
-  $description:ru-RU: "Скрывает стандартный текст часов и даты Windows 11, освобождая место для новых часов."
-  $description:de-DE: "Blendet den standardmäßigen Windows 11-Uhr- und Datumstext aus, um Platz für die neue Uhr zu machen."
-  $description:es-ES: "Oculta el texto predeterminado de hora y fecha de Windows 11 para dar paso al nuevo reloj."
-  $description:pt-BR: "Oculta o texto padrão de relógio e data do Windows 11 para dar espaço ao novo relógio."
-  $description:fr-FR: "Masque le texte par défaut de l'horloge et de la date de Windows 11 pour afficher la nouvelle horloge."
-  $description:it-IT: "Nasconde il testo predefinito di data e ora di Windows 11 per fare spazio al nuovo orologio."
-  $description:pl-PL: "Ukrywa domyślny tekst zegara i daty systemu Windows 11, aby zrobić miejsce na nowy zegar."
-  $description:ja-JP: "新しい時計を表示するために、デフォルトの Windows 11 の時計と日付のテキストを非表示にします。"
-  $description:ko-KR: "새 시계를 표시하기 위해 기본 Windows 11 시계와 날짜 텍스트를 숨깁니다."
-  $description:uk-UA: "Приховує стандартний текст годинника та дати Windows 11, щоб звільнити місце для нового годинника."
 - showDateCapsule: true
   $name: "Show Date Display"
   $name:tr-TR: "Tarih Göstergesini Göster"
@@ -715,7 +686,6 @@ struct ModSettings {
     int verticalOffset;
     std::wstring clockAlignment;
     bool hideDefaultWidgets;
-    bool hideDefaultClock;
     bool showDateCapsule;
     bool showBatteryStatus;
 } g_settings;
@@ -781,13 +751,12 @@ void LoadSettings() {
         : rawAlign;
 
     g_settings.hideDefaultWidgets = Wh_GetIntSetting(L"hideDefaultWidgets") != 0;
-    g_settings.hideDefaultClock = Wh_GetIntSetting(L"hideDefaultClock") != 0;
     g_settings.showDateCapsule = Wh_GetIntSetting(L"showDateCapsule") != 0;
     g_settings.showBatteryStatus = Wh_GetIntSetting(L"showBatteryStatus") != 0;
 
-    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, align=%s, hideWidgets=%d, hideClock=%d, showBattery=%d",
+    Wh_Log(L"Settings loaded: style=%s, fmt=%s, showSec=%d, opacity=%d, font=%d, vertOffset=%d, align=%s, hideWidgets=%d, showBattery=%d",
            g_settings.clockStyle.c_str(), g_settings.timeFormat.c_str(), g_settings.showSeconds, g_settings.glassOpacity,
-           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.clockAlignment.c_str(), g_settings.hideDefaultWidgets, g_settings.hideDefaultClock, g_settings.showBatteryStatus);
+           g_settings.clockFontSize, g_settings.verticalOffset, g_settings.clockAlignment.c_str(), g_settings.hideDefaultWidgets, g_settings.showBatteryStatus);
 }
 
 // Strong XAML references. These belong to the lock screen UI thread and must
@@ -3154,8 +3123,7 @@ void AttachToTree() {
         Wh_Log(L"Attached to the lock screen visual tree.");
     }
 
-    bool hideClock =
-        g_settings.hideDefaultClock && (g_settings.clockStyle != L"defaultOnly");
+    bool hideClock = (g_settings.clockStyle != L"defaultOnly");
     SyncTrackedElements(g_hiddenClockElements, scan.clockElements, hideClock);
     SyncTrackedElements(g_hiddenWidgetElements, scan.widgetElements,
                         g_settings.hideDefaultWidgets);
