@@ -388,7 +388,7 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
   $description:ja-JP: "モダンフリップ時計カードの半透明度（0〜255。0は完全に透明、255は完全に不透明）。他のスタイルには影響しません。"
   $description:ko-KR: "모던 플립 시계 카드의 반투명도입니다(0~255, 0은 완전 투명, 255는 완전 불투명). 다른 스타일에는 영향을 주지 않습니다."
   $description:uk-UA: "Напівпрозорість карток годинника Modern Flip (від 0 до 255; 0 — повністю прозорі, 255 — повністю непрозорі). Інші стилі не змінюються."
-- clockFontSize: 140
+- clockFontSize: 165
   $name: "Digit Font Size"
   $name:tr-TR: "Rakam Yazı Tipi Boyutu"
   $name:zh-CN: "数字字体大小"
@@ -2185,7 +2185,7 @@ wux::UIElement BuildPixelClockElement() {
     matrixLayout.VerticalAlignment(wux::VerticalAlignment::Center);
 
     // Scale dot size appropriately for 7x11 double-pixel thickness
-    double dotSize = (double)g_settings.clockFontSize * 0.095;
+    double dotSize = (double)g_settings.clockFontSize * 0.100;
     double spacing = dotSize * 0.35;
     double digitGap = dotSize * 1.3;
     double colonGap = dotSize * 1.0;
