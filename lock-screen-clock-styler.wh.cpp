@@ -32,7 +32,7 @@
 // @author          ali0zdas
 // @github          https://github.com/ali0zdas
 // @homepage        https://aliozdas.is-a.dev
-// @license         MIT
+// @license         GPL-3.0-only
 // @include         LockApp.exe
 // @architecture    x86-64
 // @compilerOptions -lole32 -loleaut32 -lruntimeobject -lpowrprof

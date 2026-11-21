@@ -8,7 +8,7 @@
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
 [![Version](https://img.shields.io/badge/Version-0.6.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](LICENSE)
 
 <a href="https://windhawk.net/mods/lock-screen-clock-styler"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users%20on%20Windhawk&color=6366f1&labelColor=0f172a&logo=windows11&logoColor=38bdf8&style=for-the-badge" height="34" alt="Active Users on Windhawk" /></a>
 <a href="https://windhawk.net/mods/lock-screen-clock-styler"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.rating&label=%E2%98%85%20Rating&suffix=%2F10&color=eab308&labelColor=0f172a&style=for-the-badge" height="34" alt="Community Rating" /></a>
@@ -160,4 +160,4 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you have an
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) &copy; 2026 [ali0zdas](https://github.com/ali0zdas).
+This project is licensed under the [GNU General Public License v3.0](LICENSE) &copy; 2026 [ali0zdas](https://github.com/ali0zdas).
