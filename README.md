@@ -31,17 +31,19 @@ It replaces the default Windows lock screen clock with 9 distinct clock aestheti
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/Retro%20Pixel.png" width="49%" alt="Retro Pixel / LED Matrix" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/retro%20pixel%20new.png" width="49%" alt="Retro Pixel / LED Matrix" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20pixel.png" width="49%" alt="Vertical Pixel / Nothing OS (Bahnschrift)" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20modern.png" width="49%" alt="Vertical Modern / Dual Weight (Segoe UI)" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20poster.png" width="49%" alt="Vertical Poster / Heavy Impact (Impact)" />
   <br />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/ansi%20shadow.png" width="49%" alt="ANSI Shadow (Terminal ASCII)" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flipclock%20new.png" width="49%" alt="Modern Flip Clock" />
   <br />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flipclock%20new.png" width="49%" alt="Classic Flip Clock" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma%20new.png" width="49%" alt="Minimalist Sonoma" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20hud.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
 </p>
 
 > Captured on Windows 11 (26H2).
@@ -111,7 +113,7 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 | :--- | :--- | :--- | :---: | :--- |
 | **Clock Style** | `clockStyle` | `pixel`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `ansiShadow`, `flip`, `vintage`, `macos`, `cyberpunk`, `defaultOnly` | `pixel` | Selects visual clock theme. |
 | **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
-| **Show Seconds** | `showSeconds` | `true`, `false` | `true` | Live seconds (all styles except `flip`, `vintage`, and vertical stack themes). |
+| **Show Seconds** | `showSeconds` | `auto`, `on`, `off` | `auto` | Live seconds (`auto` hides on Sonoma, `flip`, `vintage`, and vertical stack themes). |
 | **Digit Font Size** | `clockFontSize` | `20` to `300` | `165` | Base font size for clock digits. |
 | **Vertical Offset** | `verticalOffset` | `-200` to `+400` px | `0` | Vertical screen shift adjustment. |
 | **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
