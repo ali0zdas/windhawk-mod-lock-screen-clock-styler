@@ -7,7 +7,7 @@
 [![Windhawk Mod](https://img.shields.io/badge/Get_it_on-Windhawk-00A4EF?style=for-the-badge&logo=windows11&logoColor=white)](https://windhawk.net/mods/lock-screen-clock-styler)
 [![Windows 11](https://img.shields.io/badge/Windows_11-24H2_%7C_25H2_%7C_26H2-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows)
 [![C++20 / C++/WinRT](https://img.shields.io/badge/C%2B%2B-20_%2F_WinRT-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/)
-[![Version](https://img.shields.io/badge/Version-0.6.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
+[![Version](https://img.shields.io/badge/Version-3.0.0-success?style=for-the-badge)](https://github.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](LICENSE)
 
 <a href="https://windhawk.net/mods/lock-screen-clock-styler"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmods.windhawk.net%2Fcatalog.json&query=%24.mods%5B%27lock-screen-clock-styler%27%5D.details.users&label=Active%20Users%20on%20Windhawk&color=6366f1&labelColor=0f172a&logo=windows11&logoColor=38bdf8&style=for-the-badge" height="34" alt="Active Users on Windhawk" /></a>
@@ -32,13 +32,13 @@ It replaces the default Windows lock screen clock with 9 distinct clock aestheti
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/Retro%20Pixel.png" width="49%" alt="Retro Pixel / LED Matrix" />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
-  <br />
-  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20pixel.png" width="49%" alt="Vertical Pixel / Nothing OS (Bahnschrift)" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20modern.png" width="49%" alt="Vertical Modern / Dual Weight (Segoe UI)" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20poster.png" width="49%" alt="Vertical Poster / Heavy Impact (Impact)" />
+  <br />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flip%20clock.png" width="49%" alt="Modern Flip Clock" />
+  <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flip%20clock.png" width="49%" alt="Classic Flip Clock" />
   <br />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma.png" width="49%" alt="Minimalist Sonoma" />
   <img src="https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20style.png" width="49%" alt="Cyberpunk Sci-Fi HUD" />
@@ -53,14 +53,14 @@ It replaces the default Windows lock screen clock with 9 distinct clock aestheti
 | Style | Key | Aesthetic Description |
 | :--- | :---: | :--- |
 | 👾 **Retro Pixel / LED Matrix** | `pixel` | Authentic 7x11 double-pixel LED dot matrix display with subtle ambient dot glow and frosted acrylic contrast backplate. |
-| ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. |
-| 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. |
 | 📱 **Vertical Pixel / Nothing OS (Bahnschrift)** | `verticalBahnschrift` | Nothing OS and DIN-standard geometric typography in a 2-row vertical stack, featuring SemiBold Bahnschrift numerals with subtle minute contrast and compact line spacing. |
 | ✨ **Vertical Modern / Dual Weight (Segoe UI)** | `verticalSegoe` | Striking dual-weight vertical presentation pairing bold hour digits with extra-light Segoe UI Variable Display minutes for high typographic hierarchy and ultra-clean modern framing. |
 | 📰 **Vertical Poster / Heavy Impact (Impact)** | `verticalImpact` | Bold condensed Swiss poster aesthetic utilizing ultra-heavy Impact typography, tight vertical spacing, and high-impact visual presence reminiscent of brutalist editorial layouts. |
+| 🟩 **ANSI Shadow (Terminal ASCII)** | `ansiShadow` | Retro terminal ASCII block-art clock rendered with crisp monospace phosphor palettes (Green, Amber, Cyan, Monochrome). |
+| ⏳ **Modern Flip Clock** | `flip` | Split acrylic frosted glass cards with bold proportions, Fliqlo-inspired horizontal scissors-cut split seam, and smooth rounded corners. |
+| 📜 **Classic Flip Clock** | `vintage` | Solari-inspired mechanical train terminal clock with matte charcoal flap cards, aged ivory typography, split seam, and axle hinge clips. |
 | 🪐 **Minimalist Sonoma** | `macos` | Apple lock screen aesthetic with date positioned above the time, ultra-slender display numerals, dual-layer atmospheric shadows, and elegant left alignment. |
 | ⚡ **Cyberpunk Sci-Fi HUD** | `cyberpunk` | Tactical Netrunner HUD terminal with obsidian chassis, acid yellow & hot magenta corner brackets, top telemetry diagnostic bar, and pulsating laser dividers (`//`). |
-| 🌌 **Minimalist Aura** | `aura` | Clean frameless floating typography with ambient soft drop-shadow depth and an elegant frosted date capsule. |
 | 🪟 **Default Clock Only** | `defaultOnly` | Keeps the stock Windows 11 lock screen clock. Widget suppression remains available through its own toggle. |
 
 ---
@@ -92,11 +92,14 @@ It replaces the default Windows lock screen clock with 9 distinct clock aestheti
 
 ---
 
-## 🆕 What's New in v0.6.0
+## 🆕 What's New in v3.0.0
 
-- 📱 **3 Brand-New Vertical Stack Clock Styles:** Added **Vertical Pixel / Nothing OS (Bahnschrift)**, **Vertical Modern / Dual Weight (Segoe UI Variable)**, and **Vertical Poster / Heavy Impact (Impact)** featuring custom line overlapping, high-contrast weight pairing, and localized natural long-date capsules.
-- 💤 **Laptop Sleep/Wake Black Screen Fix (#6978):** Fixed lock screen background turning black after laptop sleep/wake (Modern Standby & S3/S4) via native console display and power state callbacks (`RegisterSuspendResumeNotification` & `PowerSettingRegisterNotification`) with zero UI thread contention during quiesce.
-- ⚡ **Startup Settings Synchronization:** Closed startup race conditions to guarantee clock style, alignment, and formatting preferences apply reliably upon initial shell launch.
+- 🟩 **New ANSI Shadow (Terminal ASCII) Clock Style:** Added a retro terminal ASCII block-art clock with terminal color themes (Matrix Green, Amber CRT, Cyber Cyan, Classic Monochrome).
+- 🎨 **Per-Theme Customization Groups (100% Backward Compatible):** Added dedicated settings sections for **Retro Pixel**, **Vertical Stack Clocks**, **ANSI Shadow**, **Flip Clocks**, **Minimalist Sonoma**, and **Cyberpunk Sci-Fi HUD** while keeping all existing top-level keys untouched:
+  - **14 Curated Color Options** with unique color emojis (`Pure White`, `Black`, `Soft Silver`, `Red`, `Orange`, `Yellow`, `Electric Cyan`, `Sky Blue`, `Matrix Green`, `Warm Amber`, `Coral Red`, `Neon Magenta`, `Soft Violet`, `Theme Default`).
+  - **Built-In Font Selector & Shadow Toggle:** Choose from 8 built-in Windows fonts and toggle drop shadows on Vertical Stack and Minimalist Sonoma clocks.
+  - **Retro Pixel & Flip Controls:** Customize LED dot shape (`Circle`, `Square`, `Rounded`), frosted backplate toggle & opacity (`0–255`), Flip card corner radius, center split seam, and Cyberpunk HUD color presets / header bar / chassis opacity.
+- ✨ **Polished Settings UI:** Added emoji prefixes across all 14 locales, refined default `clockFontSize` to `165`, and removed redundant toggles.
 
 ---
 
@@ -106,17 +109,16 @@ All settings can be customized instantly from the **Settings** tab in the Windha
 
 | Option | Setting Key | Allowed Values / Range | Default | Purpose |
 | :--- | :--- | :--- | :---: | :--- |
-| **Clock Style** | `clockStyle` | `pixel`, `flip`, `vintage`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `macos`, `cyberpunk`, `aura`, `defaultOnly` | `pixel` | Selects visual clock theme. |
+| **Clock Style** | `clockStyle` | `pixel`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `ansiShadow`, `flip`, `vintage`, `macos`, `cyberpunk`, `defaultOnly` | `pixel` | Selects visual clock theme. |
 | **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
-| **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
 | **Show Seconds** | `showSeconds` | `true`, `false` | `true` | Live seconds (all styles except `flip`, `vintage`, and vertical stack themes). |
-| **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
-| **Show Date Capsule** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display capsule. |
-| **Glass Opacity** | `glassOpacity` | `0` to `255` | `45` | Translucency of the Modern Flip cards. |
-| **Digit Font Size** | `clockFontSize` | `20` to `300` | `140` | Base font size for clock digits. |
+| **Digit Font Size** | `clockFontSize` | `20` to `300` | `165` | Base font size for clock digits. |
 | **Vertical Offset** | `verticalOffset` | `-200` to `+400` px | `0` | Vertical screen shift adjustment. |
-| **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `false` | Hides MSN weather, news, and stock widgets. |
-| **Hide Default Clock** | `hideDefaultClock` | `true`, `false` | `true` | Replaces the stock Windows 11 lock screen clock. |
+| **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
+| **Show Date Display** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display. |
+| **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `false` | Hides MSN weather, news, and sports widgets. |
+| **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
+| **Per-Theme Groups** | `pixelSettings.*`, `verticalSettings.*`, `ansiSettings.*`, `flipSettings.*`, `minimalistSettings.*`, `cyberpunkSettings.*` | Theme-specific controls | Theme defaults | Colors, fonts, shadows, LED shape, backplate & card opacity, corner radius, HUD presets. |
 
 ---
 
