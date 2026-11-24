@@ -56,9 +56,7 @@ Customize and enhance the Windows 11 lock screen clock with modern designs, fros
 | Style | Preview |
 | :---: | :---: |
 | Retro Pixel / LED Matrix | ![Retro Pixel](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/retro%20pixel%20new.png) |
-| Vertical Pixel / Nothing OS (Bahnschrift) | ![Vertical Pixel](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20pixel.png) |
-| Vertical Modern / Dual Weight (Segoe UI) | ![Vertical Modern](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20modern.png) |
-| Vertical Poster / Heavy Impact (Impact) | ![Vertical Poster](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20poster.png) |
+| Vertical Stack Styles (Pixel, Modern, Poster) | ![Vertical Stack Styles](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/vertical%20styles.png) |
 | ANSI Shadow (Terminal ASCII) | ![ANSI Shadow](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/ansi%20shadow.png) |
 | Modern Flip Clock | ![Modern Flip Clock](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/modern%20flipclock%20new.png) |
 | Classic Flip Clock | ![Classic Flip Clock](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flipclock%20new.png) |
