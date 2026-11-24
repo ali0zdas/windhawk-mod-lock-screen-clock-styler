@@ -328,7 +328,7 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
   $options:uk-UA:
     - 24h: "24-годинний (14:30)"
     - 12h: "12-годинний AM/PM (02:30 PM)"
-- showSeconds: true
+- showSeconds: auto
   $name: "⏱️ Show Seconds"
   $name:tr-TR: "⏱️ Saniyeyi Göster"
   $name:zh-CN: "⏱️ 显示秒数"
@@ -343,20 +343,76 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
   $name:ja-JP: "⏱️ 秒を表示"
   $name:ko-KR: "⏱️ 초 표시"
   $name:uk-UA: "⏱️ Показувати секунди"
-  $description: "Adds live seconds to the clock. Supported by every style except flip clocks and vertical stack styles."
-  $description:tr-TR: "Saate canlı saniye ekler. Flip saatler ve dikey yığın stilleri dışındaki tüm stillerde desteklenir."
-  $description:zh-CN: "为时钟添加动态秒数。除翻页时钟和垂直堆叠样式外的所有样式均支持。"
-  $description:zh-TW: "為時鐘新增動態秒數。除翻頁時鐘和垂直堆疊樣式外的所有樣式均支援。"
-  $description:ru-RU: "Добавляет отображение секунд в реальном времени. Поддерживается всеми стилями, кроме перекидных часов и вертикальных стилей."
-  $description:de-DE: "Fügt der Uhr Live-Sekunden hinzu. Wird von jedem Stil außer Klappuhren und vertikalen Stilen unterstützt."
-  $description:es-ES: "Añade segundos en vivo al reloj. Compatible con todos los estilos excepto los relojes flip y los estilos verticales."
-  $description:pt-BR: "Adiciona segundos ao vivo ao relógio. Suportado por todos os estilos, exceto relógios flip e estilos verticais."
-  $description:fr-FR: "Ajoute les secondes en direct à l'horloge. Pris en charge par tous les styles sauf les horloges à volets et les styles verticaux."
-  $description:it-IT: "Aggiunge i secondi in tempo reale all'orologio. Supportato da tutti gli stili tranne gli orologi flip e gli stili verticali."
-  $description:pl-PL: "Dodaje sekundy w czasie rzeczywistym do zegara. Obsługiwane przez wszystkie style z wyjątkiem zegarów klapkowych i stylów pionowych."
-  $description:ja-JP: "時計にリアルタイムの秒表示を追加します。フリップ時計および垂直スタックスタイルを除くすべてのスタイルでサポートされています。"
-  $description:ko-KR: "시계에 실시간 초 단위를 추가합니다. 플립 시계 및 세로 스택 스타일을 제외한 모든 스타일에서 지원됩니다."
-  $description:uk-UA: "Додає відображення секунд у реальному часі. Підтримується всіма стилями, крім перекидних годинників та вертикальних стилів."
+  $description: "Controls live seconds display. Automatic follows the theme default (off for Minimalist Sonoma, flip clocks, and vertical stack styles; on for Retro Pixel, ANSI Shadow, and Cyberpunk HUD)."
+  $description:tr-TR: "Canlı saniye görünümünü ayarlar. Otomatik seçeneği tema varsayılanını kullanır (Minimalist Sonoma, flip saatler ve dikey yığın stilleri için kapalı; Retro Pixel, ANSI Shadow ve Cyberpunk HUD için açık)."
+  $description:zh-CN: "控制实时秒数显示。“自动”将使用主题默认值（Minimalist Sonoma、翻页时钟和垂直堆叠样式默认关闭；Retro Pixel、ANSI Shadow 和 Cyberpunk HUD 默认开启）。"
+  $description:zh-TW: "控制即時秒數顯示。「自動」將使用佈景主題預設值（Minimalist Sonoma、翻頁時鐘與垂直堆疊樣式預設關閉；Retro Pixel、ANSI Shadow 與 Cyberpunk HUD 預設開啟）。"
+  $description:ru-RU: "Управляет отображением секунд в реальном времени. «Автоматически» использует значение темы (выкл. для Minimalist Sonoma, перекидных и вертикальных часов; вкл. для Retro Pixel, ANSI Shadow и Cyberpunk HUD)."
+  $description:de-DE: "Steuert die Live-Sekundenanzeige. „Automatisch“ verwendet den Design-Standard (aus für Minimalist Sonoma, Klappuhren und vertikale Stile; ein für Retro Pixel, ANSI Shadow und Cyberpunk HUD)."
+  $description:es-ES: "Controla la visualización de segundos en vivo. Automático usa el valor predeterminado del tema (desactivado para Minimalist Sonoma, relojes flip y estilos verticales; activado para Retro Pixel, ANSI Shadow y Cyberpunk HUD)."
+  $description:pt-BR: "Controla a exibição de segundos ao vivo. Automático usa o padrão do tema (desativado para Minimalist Sonoma, relógios flip e estilos verticais; ativado para Retro Pixel, ANSI Shadow e Cyberpunk HUD)."
+  $description:fr-FR: "Contrôle l'affichage des secondes en direct. Automatique utilise le paramètre par défaut du thème (désactivé pour Minimalist Sonoma, les horloges à volets et les styles verticaux ; activé pour Retro Pixel, ANSI Shadow et Cyberpunk HUD)."
+  $description:it-IT: "Controlla la visualizzazione dei secondi in tempo reale. Automatico usa il valore predefinito del tema (disattivato per Minimalist Sonoma, orologi flip e stili verticali; attivato per Retro Pixel, ANSI Shadow e Cyberpunk HUD)."
+  $description:pl-PL: "Steruje wyświetlaniem sekund na żywo. Opcja „Automatycznie” używa ustawienia domyślnego motywu (wyłączone dla Minimalist Sonoma, zegarów klapkowych i stylów pionowych; włączone dla Retro Pixel, ANSI Shadow i Cyberpunk HUD)."
+  $description:ja-JP: "リアルタイムの秒表示を制御します。「自動」はテーマの既定値を使用します（Minimalist Sonoma、フリップ時計、垂直スタックスタイルではオフ、Retro Pixel、ANSI Shadow、Cyberpunk HUD ではオン）。"
+  $description:ko-KR: "실시간 초 표시를 제어합니다. '자동'은 테마 기본값을 사용합니다(Minimalist Sonoma, 플립 시계, 세로 스택 스타일은 꺼짐, Retro Pixel, ANSI Shadow, Cyberpunk HUD는 켜짐)."
+  $description:uk-UA: "Керує відображенням секунд у реальном часі. «Автоматично» використовує налаштування теми (вимк. для Minimalist Sonoma, перекидних і вертикальних годинників; увімк. для Retro Pixel, ANSI Shadow та Cyberpunk HUD)."
+  $options:
+    - auto: "Automatic (Theme Default)"
+    - on: "Always Show"
+    - off: "Always Hide"
+  $options:tr-TR:
+    - auto: "Otomatik (Tema Varsayılanı)"
+    - on: "Her Zaman Göster"
+    - off: "Her Zaman Gizle"
+  $options:zh-CN:
+    - auto: "自动（主题默认）"
+    - on: "始终显示"
+    - off: "始终隐藏"
+  $options:zh-TW:
+    - auto: "自動（佈景主題預設）"
+    - on: "一律顯示"
+    - off: "一律隱藏"
+  $options:ru-RU:
+    - auto: "Автоматически (по умолчанию темы)"
+    - on: "Всегда показывать"
+    - off: "Всегда скрывать"
+  $options:de-DE:
+    - auto: "Automatisch (Design-Standard)"
+    - on: "Immer anzeigen"
+    - off: "Immer ausblenden"
+  $options:es-ES:
+    - auto: "Automático (Predeterminado del tema)"
+    - on: "Mostrar siempre"
+    - off: "Ocultar siempre"
+  $options:pt-BR:
+    - auto: "Automático (Padrão do tema)"
+    - on: "Sempre mostrar"
+    - off: "Sempre ocultar"
+  $options:fr-FR:
+    - auto: "Automatique (Par défaut du thème)"
+    - on: "Toujours afficher"
+    - off: "Toujours masquer"
+  $options:it-IT:
+    - auto: "Automatico (Predefinito del tema)"
+    - on: "Mostra sempre"
+    - off: "Nascondi sempre"
+  $options:pl-PL:
+    - auto: "Automatycznie (Domyślne motywu)"
+    - on: "Zawsze pokazuj"
+    - off: "Zawsze ukrywaj"
+  $options:ja-JP:
+    - auto: "自動（テーマの既定値）"
+    - on: "常に表示"
+    - off: "常に非表示"
+  $options:ko-KR:
+    - auto: "자동 (테마 기본값)"
+    - on: "항상 표시"
+    - off: "항상 숨기기"
+  $options:uk-UA:
+    - auto: "Автоматично (За замовчуванням теми)"
+    - on: "Завжди показувати"
+    - off: "Завжди приховувати"
 - clockFontSize: 165
   $name: "📏 Digit Font Size"
   $name:tr-TR: "📏 Rakam Yazı Tipi Boyutu"
@@ -2772,7 +2828,7 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
     $description:ja-JP: "SYS.LOC // TIME_SYNC ヘッダーバーとステータス表示を表示します。"
     $description:ko-KR: "SYS.LOC // TIME_SYNC 상단 바 및 상태 표시기를 표시합니다."
     $description:uk-UA: "Відображає верхній рядок SYS.LOC // TIME_SYNC та індикатори стану."
-  - chassisOpacity: 215
+  - chassisOpacity: 170
     $name: "🪟 Chassis Opacity"
     $name:tr-TR: "🪟 Gövde Opaklığı"
     $name:zh-CN: "🪟 外框不透明度"
@@ -2787,20 +2843,20 @@ Feedback, bug reports, and theme suggestions are warmly welcomed! If you'd like 
     $name:ja-JP: "🪟 シャーシの不透明度"
     $name:ko-KR: "🪟 섀시 불투명도"
     $name:uk-UA: "🪟 Непрозорість корпусу"
-    $description: "Background opacity of the HUD chassis (0 to 255; default 215)."
-    $description:tr-TR: "HUD gövdesinin arka plan opaklığı (0 ile 255 arası; varsayılan 215)."
-    $description:zh-CN: "HUD 外框的背景不透明度（0 到 255；默认 215）。"
-    $description:zh-TW: "HUD 外框的背景不透明度（0 到 255；預設 215）。"
-    $description:ru-RU: "Непрозрачность фона корпуса HUD (от 0 до 255; по умолчанию 215)."
-    $description:de-DE: "Hintergrunddeckkraft des HUD-Gehäuses (0 bis 255; Standard 215)."
-    $description:es-ES: "Opacidad de fondo del chasis del HUD (0 a 255; predeterminado 215)."
-    $description:pt-BR: "Opacidade de fundo do chassi do HUD (0 a 255; padrão 215)."
-    $description:fr-FR: "Opacité d'arrière-plan du châssis HUD (0 à 255 ; par défaut 215)."
-    $description:it-IT: "Opacità dello sfondo dello chassis HUD (da 0 a 255; predefinito 215)."
-    $description:pl-PL: "Krycie tła obudowy HUD (od 0 do 255; domyślnie 215)."
-    $description:ja-JP: "HUD シャーシの背景不透明度（0〜255、既定値 215）。"
-    $description:ko-KR: "HUD 섀시의 배경 불투명도입니다(0~255, 기본값 215)."
-    $description:uk-UA: "Непрозорість фону корпусу HUD (від 0 до 255; за замовчуванням 215)."
+    $description: "Background opacity of the HUD chassis (0 to 255; default 170)."
+    $description:tr-TR: "HUD gövdesinin arka plan opaklığı (0 ile 255 arası; varsayılan 170)."
+    $description:zh-CN: "HUD 外框的背景不透明度（0 到 255；默认 170）。"
+    $description:zh-TW: "HUD 外框的背景不透明度（0 到 255；預設 170）。"
+    $description:ru-RU: "Непрозрачность фона корпуса HUD (от 0 до 255; по умолчанию 170)."
+    $description:de-DE: "Hintergrunddeckkraft des HUD-Gehäuses (0 bis 255; Standard 170)."
+    $description:es-ES: "Opacidad de fondo del chasis del HUD (0 a 255; predeterminado 170)."
+    $description:pt-BR: "Opacidade de fundo do chassi do HUD (0 a 255; padrão 170)."
+    $description:fr-FR: "Opacité d'arrière-plan du châssis HUD (0 à 255 ; par défaut 170)."
+    $description:it-IT: "Opacità dello sfondo dello chassis HUD (da 0 a 255; predefinito 170)."
+    $description:pl-PL: "Krycie tła obudowy HUD (od 0 do 255; domyślnie 170)."
+    $description:ja-JP: "HUD シャーシの背景不透明度（0〜255、既定値 170）。"
+    $description:ko-KR: "HUD 섀시의 배경 불투명도입니다(0~255, 기본값 170)."
+    $description:uk-UA: "Непрозорість фону корпусу HUD (від 0 до 255; за замовчуванням 170)."
   $name: "⚡ Cyberpunk Sci-Fi HUD"
   $name:tr-TR: "⚡ Cyberpunk Sci-Fi HUD"
   $name:zh-CN: "⚡ Cyberpunk Sci-Fi HUD"
@@ -3015,12 +3071,19 @@ void LoadSettings() {
         g_settings.timeFormat = L"24h";
     }
 
-    // The settings UI is the single source of truth for seconds. Flip clocks
-    // and 2-row vertical stack clocks have no seconds display, so the toggle is ignored for them.
+    // Flip clocks and 2-row vertical stack clocks have no seconds display.
+    // "auto" follows the theme default (off for Minimalist Sonoma, on for other supported styles).
     bool isVertical = IsVerticalStyle(g_settings.clockStyle);
     bool supportsSeconds =
         (g_settings.clockStyle != L"flip" && g_settings.clockStyle != L"vintage" && !isVertical);
-    g_settings.showSeconds = supportsSeconds && Wh_GetIntSetting(L"showSeconds") != 0;
+    std::wstring rawShowSeconds = ReadStringSetting(L"showSeconds", L"auto");
+    if (rawShowSeconds == L"on") {
+        g_settings.showSeconds = supportsSeconds;
+    } else if (rawShowSeconds == L"off") {
+        g_settings.showSeconds = false;
+    } else {
+        g_settings.showSeconds = supportsSeconds && (g_settings.clockStyle != L"macos");
+    }
 
     g_settings.glassOpacity = Wh_GetIntSetting(L"flipSettings.glassOpacity");
     if (g_settings.glassOpacity == 45) {
