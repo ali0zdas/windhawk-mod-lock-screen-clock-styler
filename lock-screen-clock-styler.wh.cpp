@@ -44,13 +44,14 @@
 
 Customize and enhance the Windows 11 lock screen clock with modern designs, frosted glass panels, dynamic date capsules, and clean layout controls.
 
-## Features:
-- **✨ NEW in v3.0.0 — ANSI Shadow & Per-Theme Customization:** Added the **ANSI Shadow** clock style plus dedicated per-theme customization groups (curated color palettes, Windows font selection, drop-shadow toggle, Retro Pixel dot shape & backplate opacity, Flip card corner radius & split seam, and Cyberpunk HUD color presets).
+## What's New:
+- **✨ NEW in v3.0.0** 
+- **ANSI Shadow Style:** Retro terminal ASCII block-art clock with 4 phosphor color themes, prompt header bar, and glow effect.
+- **🎨 Per-Theme Customizations:** Dedicated settings groups so every style can be tuned independently:
+  - **Colors & Typography:** 14 curated color palettes, 8 built-in Windows fonts, font weight, and drop-shadow toggle.
+  - **Retro Pixel & Flip Cards:** LED dot shapes, frosted backplate opacity, Flip card corner radius, and center split seam.
+  - **ANSI Shadow & Cyberpunk HUD:** 4 terminal/HUD color presets, header/telemetry bar toggles, phosphor glow, and card/chassis opacity.
 - **✨ NEW — 3 VERTICAL CLOCK STYLES:** Pixel, Dual Weight & Impact.
-- **Multiple Distinct Clock Styles:** 9 distinct styles including Retro Pixel, Vertical Stacks, ANSI Shadow, Flip Clocks, Minimalist Sonoma, and Cyberpunk HUD.
-- **Lightweight & Thread-Safe:** Native XAML injection without XAML Diagnostics TAP, ensuring minimal CPU overhead.
-- **Show Seconds Toggle:** Optional live seconds display (supported across all non-flip and non-vertical styles).
-- **Extensive Customization:** Card opacity, font size, vertical offsets, and screen alignments are fully customizable via settings.
 
 ## Screenshots:
 | Style | Preview |
@@ -62,6 +63,12 @@ Customize and enhance the Windows 11 lock screen clock with modern designs, fros
 | Classic Flip Clock | ![Classic Flip Clock](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/classical%20flipclock%20new.png) |
 | Minimalist Sonoma | ![Minimalist Sonoma](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/sonoma%20new.png) |
 | Cyberpunk Sci-Fi HUD | ![Cyberpunk Sci-Fi HUD](https://raw.githubusercontent.com/ali0zdas/windhawk-mod-lock-screen-clock-styler/main/screenshots/cyberpunk%20hud.png) |
+
+## Features:
+- **Multiple Distinct Clock Styles:** 9 distinct styles including Retro Pixel, Vertical Stacks, ANSI Shadow, Flip Clocks, Minimalist Sonoma, and Cyberpunk HUD.
+- **Lightweight & Thread-Safe:** Native XAML injection without XAML Diagnostics TAP, ensuring minimal CPU overhead.
+- **Show Seconds Toggle:** Theme-aware live seconds display (`Automatic`, `Always Show`, or `Always Hide` — supported across all non-flip and non-vertical styles).
+- **Extensive Customization:** Card opacity, font size, vertical offsets, and screen alignments are fully customizable via settings.
 
 ## Security Note:
 This mod exclusively targets `LockApp.exe`. It does not inject into or interfere with `LogonUI.exe` or `winlogon.exe` in the Secure Desktop, preventing any system lockup or logon security risks.
