@@ -102,25 +102,6 @@ It replaces the default Windows lock screen clock with 9 distinct clock aestheti
 
 ---
 
-## ⚙️ Configuration Reference
-
-All settings can be customized instantly from the **Settings** tab in the Windhawk user interface:
-
-| Option | Setting Key | Allowed Values / Range | Default | Purpose |
-| :--- | :--- | :--- | :---: | :--- |
-| **Clock Style** | `clockStyle` | `pixel`, `verticalBahnschrift`, `verticalSegoe`, `verticalImpact`, `ansiShadow`, `flip`, `vintage`, `macos`, `cyberpunk`, `defaultOnly` | `pixel` | Selects visual clock theme. |
-| **Time Format** | `timeFormat` | `24h`, `12h` | `24h` | Toggle between 24-hour and 12-hour AM/PM display. |
-| **Show Seconds** | `showSeconds` | `auto`, `on`, `off` | `auto` | Live seconds (`auto` hides on Sonoma, `flip`, `vintage`, and vertical stack themes). |
-| **Digit Font Size** | `clockFontSize` | `20` to `300` | `165` | Base font size for clock digits. |
-| **Vertical Offset** | `verticalOffset` | `-200` to `+400` px | `0` | Vertical screen shift adjustment. |
-| **Clock Alignment** | `clockAlignment` | `auto`, `center`, `bottomLeft`, `left`, `right` | `auto` | Screen placement (`auto` uses theme default). |
-| **Show Date Display** | `showDateCapsule` | `true`, `false` | `true` | Localized date and weekday display. |
-| **Hide Default Widgets**| `hideDefaultWidgets`| `true`, `false` | `false` | Hides MSN weather, news, and sports widgets. |
-| **Battery Status** | `showBatteryStatus`| `true`, `false` | `false` | Laptop battery percentage and charging capsule. |
-| **Per-Theme Groups** | `pixelSettings.*`, `verticalSettings.*`, `ansiSettings.*`, `flipSettings.*`, `minimalistSettings.*`, `cyberpunkSettings.*` | Theme-specific controls | Theme defaults | Colors, fonts, shadows, LED shape, backplate & card opacity, corner radius, HUD presets. |
-
----
-
 ## 🚀 Installation & Usage
 
 ### Method 1: Official Windhawk Repository (Recommended)
